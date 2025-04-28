@@ -23,12 +23,14 @@ namespace Notify.Client
         private readonly IHttpClient client;
         private readonly string serviceId;
         private readonly string apiKey;
-
-        public BaseClient(IHttpClient client, string apiKey, string baseUrl = "https://api.notifications.service.gov.uk/")
+        private readonly string client_id;
+        
+        public BaseClient(IHttpClient client, string apiKey, string clientId, string baseUrl = "https://api.notifications.service.gov.uk/")
         {
             var serviceCredentials = ExtractServiceIdAndApiKey(apiKey);
             serviceId = serviceCredentials.Item1;
             this.apiKey = serviceCredentials.Item2;
+            client_id = ValidateClientId(clientId);
             BaseUrl = baseUrl;
             this.client = client;
             this.client.BaseAddress = ValidateBaseUri(BaseUrl);
@@ -37,6 +39,7 @@ namespace Notify.Client
             var productVersion = typeof(BaseClient).GetTypeInfo().Assembly.GetName().Version.ToString();
             this.client.AddUserAgent(NOTIFY_CLIENT_NAME + productVersion);
         }
+       
 
         public async Task<string> GET(string url)
         {
@@ -81,7 +84,7 @@ namespace Notify.Client
                 HandleHTTPErrors(response, responseContent);
             }
             return responseContent;
-        }
+        }      
 
         private async Task<HttpResponseMessage> SendRequest(string url, HttpMethod method, HttpContent content)
         {
@@ -94,6 +97,7 @@ namespace Notify.Client
 
             var notifyToken = Authenticator.CreateToken(this.apiKey, this.serviceId);
             request.Headers.TryAddWithoutValidation("Authorization", "Bearer " + notifyToken);
+            request.Headers.TryAddWithoutValidation("X-QC-Client-Id", this.client_id);
 
             HttpResponseMessage response;
 
@@ -131,7 +135,7 @@ namespace Notify.Client
 
         public Tuple<string, string> ExtractServiceIdAndApiKey(string fromApiKey)
         {
-            if (fromApiKey.Length < 74 || string.IsNullOrWhiteSpace(fromApiKey) || fromApiKey.Contains(" "))
+            if (fromApiKey.Length < 73 || string.IsNullOrWhiteSpace(fromApiKey) || fromApiKey.Contains(" "))
             {
                 throw new NotifyAuthException("The API Key provided is invalid. Please ensure you are using a v2 API Key that is not empty or null");
             }
@@ -154,6 +158,16 @@ namespace Notify.Client
 
             return uriResult;
 
+        }
+
+        private string ValidateClientId(string clientId)
+        {
+            if (string.IsNullOrWhiteSpace(clientId) || clientId.Contains(" "))
+            {
+                throw new NotifyAuthException("A required unique identifier for the client or service making the request.");
+            }
+
+            return clientId;
         }
 
         public string GetUserAgent()

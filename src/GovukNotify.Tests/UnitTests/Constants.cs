@@ -12,6 +12,14 @@ namespace Notify.Tests.UnitTests
             }
         }
 
+        public static String fakeClientId
+        {
+            get
+            {
+                return @"FAKECLIENTID-f47ac10b-58cc-4372-a567-0e02b2c3d479";
+            }
+        }
+
         public static String fakePhoneNumber { get { return "07766565767"; } }
         public static String fakeEmail { get { return "test@mail.com"; } }
 

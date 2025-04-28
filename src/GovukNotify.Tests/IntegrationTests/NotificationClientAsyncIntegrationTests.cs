@@ -4,7 +4,6 @@ using System.IO;
 using System.Threading.Tasks;
 using Notify.Client;
 using Notify.Exceptions;
-using Notify.Interfaces;
 using Notify.Models;
 using Notify.Models.Responses;
 using NUnit.Framework;
@@ -18,6 +17,7 @@ namespace Notify.Tests.IntegrationTests
 
         private readonly String NOTIFY_API_URL = Environment.GetEnvironmentVariable("NOTIFY_API_URL");
         private readonly String API_KEY = Environment.GetEnvironmentVariable("API_KEY");
+        private readonly String CLIENT_ID = Environment.GetEnvironmentVariable("CLIENT_ID");
         private readonly String API_SENDING_KEY = Environment.GetEnvironmentVariable("API_SENDING_KEY");
 
         private readonly String FUNCTIONAL_TEST_NUMBER = Environment.GetEnvironmentVariable("FUNCTIONAL_TEST_NUMBER");
@@ -48,7 +48,7 @@ namespace Notify.Tests.IntegrationTests
         [Test, Category("Integration"), Category("Integration/NotificationClientAsync")]
         public void SetUp()
         {
-            this.client = new NotificationClient(NOTIFY_API_URL, API_KEY);
+            this.client = new NotificationClient(NOTIFY_API_URL, API_KEY, CLIENT_ID);
         }
 
         [Test, Category("Integration"), Category("Integration/NotificationClientAsync")]

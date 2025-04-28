@@ -30,7 +30,7 @@ namespace Notify.Tests.UnitTests
             handler = new Mock<HttpMessageHandler>();
 
             var w = new HttpClientWrapper(new HttpClient(handler.Object));
-            client = new NotificationClient(w, Constants.fakeApiKey);
+            client = new NotificationClient(w, Constants.fakeApiKey, Constants.fakeClientId);
         }
 
         [TearDown]
@@ -43,13 +43,13 @@ namespace Notify.Tests.UnitTests
         [Test, Category("Unit"), Category("Unit/NotificationClientAsync")]
         public void CreateNotificationClientWithInvalidApiKeyFails()
         {
-            Assert.Throws<NotifyAuthException>(() => new NotificationClient("someinvalidkey"));
+            Assert.Throws<NotifyAuthException>(() => new NotificationClient("someinvalidkey", "someinvalidclientid"));
         }
 
         [Test, Category("Unit"), Category("Unit/NotificationClientAsync")]
         public void CreateNotificationClientWithEmptyApiKeyFails()
         {
-            Assert.Throws<NotifyAuthException>(() => new NotificationClient(""));
+            Assert.Throws<NotifyAuthException>(() => new NotificationClient("" , ""));
         }
 
         [Test, Category("Unit"), Category("Unit/NotificationClientAsync")]

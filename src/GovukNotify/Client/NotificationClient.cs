@@ -29,16 +29,16 @@ namespace Notify.Client
         public string TYPE_PARAM = "?type=";
         public string VERSION_PARAM = "/version/";
 
-        public NotificationClient(string apiKey) : base(new HttpClientWrapper(new HttpClient()), apiKey)
+        public NotificationClient(string apiKey, string clientId = null) : base(new HttpClientWrapper(new HttpClient()), apiKey, clientId )
         {
         }
 
-        public NotificationClient(string baseUrl, string apiKey) : base(new HttpClientWrapper(new HttpClient()), apiKey,
+        public NotificationClient(string baseUrl, string apiKey, string clientId = null) : base(new HttpClientWrapper(new HttpClient()), apiKey, clientId ,
             baseUrl)
         {
         }
 
-        public NotificationClient(IHttpClient client, string apiKey) : base(client, apiKey)
+        public NotificationClient(IHttpClient client, string apiKey, string clientId = null) : base(client, apiKey, clientId)
         {
         }
 
@@ -149,9 +149,9 @@ namespace Notify.Client
                 o.Add(new JProperty("sms_sender_id", smsSenderId));
             }
 
-            var response = await POST(SEND_SMS_NOTIFICATION_URL, o.ToString(Formatting.None)).ConfigureAwait(false);
+           var response = await POST(SEND_SMS_NOTIFICATION_URL, o.ToString(Formatting.None)).ConfigureAwait(false);
 
-            return JsonConvert.DeserializeObject<SmsNotificationResponse>(response);
+           return JsonConvert.DeserializeObject<SmsNotificationResponse>(response);
         }
 
         public async Task<EmailNotificationResponse> SendEmailAsync(string emailAddress, string templateId,

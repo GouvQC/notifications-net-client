@@ -30,7 +30,7 @@ Les responsables de projets ont le droit et la responsabilité de retirer, modif
 
 Ce Code de conduite s’applique à la fois dans le cadre des projets et dans la sphère publique, lorsqu’une personne représente le MCN.
 
-Des cas de conduite abusive, de harcèlement ou autre pratique jugée inacceptable ayant cours sur un projet au MCN peuvent être signalés en contactant le comité *xxxx* via l'adresse *<SoutienDevNTIC.@mcn.gouv.qc.ca>*.
+Des cas de conduite abusive, de harcèlement ou autre pratique jugée inacceptable ayant cours sur un projet au MCN peuvent être signalés en contactant le comité *xxxx* via l'adresse *<assistance.pgn@mcn.gouv.qc.ca>*.
 
 ## Attribution
 

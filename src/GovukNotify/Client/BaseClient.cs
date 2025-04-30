@@ -17,29 +17,33 @@ namespace Notify.Client
         private const int SERVICE_API_KEY_START_POSITION = 36;
         private const int GUID_LENGTH = 36;
         private const string NOTIFY_CLIENT_NAME = "NOTIFY-API-NET-CLIENT/";
+        private const string BASE_URL = "https://gw-gouvqc.mcn.api.gouv.qc.ca/pgn";
+        private const string PROXY_PGGAPI = "mcn.api.gouv.qc.ca";
 
         public string BaseUrl;
 
         private readonly IHttpClient client;
         private readonly string serviceId;
         private readonly string apiKey;
-        private readonly string client_id;
-        
-        public BaseClient(IHttpClient client, string apiKey, string clientId, string baseUrl = "https://api.notifications.service.gov.uk/")
-        {
+        private readonly string clientId;
+        private readonly string proxyPggapi;
+
+        public BaseClient(IHttpClient client, string apiKey, string clientId, string baseUrl = BASE_URL)
+        {           
             var serviceCredentials = ExtractServiceIdAndApiKey(apiKey);
             serviceId = serviceCredentials.Item1;
             this.apiKey = serviceCredentials.Item2;
-            client_id = ValidateClientId(clientId);
             BaseUrl = baseUrl;
             this.client = client;
             this.client.BaseAddress = ValidateBaseUri(BaseUrl);
+            this.proxyPggapi = PROXY_PGGAPI;
+            this.clientId = ValidateClientId(clientId, baseUrl, proxyPggapi);
             this.client.AddContentHeader("application/json");
 
             var productVersion = typeof(BaseClient).GetTypeInfo().Assembly.GetName().Version.ToString();
             this.client.AddUserAgent(NOTIFY_CLIENT_NAME + productVersion);
         }
-       
+
 
         public async Task<string> GET(string url)
         {
@@ -84,7 +88,7 @@ namespace Notify.Client
                 HandleHTTPErrors(response, responseContent);
             }
             return responseContent;
-        }      
+        }
 
         private async Task<HttpResponseMessage> SendRequest(string url, HttpMethod method, HttpContent content)
         {
@@ -97,7 +101,11 @@ namespace Notify.Client
 
             var notifyToken = Authenticator.CreateToken(this.apiKey, this.serviceId);
             request.Headers.TryAddWithoutValidation("Authorization", "Bearer " + notifyToken);
-            request.Headers.TryAddWithoutValidation("X-QC-Client-Id", this.client_id);
+
+            if (!string.IsNullOrWhiteSpace(this.clientId))
+            {
+                request.Headers.TryAddWithoutValidation("X-QC-Client-Id", this.clientId);
+            }
 
             HttpResponseMessage response;
 
@@ -160,12 +168,15 @@ namespace Notify.Client
 
         }
 
-        private string ValidateClientId(string clientId)
+        private string ValidateClientId(string clientId, string baseUrl, string proxyPggapi)
         {
-            if (string.IsNullOrWhiteSpace(clientId) || clientId.Contains(" "))
+            if (baseUrl.Contains(proxyPggapi))
             {
-                throw new NotifyAuthException("A required unique identifier for the client or service making the request.");
-            }
+                if (string.IsNullOrWhiteSpace(clientId) || clientId.Contains(" "))
+                {
+                    throw new NotifyAuthException("A valid client identifier (X-QC-Client-Id) is required when using the PGGAPI proxy.");
+                }
+            }          
 
             return clientId;
         }

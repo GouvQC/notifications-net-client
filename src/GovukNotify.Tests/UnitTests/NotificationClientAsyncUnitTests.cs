@@ -47,6 +47,12 @@ namespace Notify.Tests.UnitTests
         }
 
         [Test, Category("Unit"), Category("Unit/NotificationClientAsync")]
+        public void CreateNotificationClientWithProxyAPIAndClientIdFails()
+        {
+            Assert.Throws<NotifyAuthException>(() => new NotificationClient(Constants.fakeApiKey, ""));
+        }
+
+        [Test, Category("Unit"), Category("Unit/NotificationClientAsync")]
         public void CreateNotificationClientWithEmptyApiKeyFails()
         {
             Assert.Throws<NotifyAuthException>(() => new NotificationClient("" , ""));

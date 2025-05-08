@@ -1,0 +1,25 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.36" />
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.4" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\PgnNotifications.Client\PgnNotifications.Client.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="PgnNotifications.Client">
+      <HintPath>..\PgnNotifications.Client\bin\Debug\net462\PgnNotifications.Client.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>

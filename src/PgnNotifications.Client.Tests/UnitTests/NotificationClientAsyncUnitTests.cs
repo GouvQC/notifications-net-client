@@ -1,3 +1,12 @@
+using Moq;
+using Moq.Protected;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using NUnit.Framework;
+using PgnNotifications.Client;
+using PgnNotifications.Exceptions;
+using PgnNotifications.Models;
+using PgnNotifications.Models.Responses;
 using System;
 using System.Collections.Generic;
 using System.Net;
@@ -5,16 +14,6 @@ using System.Net.Http;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using Moq;
-using Moq.Protected;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using PgnNotifications.Client;
-using PgnNotifications.Exceptions;
-using PgnNotifications.Interfaces;
-using PgnNotifications.Models;
-using PgnNotifications.Models.Responses;
-using NUnit.Framework;
 
 namespace Notify.Tests.UnitTests
 {
@@ -80,18 +79,6 @@ namespace Notify.Tests.UnitTests
         }
 
         [Test, Category("Unit"), Category("Unit/NotificationClientAsync")]
-        public async Task GetPdfForLetterCreatesExpectedRequest()
-        {
-            var responseAsString = "%PDF-1.5 testpdf";
-            MockRequest(
-                responseAsString,
-                string.Format(client.GET_PDF_FOR_LETTER_URL, Constants.fakeNotificationId),
-                AssertValidRequest);
-
-            await client.GetPdfForLetterAsync(Constants.fakeNotificationId);
-        }
-
-        [Test, Category("Unit"), Category("Unit/NotificationClientAsync")]
         public async Task GetAllNotificationsCreatesExpectedResult()
         {
             MockRequest(Constants.fakeNotificationsJson,
@@ -149,17 +136,7 @@ namespace Notify.Tests.UnitTests
                 AssertValidRequest);
 
             await client.GetNotificationsAsync(templateType: "email");
-        }
-
-        [Test, Category("Unit"), Category("Unit/NotificationClientAsync")]
-        public async Task GetAllLetterNotificationsCreatesExpectedResult()
-        {
-            MockRequest(Constants.fakeEmailNotificationResponseJson,
-                client.GET_ALL_NOTIFICATIONS_URL + "?template_type=letter",
-                AssertValidRequest);
-
-            await client.GetNotificationsAsync(templateType: "letter");
-        }
+        }       
 
         [Test, Category("Unit"), Category("Unit/NotificationClientAsync")]
         public async Task GetTemplateWithIdCreatesExpectedRequest()
@@ -190,19 +167,7 @@ namespace Notify.Tests.UnitTests
 
             var responseNotification = await client.GetNotificationByIdAsync(Constants.fakeNotificationId);
             Assert.AreEqual(expectedResponse, responseNotification);
-        }
-
-        [Test, Category("Unit"), Category("Unit/NotificationClient")]
-        public async Task GetPdfForLetterReceivesExpectedResponse()
-        {
-            var responseAsString = "%PDF-1.5 testpdf";
-            var expectedResponse = Encoding.UTF8.GetBytes(responseAsString);
-
-            MockRequest(responseAsString);
-
-            var actualResponse = await client.GetPdfForLetterAsync(Constants.fakeNotificationId);
-            Assert.AreEqual(expectedResponse, actualResponse);
-        }
+        }       
 
         [Test, Category("Unit"), Category("Unit/NotificationClientAsync")]
         public async Task GetTemplateWithIdReceivesExpectedResponse()
@@ -692,88 +657,7 @@ namespace Notify.Tests.UnitTests
                     () => { NotificationClient.PrepareUpload(new byte[3 * 1024 * 1024]); },
                     Throws.ArgumentException
                     );
-        }
-
-        [Test, Category("Unit"), Category("Unit/NotificationClientAsync")]
-        public async Task SendLetterNotificationGeneratesExpectedRequest()
-        {
-            Dictionary<string, dynamic> personalisation = new Dictionary<string, dynamic>
-                {
-                    { "address_line_1", "Foo" },
-                    { "address_line_2", "Bar" },
-                    { "postcode", "SW1 1AA" }
-                };
-            JObject expected = new JObject
-            {
-                { "template_id", Constants.fakeTemplateId },
-                { "personalisation", JObject.FromObject(personalisation) },
-                { "reference", Constants.fakeNotificationReference }
-            };
-
-            MockRequest(Constants.fakeTemplatePreviewResponseJson,
-                client.SEND_LETTER_NOTIFICATION_URL,
-                AssertValidRequest,
-                HttpMethod.Post,
-                AssertGetExpectedContent, expected.ToString(Formatting.None));
-
-            await client.SendLetterAsync(Constants.fakeTemplateId, personalisation, Constants.fakeNotificationReference);
-        }
-
-        [Test, Category("Unit"), Category("Unit/NotificationClientAsync")]
-        public async Task SendLetterNotificationGeneratesExpectedResponse()
-        {
-            Dictionary<string, dynamic> personalisation = new Dictionary<string, dynamic>
-                {
-                    { "address_line_1", "Foo" },
-                    { "address_line_2", "Bar" },
-                    { "postcode", "SW1 1AA" }
-                };
-            LetterNotificationResponse expectedResponse = JsonConvert.DeserializeObject<LetterNotificationResponse>(Constants.fakeLetterNotificationResponseJson);
-
-            MockRequest(Constants.fakeLetterNotificationResponseJson);
-
-            LetterNotificationResponse actualResponse = await client.SendLetterAsync(Constants.fakeTemplateId, personalisation, Constants.fakeNotificationReference);
-
-            Assert.AreEqual(expectedResponse, actualResponse);
-
-        }
-
-        [Test, Category("Unit"), Category("Unit/NotificationClientAsync")]
-        public async Task SendPrecompiledLetterNotificationGeneratesExpectedRequest()
-        {
-            JObject expected = new JObject
-            {
-                { "reference", Constants.fakeNotificationReference },
-                { "content", "JVBERi0xLjUgdGVzdHBkZg==" }
-            };
-
-            MockRequest(Constants.fakeTemplatePreviewResponseJson,
-                client.SEND_LETTER_NOTIFICATION_URL,
-                AssertValidRequest,
-                HttpMethod.Post,
-                AssertGetExpectedContent, expected.ToString(Formatting.None));
-
-            await client.SendPrecompiledLetterAsync(
-                    Constants.fakeNotificationReference,
-                    Encoding.UTF8.GetBytes("%PDF-1.5 testpdf")
-            );
-        }
-
-        [Test, Category("Unit"), Category("Unit/NotificationClientAsync")]
-        public async Task SendPrecompiledLetterNotificationGeneratesExpectedResponse()
-        {
-            LetterNotificationResponse expectedResponse = JsonConvert.DeserializeObject<LetterNotificationResponse>(Constants.fakePrecompiledLetterNotificationResponseJson);
-
-            MockRequest(Constants.fakePrecompiledLetterNotificationResponseJson);
-
-            LetterNotificationResponse actualResponse = await client.SendPrecompiledLetterAsync(Constants.fakeNotificationReference, Encoding.UTF8.GetBytes("%PDF-1.5 testpdf"));
-
-            Assert.IsNotNull(expectedResponse.id);
-            Assert.IsNotNull(expectedResponse.reference);
-            Assert.IsNull(expectedResponse.content);
-            Assert.AreEqual(expectedResponse, actualResponse);
-
-        }
+        } 
 
         private static void AssertGetExpectedContent(string expected, string content)
         {

@@ -1,15 +1,13 @@
-﻿using System;
-using System.Text;
-using System.Threading;
-using System.Linq;
-using System.Collections.Generic;
-using System.IO;
+﻿using NUnit.Framework;
 using PgnNotifications.Client;
 using PgnNotifications.Exceptions;
 using PgnNotifications.Interfaces;
 using PgnNotifications.Models;
 using PgnNotifications.Models.Responses;
-using NUnit.Framework;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Threading;
 
 namespace Notify.Tests.IntegrationTests
 {
@@ -26,15 +24,13 @@ namespace Notify.Tests.IntegrationTests
         private readonly String FUNCTIONAL_TEST_EMAIL = Environment.GetEnvironmentVariable("FUNCTIONAL_TEST_EMAIL");
 
         private readonly String EMAIL_TEMPLATE_ID = Environment.GetEnvironmentVariable("EMAIL_TEMPLATE_ID");
-        private readonly String SMS_TEMPLATE_ID = Environment.GetEnvironmentVariable("SMS_TEMPLATE_ID");
-        private readonly String LETTER_TEMPLATE_ID = Environment.GetEnvironmentVariable("LETTER_TEMPLATE_ID");
+        private readonly String SMS_TEMPLATE_ID = Environment.GetEnvironmentVariable("SMS_TEMPLATE_ID");        
         private readonly String EMAIL_REPLY_TO_ID = Environment.GetEnvironmentVariable("EMAIL_REPLY_TO_ID");
         private readonly String SMS_SENDER_ID = Environment.GetEnvironmentVariable("SMS_SENDER_ID");
         private readonly String INBOUND_SMS_QUERY_KEY = Environment.GetEnvironmentVariable("INBOUND_SMS_QUERY_KEY");
 
         private String smsNotificationId;
         private String emailNotificationId;
-        private String letterNotificationId;
 
         const String TEST_TEMPLATE_SMS_BODY = "Hello ((name))\r\n\r\nFunctional Tests make our world a better place";
         const String TEST_SMS_BODY = "Hello someone\n\nFunctional Tests make our world a better place";
@@ -42,11 +38,7 @@ namespace Notify.Tests.IntegrationTests
         const String TEST_TEMPLATE_EMAIL_BODY = "Hello ((name))\r\n\r\nFunctional test help make our world a better place";
         const String TEST_EMAIL_BODY = "Hello someone\r\n\r\nFunctional test help make our world a better place";
         const String TEST_EMAIL_SUBJECT = "Functional Tests are good";
-
-        const String TEST_LETTER_BODY = "Hello Foo";
-        const String TEST_LETTER_SUBJECT = "Main heading";
-        const String TEST_LETTER_CONTACT_BLOCK = "Government Digital Service\nThe White Chapel Building\n10 Whitechapel High Street\nLondon\nE1 8QS\nUnited Kingdom";
-
+      
         [SetUp]
         [Test, Category("Integration"), Category("Integration/NotificationClient")]
         public void SetUp()
@@ -146,84 +138,6 @@ namespace Notify.Tests.IntegrationTests
             Assert.IsNull(notification.costDetails.internationalRateMultiplier);
             Assert.IsNull(notification.costDetails.postage);
             Assert.IsNull(notification.costDetails.billableSheetsOfPaper);
-
-            NotifyAssertions.AssertNotification(notification);
-        }
-
-        [Test, Category("Integration"), Category("Integration/NotificationClient")]
-        public void SendLetterTestWithPersonalisation()
-        {
-            Dictionary<String, dynamic> personalisation = new Dictionary<String, dynamic>
-            {
-                { "address_line_1", "Foo" },
-                { "address_line_2", "Bar" },
-                { "postcode", "SW1 1AA" }
-            };
-
-            LetterNotificationResponse response =
-                this.client.SendLetter(LETTER_TEMPLATE_ID, personalisation);
-
-            this.letterNotificationId = response.id;
-
-            Assert.IsNotNull(response);
-
-            Assert.AreEqual(response.content.body, TEST_LETTER_BODY);
-            Assert.AreEqual(response.content.subject, TEST_LETTER_SUBJECT);
-
-        }
-
-        [Test, Category("Integration"), Category("Integration/NotificationClient")]
-        public void GetLetterNotificationWithIdReturnsNotification()
-        {
-            SendLetterTestWithPersonalisation();
-            Notification notification = this.client.GetNotificationById(this.letterNotificationId);
-
-            Assert.IsNotNull(notification);
-            Assert.IsNotNull(notification.id);
-            Assert.AreEqual(notification.id, this.letterNotificationId);
-
-            Assert.IsNotNull(notification.body);
-            Assert.AreEqual(notification.body, TEST_LETTER_BODY);
-
-            Assert.IsNotNull(notification.subject);
-            Assert.AreEqual(notification.subject, TEST_LETTER_SUBJECT);
-
-            Assert.IsNotNull(notification.costDetails.postage);
-            Assert.IsNotNull(notification.costDetails.billableSheetsOfPaper);
-
-            NotifyAssertions.AssertNotification(notification);
-        }
-
-        [Test, Category("Integration"), Category("Integration/NotificationClient")]
-        public void SendPrecompiledLetterTest()
-        {
-
-            string reference = System.Guid.NewGuid().ToString();
-            string postage = "first";
-            byte[] pdfContents;
-            try
-            {
-                pdfContents = File.ReadAllBytes("../../../IntegrationTests/test_files/one_page_pdf.pdf");
-            }
-            catch (DirectoryNotFoundException)
-            {
-                pdfContents = File.ReadAllBytes("IntegrationTests/test_files/one_page_pdf.pdf");
-            }
-
-            LetterNotificationResponse response = this.client.SendPrecompiledLetter(reference, pdfContents, postage);
-
-            Assert.IsNotNull(response.id);
-            Assert.AreEqual(response.reference, reference);
-            Assert.AreEqual(response.postage, postage);
-
-            Notification notification = this.client.GetNotificationById(response.id);
-
-            Assert.IsNotNull(notification);
-            Assert.IsNotNull(notification.id);
-            Assert.AreEqual(notification.id, response.id);
-
-            Assert.AreEqual(notification.reference, response.reference);
-            Assert.AreEqual(notification.postage, response.postage);
 
             NotifyAssertions.AssertNotification(notification);
         }
@@ -395,7 +309,7 @@ namespace Notify.Tests.IntegrationTests
             const String type = "invalid";
 
             var ex = Assert.Throws<NotifyClientException>(() => this.client.GetAllTemplates(type));
-            Assert.That(ex.Message, Does.Contain("type invalid is not one of [sms, email, letter, broadcast]"));
+            Assert.That(ex.Message, Does.Contain("type invalid is not one of [sms, email]"));
         }
 
         [Test, Category("Integration"), Category("Integration/NotificationClient")]
@@ -412,14 +326,6 @@ namespace Notify.Tests.IntegrationTests
             TemplateResponse template = this.client.GetTemplateById(EMAIL_TEMPLATE_ID);
             Assert.AreEqual(template.id, EMAIL_TEMPLATE_ID);
             Assert.AreEqual(template.body, TEST_TEMPLATE_EMAIL_BODY);
-        }
-
-        [Test, Category("Integration"), Category("Integration/NotificationClient")]
-        public void GetLetterTemplateWithIdCheckContactBlock()
-        {
-            TemplateResponse template = this.client.GetTemplateById(LETTER_TEMPLATE_ID);
-            Assert.AreEqual(template.id, LETTER_TEMPLATE_ID);
-            Assert.AreEqual(template.letter_contact_block, TEST_LETTER_CONTACT_BLOCK);
         }
 
         [Test, Category("Integration"), Category("Integration/NotificationClient")]
@@ -523,34 +429,6 @@ namespace Notify.Tests.IntegrationTests
 
             Assert.IsNotNull(response.reference);
             Assert.AreEqual(response.reference, "sample-test-ref");
-        }
-
-        [Test, Category("Integration"), Category("Integration/NotificationClient")]
-        public void GetPdfForLetter()
-        {
-            byte[] pdfData = null;
-            for (int i = 0; i < 24; i++)
-            {
-                try
-                {
-                    pdfData = this.client.GetPdfForLetter(this.letterNotificationId);
-                    break;
-                }
-                catch (NotifyClientException e)
-                {
-                    if (!e.Message.Contains("PDFNotReadyError"))
-                    {
-                        throw e;
-                    }
-                    else
-                    {
-                        Thread.Sleep(5000);
-                    }
-                }
-            }
-            Assert.IsNotNull(pdfData);
-            var expectedResponse = Encoding.UTF8.GetBytes("%PDF-");
-            Assert.AreEqual(pdfData.Take(expectedResponse.Length).ToArray(), expectedResponse);
         }
     }
 }

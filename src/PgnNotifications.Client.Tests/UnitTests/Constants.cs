@@ -278,79 +278,7 @@ namespace Notify.Tests.UnitTests
                     ]
                 }";
             }
-        }
-        public static String fakeLetterNotificationsJson
-        {
-            get
-            {
-                return @"{
-                    ""notifications"": [
-                        {
-                            ""completed_at"": null,
-                            ""created_at"": ""2016-11-22T11:21:13.133522Z"",
-                            ""created_by_name"": null,
-                            ""email_address"": null,
-                            ""id"": ""902e4312-bc4a-4c87-8c3e-9f4144ca36fd"",
-                            ""line_1"": ""Mr Someone"",
-                            ""line_2"": ""1 Test Street"",
-                            ""line_3"": null,
-                            ""line_4"": null,
-                            ""line_5"": null,
-                            ""line_6"": null,
-                            ""phone_number"": null,
-                            ""postcode"": ""SW1 1AA"",
-                            ""postage"": ""second"",
-                            ""reference"": null,
-                            ""sent_at"": ""2016-11-22T16:16:09.885808Z"",
-                            ""status"": ""sending"",
-                            ""template"": {
-                                ""id"": ""913e9fa6-9cbb-44ad-8f58-38487dccfd82"",
-                                ""uri"": ""/service/fd29e421-24b6-4f45-ac5c-e642a1d68641/template/323e9fa6-9cbb-44ad-8f64-38487dccfd43"",
-                                ""version"": 2  },
-                            ""type"": ""letter"",
-                            ""one_click_unsubscribe_url"": null,
-                            ""is_cost_data_ready"": true,
-                            ""cost_in_pounds"": 0.5,
-                            ""cost_details"": {
-                                ""billable_sheets_of_paper"": 1,
-                                ""postage"": ""first""
-                            }
-                        },
-                        {
-                            ""completed_at"": null,
-                            ""created_at"": ""2016-11-24T11:21:13.133522Z"",
-                            ""created_by_name"": null,
-                            ""email_address"": null,
-                            ""id"": ""902e4312-bc4a-4c87-8c3e-9f4144ca36fd"",
-                            ""line_1"": ""Mrs Somebody"",
-                            ""line_2"": ""2 Test Street"",
-                            ""line_3"": null,
-                            ""line_4"": null,
-                            ""line_5"": null,
-                            ""line_6"": null,
-                            ""phone_number"": null,
-                            ""postcode"": ""SW1 1AA"",
-                            ""postage"": ""first"",
-                            ""reference"": null,
-                            ""sent_at"": ""2016-11-24T16:16:09.885808Z"",
-                            ""status"": ""sending"",
-                            ""template"": {
-                                ""id"": ""913e9fa6-9cbb-44ad-8f58-38487dccfd84"",
-                                ""uri"": ""/service/fd29e421-24b6-4f45-ac5c-e642a1d68641/template/323e9fa6-9cbb-44ad-8f64-38487dccfd43"",
-                                ""version"": 2  },
-                            ""type"": ""letter"",
-                            ""one_click_unsubscribe_url"": null,
-                            ""is_cost_data_ready"": true,
-                            ""cost_in_pounds"": 0.5,
-                            ""cost_details"": {
-                                ""billable_sheets_of_paper"": 1,
-                                ""postage"": ""first""
-                            }
-                        }
-                    ]
-                }";
-            }
-        }
+        }        
         public static String fakeTemplateResponseJson
         {
             get
@@ -540,39 +468,5 @@ namespace Notify.Tests.UnitTests
                         }";
             }
         }
-
-        public static String fakeLetterNotificationResponseJson
-        {
-            get
-            {
-                return @"{
-                            ""content"": {
-                                ""body"": ""Hello someone\n\nFake"",
-                                ""subject"": ""Test""
-                            },
-                            ""id"": ""731b9c83-563f-4b59-afc5-87e9ca717833"",
-                            ""reference"":  ""some-client-ref"",
-                            ""template"": {
-                                ""id"": ""f0bb62f7-5ddb-4bf8-aac7-7ey6aefd1524"",
-                                ""uri"": ""https://someurl/v2/templates/c0bs62f7-4ddb-6bf8-cac7-c1e6aefd1524"",
-                                ""version"": 5
-                            },
-                            ""uri"": ""https://someurl//v2/notifications/321b9c43-563f-4c59-sac5-87e9ca325833""
-                        }";
-            }
-        }
-
-        public static String fakePrecompiledLetterNotificationResponseJson
-        {
-            get
-            {
-                return @"{
-                            ""id"": ""731b9c83-563f-4b59-afc5-87e9ca717833"",
-                            ""reference"":  ""some-client-ref"",
-                            ""postage"": ""second""
-                        }";
-            }
-        }
-
     }
 }

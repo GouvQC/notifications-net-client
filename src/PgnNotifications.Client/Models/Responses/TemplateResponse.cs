@@ -13,7 +13,6 @@ namespace PgnNotifications.Models.Responses
         public int version;
         public string body;
         public string subject;
-        public string letter_contact_block;
 
         public override bool Equals(object response)
         {
@@ -31,8 +30,7 @@ namespace PgnNotifications.Models.Responses
                 created_by == resp.created_by &&
                 version == resp.version &&
                 body == resp.body &&
-                subject == resp.subject &&
-                letter_contact_block == resp.letter_contact_block;
+                subject == resp.subject ;
         }
 
         public override int GetHashCode()

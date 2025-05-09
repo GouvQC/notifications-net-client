@@ -24,15 +24,13 @@ namespace Notify.Tests.IntegrationTests
         private readonly String FUNCTIONAL_TEST_EMAIL = Environment.GetEnvironmentVariable("FUNCTIONAL_TEST_EMAIL");
 
         private readonly String EMAIL_TEMPLATE_ID = Environment.GetEnvironmentVariable("EMAIL_TEMPLATE_ID");
-        private readonly String SMS_TEMPLATE_ID = Environment.GetEnvironmentVariable("SMS_TEMPLATE_ID");
-        private readonly String LETTER_TEMPLATE_ID = Environment.GetEnvironmentVariable("LETTER_TEMPLATE_ID");
+        private readonly String SMS_TEMPLATE_ID = Environment.GetEnvironmentVariable("SMS_TEMPLATE_ID");       
         private readonly String EMAIL_REPLY_TO_ID = Environment.GetEnvironmentVariable("EMAIL_REPLY_TO_ID");
         private readonly String SMS_SENDER_ID = Environment.GetEnvironmentVariable("SMS_SENDER_ID");
         private readonly String INBOUND_SMS_QUERY_KEY = Environment.GetEnvironmentVariable("INBOUND_SMS_QUERY_KEY");
 
         private String smsNotificationId;
         private String emailNotificationId;
-        private String letterNotificationId;
 
         const String TEST_TEMPLATE_SMS_BODY = "Hello ((name))\r\n\r\nFunctional Tests make our world a better place";
         const String TEST_SMS_BODY = "Hello someone\n\nFunctional Tests make our world a better place";
@@ -40,9 +38,6 @@ namespace Notify.Tests.IntegrationTests
         const String TEST_TEMPLATE_EMAIL_BODY = "Hello ((name))\r\n\r\nFunctional test help make our world a better place";
         const String TEST_EMAIL_BODY = "Hello someone\r\n\r\nFunctional test help make our world a better place";
         const String TEST_EMAIL_SUBJECT = "Functional Tests are good";
-
-        const String TEST_LETTER_BODY = "Hello Foo";
-        const String TEST_LETTER_SUBJECT = "Main heading";
 
         [SetUp]
         [Test, Category("Integration"), Category("Integration/NotificationClientAsync")]
@@ -143,84 +138,6 @@ namespace Notify.Tests.IntegrationTests
             Assert.IsNull(notification.costDetails.internationalRateMultiplier);
             Assert.IsNull(notification.costDetails.postage);
             Assert.IsNull(notification.costDetails.billableSheetsOfPaper);
-
-            NotifyAssertions.AssertNotification(notification);
-        }
-
-        [Test, Category("Integration"), Category("Integration/NotificationClientAsync")]
-        public async Task SendLetterTestWithPersonalisation()
-        {
-            Dictionary<String, dynamic> personalisation = new Dictionary<String, dynamic>
-            {
-                { "address_line_1", "Foo" },
-                { "address_line_2", "Bar" },
-                { "postcode", "SW1 1AA" }
-            };
-
-            LetterNotificationResponse response =
-                await this.client.SendLetterAsync(LETTER_TEMPLATE_ID, personalisation);
-
-            this.letterNotificationId = response.id;
-
-            Assert.IsNotNull(response);
-
-            Assert.AreEqual(response.content.body, TEST_LETTER_BODY);
-            Assert.AreEqual(response.content.subject, TEST_LETTER_SUBJECT);
-
-        }
-
-        [Test, Category("Integration"), Category("Integration/NotificationClientAsync")]
-        public async Task GetLetterNotificationWithIdReturnsNotification()
-        {
-            await SendLetterTestWithPersonalisation();
-            Notification notification = await this.client.GetNotificationByIdAsync(this.letterNotificationId);
-
-            Assert.IsNotNull(notification);
-            Assert.IsNotNull(notification.id);
-            Assert.AreEqual(notification.id, this.letterNotificationId);
-
-            Assert.IsNotNull(notification.body);
-            Assert.AreEqual(notification.body, TEST_LETTER_BODY);
-
-            Assert.IsNotNull(notification.subject);
-            Assert.AreEqual(notification.subject, TEST_LETTER_SUBJECT);
-
-            Assert.IsNotNull(notification.costDetails.postage);
-            Assert.IsNotNull(notification.costDetails.billableSheetsOfPaper);
-
-            NotifyAssertions.AssertNotification(notification);
-        }
-
-        [Test, Category("Integration"), Category("Integration/NotificationClientAsync")]
-        public async Task SendPrecompiledLetterTest()
-        {
-
-            string reference = System.Guid.NewGuid().ToString();
-            string postage = "first";
-            byte[] pdfContents;
-            try
-            {
-                pdfContents = File.ReadAllBytes("../../../IntegrationTests/test_files/one_page_pdf.pdf");
-            }
-            catch (DirectoryNotFoundException)
-            {
-                pdfContents = File.ReadAllBytes("IntegrationTests/test_files/one_page_pdf.pdf");
-            }
-
-            LetterNotificationResponse response = await this.client.SendPrecompiledLetterAsync(reference, pdfContents, postage);
-
-            Assert.IsNotNull(response.id);
-            Assert.AreEqual(response.reference, reference);
-            Assert.AreEqual(response.postage, postage);
-
-            Notification notification = await this.client.GetNotificationByIdAsync(response.id);
-
-            Assert.IsNotNull(notification);
-            Assert.IsNotNull(notification.id);
-            Assert.AreEqual(notification.id, response.id);
-
-            Assert.AreEqual(notification.reference, response.reference);
-            Assert.AreEqual(notification.postage, response.postage);
 
             NotifyAssertions.AssertNotification(notification);
         }
@@ -383,15 +300,6 @@ namespace Notify.Tests.IntegrationTests
             {
                 NotifyAssertions.AssertTemplateResponse(template, type);
             }
-        }
-
-        [Test, Category("Integration"), Category("Integration/NotificationClientAsync")]
-        public void GetAllInvalidTemplatesRaisesClientException()
-        {
-            const String type = "invalid";
-
-            var ex = Assert.ThrowsAsync<NotifyClientException>(async () => await this.client.GetAllTemplatesAsync(type));
-            Assert.That(ex.Message, Does.Contain("type invalid is not one of [sms, email, letter, broadcast]"));
         }
 
         [Test, Category("Integration"), Category("Integration/NotificationClientAsync")]

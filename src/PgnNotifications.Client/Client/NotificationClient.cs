@@ -17,11 +17,9 @@ namespace PgnNotifications.Client
     public class NotificationClient : BaseClient, INotificationClient, IAsyncNotificationClient
     {
         public string GET_RECEIVED_TEXTS_URL = "v2/received-text-messages";
-        public string GET_NOTIFICATION_URL = "v2/notifications/";
-        public string GET_PDF_FOR_LETTER_URL = "v2/notifications/{0}/pdf";
+        public string GET_NOTIFICATION_URL = "v2/notifications/";        
         public string SEND_SMS_NOTIFICATION_URL = "v2/notifications/sms";
-        public string SEND_EMAIL_NOTIFICATION_URL = "v2/notifications/email";
-        public string SEND_LETTER_NOTIFICATION_URL = "v2/notifications/letter";
+        public string SEND_EMAIL_NOTIFICATION_URL = "v2/notifications/email";        
         public string GET_TEMPLATE_URL = "v2/template/";
         public string GET_ALL_NOTIFICATIONS_URL = "v2/notifications";
         public string GET_ALL_TEMPLATES_URL = "v2/templates";
@@ -173,35 +171,7 @@ namespace PgnNotifications.Client
             var response = await POST(SEND_EMAIL_NOTIFICATION_URL, o.ToString(Formatting.None)).ConfigureAwait(false);
 
             return JsonConvert.DeserializeObject<EmailNotificationResponse>(response);
-        }
-
-        public async Task<LetterNotificationResponse> SendLetterAsync(string templateId, Dictionary<string, dynamic> personalisation,
-            string clientReference = null)
-        {
-            var o = CreateRequestParams(templateId, personalisation, clientReference);
-
-            var response = await this.POST(SEND_LETTER_NOTIFICATION_URL, o.ToString(Formatting.None)).ConfigureAwait(false);
-
-            return JsonConvert.DeserializeObject<LetterNotificationResponse>(response);
-        }
-
-        public async Task<LetterNotificationResponse> SendPrecompiledLetterAsync(string clientReference, byte[] pdfContents, string postage = null)
-        {
-            var requestParams = new JObject
-            {
-                {"reference", clientReference},
-                {"content", System.Convert.ToBase64String(pdfContents)}
-            };
-
-            if (postage != null)
-            {
-                requestParams.Add(new JProperty("postage", postage));
-            }
-
-            var response = await this.POST(SEND_LETTER_NOTIFICATION_URL, requestParams.ToString(Formatting.None)).ConfigureAwait(false);
-
-            return JsonConvert.DeserializeObject<LetterNotificationResponse>(response);
-        }
+        }       
 
         public async Task<TemplateResponse> GetTemplateByIdAsync(string templateId)
         {
@@ -239,15 +209,7 @@ namespace PgnNotifications.Client
             {
                 throw new NotifyClientException("Could not create Template object from response: {0}", response);
             }
-        }
-
-
-        public async Task<byte[]> GetPdfForLetterAsync(string notificationId)
-        {
-            var finalUrl = string.Format(GET_PDF_FOR_LETTER_URL, notificationId);
-            var response = await GETBytes(finalUrl).ConfigureAwait(false);
-            return response;
-        }
+        }        
 
         public static JObject PrepareUpload(byte[] documentContents, string filename, bool confirmEmailBeforeDownload, string retentionPeriod)
         {
@@ -451,42 +413,6 @@ namespace PgnNotifications.Client
             try
             {
                 return SendEmailAsync(emailAddress, templateId, personalisation, clientReference, emailReplyToId, oneClickUnsubscribeURL).Result;
-            }
-            catch (AggregateException ex)
-            {
-                throw HandleAggregateException(ex);
-            }
-        }
-
-        public LetterNotificationResponse SendLetter(string templateId, Dictionary<string, dynamic> personalisation, string clientReference = null)
-        {
-            try
-            {
-                return SendLetterAsync(templateId, personalisation, clientReference).Result;
-            }
-            catch (AggregateException ex)
-            {
-                throw HandleAggregateException(ex);
-            }
-        }
-
-        public LetterNotificationResponse SendPrecompiledLetter(string clientReference, byte[] pdfContents, string postage = null)
-        {
-            try
-            {
-                return SendPrecompiledLetterAsync(clientReference, pdfContents, postage).Result;
-            }
-            catch (AggregateException ex)
-            {
-                throw HandleAggregateException(ex);
-            }
-        }
-
-        public byte[] GetPdfForLetter(string notificationId)
-        {
-            try
-            {
-                return GetPdfForLetterAsync(notificationId).Result;
             }
             catch (AggregateException ex)
             {

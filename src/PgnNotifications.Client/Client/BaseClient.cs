@@ -17,7 +17,7 @@ namespace PgnNotifications.Client
         private const int SERVICE_API_KEY_START_POSITION = 36;
         private const int GUID_LENGTH = 36;
         private const string NOTIFY_CLIENT_NAME = "NOTIFY-API-NET-CLIENT/";
-        private const string BASE_URL = "https://gw-gouvqc.mcn.api.gouv.qc.ca/pgn";
+        private const string BASE_URL = "https://gw-gouvqc.mcn.api.gouv.qc.ca/pgn/";
         private const string PROXY_PGGAPI = "mcn.api.gouv.qc.ca";
 
         public string BaseUrl;
@@ -33,7 +33,10 @@ namespace PgnNotifications.Client
             var serviceCredentials = ExtractServiceIdAndApiKey(apiKey);
             serviceId = serviceCredentials.Item1;
             this.apiKey = serviceCredentials.Item2;
-            BaseUrl = baseUrl ?? BASE_URL;
+
+            BaseUrl = string.IsNullOrEmpty(baseUrl) ? BASE_URL : baseUrl;
+
+
             this.client = client;
             this.client.BaseAddress = ValidateBaseUri(BaseUrl);
             this.proxyPggapi = PROXY_PGGAPI;

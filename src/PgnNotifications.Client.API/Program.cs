@@ -1,3 +1,4 @@
+using System.Reflection;
 using Microsoft.OpenApi.Models;
 using PgnNotifications.Client.API.Services;
 
@@ -10,8 +11,7 @@ builder.Services.AddScoped<NotificationServiceContext>();
 
 // Swagger configuration
 builder.Services.AddSwaggerGen(c =>
-{
-    // Define custom headers
+{    
     c.AddSecurityDefinition("X-Api-Key", new OpenApiSecurityScheme
     {
         In = ParameterLocation.Header,
@@ -61,9 +61,15 @@ builder.Services.AddSwaggerGen(c =>
             Array.Empty<string>()
         }
     });
+
+    c.SchemaFilter<SwaggerSchemaFilter>();
+
+    var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+    c.IncludeXmlComments(xmlPath, includeControllerXmlComments: true);
 });
 
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddDataAnnotationsLocalization(); 
 builder.Services.AddEndpointsApiExplorer();
 
 var app = builder.Build();

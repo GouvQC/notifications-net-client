@@ -10,18 +10,49 @@ namespace PgnNotifications.Client.API.Controllers
         private readonly INotificationService _notificationService = notificationService;
 
         [HttpPost("SendSms")]
-        public IActionResult SendSms([FromHeader(Name = "mobileNumber")] string mobileNumber, [FromHeader(Name = "templateId")] string templateId)
+        public IActionResult SendSms([FromBody] SmsRequest request)
         {
-            var response = _notificationService.SendSms(mobileNumber, templateId, new Dictionary<string, dynamic> { { "name", "Test Send Sms" } });
+            var response = _notificationService.SendSms(
+                request.MobileNumber,
+                request.TemplateId,
+                request.Personalisation,
+                request.ClientReference,
+                request.SmsSenderId
+            );
+
+            return Ok(response);
+        }      
+
+        [HttpPost("SendEmail")]
+        public IActionResult SendEmail([FromBody] EmailRequest request)
+        {
+            // Garantindo que campos obrigatórios estejam presentes.
+            if (string.IsNullOrWhiteSpace(request.EmailAddress))
+            {
+                return BadRequest("The 'EmailAddress' field is required.");
+            }
+            if (string.IsNullOrWhiteSpace(request.TemplateId))
+            {
+                return BadRequest("The 'TemplateId' field is required.");
+            }
+
+            // Chamando o serviço para enviar o email.
+            var response = _notificationService.SendEmail(
+                request.EmailAddress,
+                request.TemplateId,
+                request.Personalisation,
+                request.ClientReference,
+                request.EmailReplyToId,
+                request.OneClickUnsubscribeURL,
+                request.ScheduledFor,
+                request.Importance,
+                request.CcAddress
+            );
+
+            // Retornando a resposta
             return Ok(response);
         }
 
-        [HttpPost("SendEmail")]
-        public IActionResult SendEmail([FromHeader] string emailAddress, [FromHeader] string templateId)
-        {
-            var response = _notificationService.SendEmail(emailAddress, templateId, new Dictionary<string, dynamic> { { "name", "Test Send Email" } });
-            return Ok(response);
-        }
 
         [HttpGet("GetAllTemplates")]
         public IActionResult GetAllTemplates([FromHeader] string templateType = "")

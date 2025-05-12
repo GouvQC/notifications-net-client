@@ -133,45 +133,80 @@ namespace PgnNotifications.Client
 
             return receivedTexts;
         }
-
-        public async Task<SmsNotificationResponse> SendSmsAsync(string mobileNumber, string templateId,
-            Dictionary<string, dynamic> personalisation = null, string clientReference = null,
+        
+        public async Task<SmsNotificationResponse> SendSmsAsync(
+            string mobileNumber,
+            string templateId,
+            Dictionary<string, dynamic> personalisation = null,
+            string clientReference = null,
             string smsSenderId = null)
         {
+            // Create the object with required and optional parameters
             var o = CreateRequestParams(templateId, personalisation, clientReference);
+
+            // Add phone number to the object
             o.AddFirst(new JProperty("phone_number", mobileNumber));
 
-            if (smsSenderId != null)
-            {
+            // Add SMS sender ID if provided
+            if (!string.IsNullOrWhiteSpace(smsSenderId))
                 o.Add(new JProperty("sms_sender_id", smsSenderId));
-            }
 
-           var response = await POST(SEND_SMS_NOTIFICATION_URL, o.ToString(Formatting.None)).ConfigureAwait(false);
+            // Send the request and deserialize the response
+            var response = await POST(SEND_SMS_NOTIFICATION_URL, o.ToString(Formatting.None))
+                .ConfigureAwait(false);
 
-           return JsonConvert.DeserializeObject<SmsNotificationResponse>(response);
+            return JsonConvert.DeserializeObject<SmsNotificationResponse>(response);
         }
 
-        public async Task<EmailNotificationResponse> SendEmailAsync(string emailAddress, string templateId,
-            Dictionary<string, dynamic> personalisation = null, string clientReference = null,
-            string emailReplyToId = null, string oneClickUnsubscribeURL = null)
+        public async Task<EmailNotificationResponse> SendEmailAsync(
+            string emailAddress,
+            string templateId,
+            Dictionary<string, dynamic> personalisation = null,
+            string clientReference = null,
+            string emailReplyToId = null,
+            string oneClickUnsubscribeURL = null,
+            string scheduledFor = null,
+            string importance = null,
+            string ccAddress = null)
         {
+            // Create the object with required and optional parameters
             var o = CreateRequestParams(templateId, personalisation, clientReference);
+
+            // Add email address at the beginning of the JSON object
             o.AddFirst(new JProperty("email_address", emailAddress));
 
-            if (emailReplyToId != null)
-            {
+            // Add optional fields if provided
+            if (!string.IsNullOrWhiteSpace(emailReplyToId))
                 o.Add(new JProperty("email_reply_to_id", emailReplyToId));
-            }
 
-            if (oneClickUnsubscribeURL != null)
-            {
+            if (!string.IsNullOrWhiteSpace(oneClickUnsubscribeURL))
                 o.Add(new JProperty("one_click_unsubscribe_url", oneClickUnsubscribeURL));
+
+            if (!string.IsNullOrWhiteSpace(scheduledFor))
+                o.Add(new JProperty("scheduled_for", scheduledFor));
+
+            if (!string.IsNullOrWhiteSpace(importance))
+            {
+                var validImportances = new[] { "high", "normal", "low" };
+                var importanceNormalized = importance.Trim().ToLowerInvariant();
+
+                // Validate importance value
+                if (!validImportances.Contains(importanceNormalized))
+                    throw new NotifyClientException("The 'importance' field must be: high, normal, or low.");
+
+                o.Add(new JProperty("importance", importanceNormalized));
             }
 
-            var response = await POST(SEND_EMAIL_NOTIFICATION_URL, o.ToString(Formatting.None)).ConfigureAwait(false);
+            if (!string.IsNullOrWhiteSpace(ccAddress))
+                o.Add(new JProperty("cc_address", ccAddress));
+
+            // Send the request and deserialize the response
+            var response = await POST(SEND_EMAIL_NOTIFICATION_URL, o.ToString(Formatting.None))
+                .ConfigureAwait(false);
 
             return JsonConvert.DeserializeObject<EmailNotificationResponse>(response);
-        }       
+        }
+
 
         public async Task<TemplateResponse> GetTemplateByIdAsync(string templateId)
         {
@@ -408,11 +443,13 @@ namespace PgnNotifications.Client
             }
         }
 
-        public EmailNotificationResponse SendEmail(string emailAddress, string templateId, Dictionary<string, dynamic> personalisation = null, string clientReference = null, string emailReplyToId = null, string oneClickUnsubscribeURL = null)
+        public EmailNotificationResponse SendEmail(string emailAddress, string templateId, Dictionary<string, dynamic> personalisation = null,
+                                                   string clientReference = null, string emailReplyToId = null, string oneClickUnsubscribeURL = null,
+                                                   string scheduledFor = null, string importance= null, string ccAddress= null)
         {
             try
             {
-                return SendEmailAsync(emailAddress, templateId, personalisation, clientReference, emailReplyToId, oneClickUnsubscribeURL).Result;
+                return SendEmailAsync(emailAddress, templateId, personalisation, clientReference, emailReplyToId, oneClickUnsubscribeURL,scheduledFor,importance,ccAddress).Result;
             }
             catch (AggregateException ex)
             {

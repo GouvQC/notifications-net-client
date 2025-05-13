@@ -5,9 +5,15 @@ namespace PgnNotifications.Client.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class NotificationClientController(INotificationService notificationService) : ControllerBase
+    public class NotificationClientController : ControllerBase
     {
-        private readonly INotificationService _notificationService = notificationService;
+        private readonly INotificationService _notificationService;
+
+        // Construtor tradicional
+        public NotificationClientController(INotificationService notificationService)
+        {
+            _notificationService = notificationService;
+        }
 
         [HttpPost("SendSms")]
         public IActionResult SendSms([FromBody] SmsRequest request)
@@ -21,12 +27,11 @@ namespace PgnNotifications.Client.API.Controllers
             );
 
             return Ok(response);
-        }      
+        }
 
         [HttpPost("SendEmail")]
         public IActionResult SendEmail([FromBody] EmailRequest request)
         {
-            // Garantindo que campos obrigatórios estejam presentes.
             if (string.IsNullOrWhiteSpace(request.EmailAddress))
             {
                 return BadRequest("The 'EmailAddress' field is required.");
@@ -36,7 +41,6 @@ namespace PgnNotifications.Client.API.Controllers
                 return BadRequest("The 'TemplateId' field is required.");
             }
 
-            // Chamando o serviço para enviar o email.
             var response = _notificationService.SendEmail(
                 request.EmailAddress,
                 request.TemplateId,
@@ -49,10 +53,8 @@ namespace PgnNotifications.Client.API.Controllers
                 request.CcAddress
             );
 
-            // Retornando a resposta
             return Ok(response);
         }
-
 
         [HttpGet("GetAllTemplates")]
         public IActionResult GetAllTemplates([FromHeader] string templateType = "")

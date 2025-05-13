@@ -1,0 +1,29 @@
+# URL de l'API de notification
+export NOTIFY_API_URL="votre-proxy-url"
+
+# Clé API pour accéder aux services de notification (remplacer par votre propre clé)
+export API_KEY="votre-cle-api-ici"
+
+# ID du service utilisé pour les tests
+export SERVICE_ID="votre-service-id-ici"
+
+# CLIENT ID du service PGGAPI ABONNÉE
+export CLIENT_ID="votre-client-id-ici"
+
+# Numéro de téléphone utilisé pour les tests fonctionnels
+export FUNCTIONAL_TEST_NUMBER="numero-membre-equipe-service"
+
+# Adresse courriel utilisée pour les tests fonctionnels
+export FUNCTIONAL_TEST_EMAIL="exemple@domaine.com"
+
+# ID du modèle de courriel utilisé pour les tests
+export EMAIL_TEMPLATE_ID="id-modele-courriel"
+
+# ID du modèle SMS utilisé pour les tests
+export SMS_TEMPLATE_ID="id-modele-sms"
+
+# ID de réponse pour les courriels (optionnel)
+export EMAIL_REPLY_TO_ID="reply-to-id"
+
+# ID de l'expéditeur SMS (optionnel)
+export SMS_SENDER_ID="sms-sender-id"

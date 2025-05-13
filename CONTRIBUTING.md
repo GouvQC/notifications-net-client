@@ -6,7 +6,7 @@ Veuillez lire ce document avant de soumettre des problèmes ou des demandes d’
 
 ## Signaler des bogues/demandes de fonctionnalités
 
-Nous vous invitons à utiliser la boîte du Soutien au développement <SoutienDEVNTIC@mcn.gouv.qc.ca> pour signaler des bogues ou suggérer de nouvelles fonctionnalités.
+Nous vous invitons à utiliser la boîte du Soutien au développement <assistance.pgn@mcn.gouv.qc.ca> pour signaler des bogues ou suggérer de nouvelles fonctionnalités.
 
 Lorsque vous déposez un problème, nous vérifions rapidement dans le carnet du projet si le problème a déjà été identifié afin de vous informer rapidement s’il y a déjà eu un signalement. On vous demande d’inclure autant d’informations que possible pour faciliter la compréhension du problème rencontré. Des détails comme ceux-ci sont très utiles:
 
@@ -42,7 +42,7 @@ Examiner les problèmes existants est un excellent moyen de trouver quelque chos
 
 Ce projet a adopté le *Code de conduite du MCN*. Ce code de conduite couvre toutes les activités des projets sous la gouverne du MCN; qu’il s’agisse de code, de documentation ou de commentaires sur les problèmes ou les relations publiques
 
-Pour plus d’informations, veuillez adresser une demande à la boîte <SoutienDevNTIC@mcn.gouv.qc.ca>, votre message sera traité de manière sécurisée et confidentielle.
+Pour plus d’informations, veuillez adresser une demande à la boîte <assistance.pgn@mcn.gouv.qc.ca>, votre message sera traité de manière sécurisée et confidentielle.
 
 ## Notifications de problèmes de sécurité
 
@@ -51,3 +51,54 @@ Si vous découvrez un problème de sécurité potentiel dans un projet appartena
 ## Licences
 
 Voir le fichier [LICENCE](LICENSE) qui identifie les licences potentiellement requises pour soutenir un de nos projets. Nous vous demanderons de confirmer la licence en lien avec votre contribution.
+
+## Configuration
+
+### Conteneur Docker
+
+This app uses dependencies that are difficult to install locally. In order to make local development easy, we run app commands through a Docker container. Run the following to set this up:
+
+Il s'agit d'une base de code écrite pour prendre en charge uniquement .Net C#.
+
+Cette application utilise des dépendances difficiles à installer localement. Afin de faciliter le développement local, nous exécutons les commandes de l'application via un conteneur Docker. Exécutez la commande suivante pour configurer cela :
+
+```shell
+make bootstrap-with-docker
+```
+
+Comme le conteneur met en cache des éléments tels que les paquets, vous devrez relancer cette commande si vous changez les versions des paquets.
+
+### `environment.sh`
+
+Dans le répertoire racine du dépôt, exécutez :
+
+```
+notify-pass credentials/client-integration-tests > environment.sh
+```
+
+À moins que vous ne fassiez partie de l’équipe MCN, vous ne pourrez pas exécuter cette commande ni les tests d'intégration. Cependant, le fichier doit quand même exister — exécutez plutôt `touch environment.sh`.
+
+
+## Tests
+
+Pour exécuter les tests, vous devrez d’abord créer les binaires :
+
+```
+make build-with-docker
+```
+
+### Unit Tests
+
+Pour exécuter les tests unitaires :
+
+```
+make test-with-docker
+```
+
+### Integration Tests
+
+Pour exécuter les tests d’intégration :
+
+```
+make integration-test-with-docker
+```

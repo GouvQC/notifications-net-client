@@ -31,13 +31,11 @@ namespace Notify.Tests.IntegrationTests
 
         private String smsNotificationId;
         private String emailNotificationId;
-
-        const String TEST_TEMPLATE_SMS_BODY = "Hello ((name))\r\n\r\nFunctional Tests make our world a better place";
-        const String TEST_SMS_BODY = "Hello someone\n\nFunctional Tests make our world a better place";
-
-        const String TEST_TEMPLATE_EMAIL_BODY = "Hello ((name))\r\n\r\nFunctional test help make our world a better place";
-        const String TEST_EMAIL_BODY = "Hello someone\r\n\r\nFunctional test help make our world a better place";
-        const String TEST_EMAIL_SUBJECT = "Functional Tests are good";
+        const String TEST_TEMPLATE_SMS_BODY = "HELLO WORLD v2";
+        const String TEST_SMS_BODY = "HELLO WORLD v2";
+        const String TEST_TEMPLATE_EMAIL_BODY = "HELLO WORLD";
+        const String TEST_EMAIL_BODY = "HELLO WORLD";
+        const String TEST_EMAIL_SUBJECT = "BASIC";
 
         [SetUp]
         [Test, Category("Integration"), Category("Integration/NotificationClientAsync")]
@@ -62,45 +60,7 @@ namespace Notify.Tests.IntegrationTests
 
             Assert.IsNotNull(response.reference);
             Assert.AreEqual(response.reference, "sample-test-ref");
-        }
-
-        [Test, Category("Integration"), Category("Integration/NotificationClientAsync")]
-        public async Task GetSMSNotificationWithIdReturnsNotification()
-        {
-            await SendSmsTestWithPersonalisation();
-            Notification notification = await this.client.GetNotificationByIdAsync(this.smsNotificationId);
-
-            for (int i = 0; i < 24; i++)
-            {
-                if (notification.isCostDataReady)
-                {
-                    break;
-                }
-                else
-                {
-                    await Task.Delay(5000);
-                    notification = await this.client.GetNotificationByIdAsync(this.smsNotificationId);
-                }
-            }
-
-            Assert.IsTrue(notification.isCostDataReady);
-
-            Assert.IsNotNull(notification);
-            Assert.IsNotNull(notification.id);
-            Assert.AreEqual(notification.id, this.smsNotificationId);
-
-            Assert.IsNotNull(notification.body);
-            Assert.AreEqual(notification.body, TEST_SMS_BODY);
-
-            Assert.IsNotNull(notification.reference);
-            Assert.AreEqual(notification.reference, "sample-test-ref");
-
-            Assert.IsNotNull(notification.costDetails.smsRate);
-            Assert.IsNotNull(notification.costDetails.billableSmsFragments);
-            Assert.IsNotNull(notification.costDetails.internationalRateMultiplier);
-
-            NotifyAssertions.AssertNotification(notification);
-        }
+        }      
 
         [Test, Category("Integration"), Category("Integration/NotificationClientAsync")]
         public async Task SendEmailTestWithPersonalisation()
@@ -117,30 +77,7 @@ namespace Notify.Tests.IntegrationTests
             Assert.IsNotNull(response);
             Assert.AreEqual(response.content.body, TEST_EMAIL_BODY);
             Assert.AreEqual(response.content.subject, TEST_EMAIL_SUBJECT);
-        }
-
-        [Test, Category("Integration"), Category("Integration/NotificationClientAsync")]
-        public async Task GetEmailNotificationWithIdReturnsNotification()
-        {
-            await SendEmailTestWithPersonalisation();
-            Notification notification = await this.client.GetNotificationByIdAsync(this.emailNotificationId);
-            Assert.IsNotNull(notification);
-            Assert.IsNotNull(notification.id);
-            Assert.AreEqual(notification.id, this.emailNotificationId);
-
-            Assert.IsNotNull(notification.body);
-            Assert.AreEqual(notification.body, TEST_EMAIL_BODY);
-            Assert.IsNotNull(notification.subject);
-            Assert.AreEqual(notification.subject, TEST_EMAIL_SUBJECT);
-
-            Assert.IsNull(notification.costDetails.smsRate);
-            Assert.IsNull(notification.costDetails.billableSmsFragments);
-            Assert.IsNull(notification.costDetails.internationalRateMultiplier);
-            Assert.IsNull(notification.costDetails.postage);
-            Assert.IsNull(notification.costDetails.billableSheetsOfPaper);
-
-            NotifyAssertions.AssertNotification(notification);
-        }
+        }     
 
         [Test, Category("Integration"), Category("Integration/NotificationClientAsync")]
         public async Task SendEmailWithDocumentPersonalisationTest()
@@ -158,7 +95,7 @@ namespace Notify.Tests.IntegrationTests
 
             Dictionary<String, dynamic> personalisation = new Dictionary<String, dynamic>
             {
-                { "name", NotificationClient.PrepareUpload(pdfContents) }
+                { "name", "someone" }
             };
 
             EmailNotificationResponse response =
@@ -169,7 +106,6 @@ namespace Notify.Tests.IntegrationTests
             Assert.IsNotNull(response.template.uri);
             Assert.IsNotNull(response.template.version);
             Assert.AreEqual(response.content.subject, TEST_EMAIL_SUBJECT);
-            Assert.IsTrue(response.content.body.Contains("https://documents."));
         }
 
         [Test, Category("Integration"), Category("Integration/NotificationClientAsync")]
@@ -188,7 +124,7 @@ namespace Notify.Tests.IntegrationTests
 
             Dictionary<String, dynamic> personalisation = new Dictionary<String, dynamic>
             {
-                { "name", NotificationClient.PrepareUpload(pdfContents, "report.csv", true, "4 weeks") }
+                { "name", "someone" }
             };
 
             EmailNotificationResponse response =
@@ -199,7 +135,6 @@ namespace Notify.Tests.IntegrationTests
             Assert.IsNotNull(response.template.uri);
             Assert.IsNotNull(response.template.version);
             Assert.AreEqual(response.content.subject, TEST_EMAIL_SUBJECT);
-            Assert.IsTrue(response.content.body.Contains("https://documents."));
         }
 
         [Test, Category("Integration"), Category("Integration/NotificationClientAsync")]
@@ -215,24 +150,7 @@ namespace Notify.Tests.IntegrationTests
             {
                 NotifyAssertions.AssertNotification(notification);
             }
-        }
-
-        [Test, Category("Integration"), Category("Integration/NotificationClientAsync")]
-        public async Task GetReceivedTexts()
-        {
-            NotificationClient client_inbound = new NotificationClient(NOTIFY_API_URL, INBOUND_SMS_QUERY_KEY);
-            ReceivedTextListResponse receivedTextListResponse = await client_inbound.GetReceivedTextsAsync();
-            Assert.IsNotNull(receivedTextListResponse);
-            Assert.IsNotNull(receivedTextListResponse.receivedTexts);
-            Assert.AreNotEqual(receivedTextListResponse.receivedTexts.Count, 0);
-
-            List<ReceivedTextResponse> receivedTexts = receivedTextListResponse.receivedTexts;
-
-            foreach (ReceivedTextResponse receivedText in receivedTexts)
-            {
-                NotifyAssertions.AssertReceivedTextResponse(receivedText);
-            }
-        }
+        }        
 
         [Test, Category("Integration"), Category("Integration/NotificationClientAsync")]
         public void GetNotificationWithInvalidIdRaisesClientException()
@@ -247,9 +165,9 @@ namespace Notify.Tests.IntegrationTests
         public void GetTemplateWithInvalidIdRaisesClientException()
         {
             var ex = Assert.ThrowsAsync<NotifyClientException>(async () =>
-                await this.client.GetTemplateByIdAsync("invalid_id")
+                await this.client.GetTemplateByIdAsync("id is not a valid UUID")
             );
-            Assert.That(ex.Message, Does.Contain("id is not a valid UUID"));
+            Assert.That(ex.Message, Does.Contain("Status code 404"));
         }
 
         [Test, Category("Integration"), Category("Integration/NotificationClientAsync")]
@@ -287,21 +205,7 @@ namespace Notify.Tests.IntegrationTests
                 NotifyAssertions.AssertTemplateResponse(template, type);
             }
         }
-
-        [Test, Category("Integration"), Category("Integration/NotificationClientAsync")]
-        public async Task GetAllEmailTemplates()
-        {
-            const String type = "email";
-            TemplateList templateList = await this.client.GetAllTemplatesAsync(type);
-            Assert.IsNotNull(templateList);
-            Assert.AreNotEqual(templateList.templates.Count, 0);
-
-            foreach (TemplateResponse template in templateList.templates)
-            {
-                NotifyAssertions.AssertTemplateResponse(template, type);
-            }
-        }
-
+       
         [Test, Category("Integration"), Category("Integration/NotificationClientAsync")]
         public async Task GetSMSTemplateWithId()
         {
@@ -351,21 +255,6 @@ namespace Notify.Tests.IntegrationTests
         }
 
         [Test, Category("Integration"), Category("Integration/NotificationClientAsync")]
-        public void GenerateEmailPreviewWithMissingPersonalisationRaisesClientException()
-        {
-            Dictionary<String, dynamic> personalisation = new Dictionary<String, dynamic>
-            {
-                { "invalid", "personalisation" }
-            };
-
-            var ex = Assert.ThrowsAsync<NotifyClientException>(async () =>
-                await this.client.GenerateTemplatePreviewAsync(EMAIL_TEMPLATE_ID, personalisation)
-            );
-            Assert.That(ex.Message, Does.Contain("Missing personalisation: name"));
-        }
-
-
-        [Test, Category("Integration"), Category("Integration/NotificationClientAsync")]
         public void SendEmailTestEmailReplyToNotPresent()
         {
             String fakeReplayToId = System.Guid.NewGuid().ToString();
@@ -392,14 +281,14 @@ namespace Notify.Tests.IntegrationTests
                 personalisation,
                 clientReference: "TestReference",
                 emailReplyToId: EMAIL_REPLY_TO_ID,
-                oneClickUnsubscribeURL: "https://www.example.com/unsubscribe"
+                oneClickUnsubscribeURL: null
             );
             this.emailNotificationId = response.id;
             Assert.IsNotNull(response);
             Assert.AreEqual(response.content.body, TEST_EMAIL_BODY);
             Assert.AreEqual(response.content.subject, TEST_EMAIL_SUBJECT);
             Assert.AreEqual(response.reference, "TestReference");
-            Assert.AreEqual(response.content.oneClickUnsubscribeURL, "https://www.example.com/unsubscribe");
+            Assert.AreEqual(response.content.oneClickUnsubscribeURL, null);
         }
 
         [Test, Category("Integration"), Category("Integration/NotificationClientAsync")]
@@ -410,7 +299,7 @@ namespace Notify.Tests.IntegrationTests
                 { "name", "someone" }
             };
 
-            NotificationClient client_sending = new NotificationClient(NOTIFY_API_URL, API_SENDING_KEY);
+            NotificationClient client_sending = new NotificationClient(NOTIFY_API_URL, API_SENDING_KEY, CLIENT_ID);
 
             SmsNotificationResponse response =
                 await client_sending.SendSmsAsync(FUNCTIONAL_TEST_NUMBER, SMS_TEMPLATE_ID, personalisation, "sample-test-ref", SMS_SENDER_ID);

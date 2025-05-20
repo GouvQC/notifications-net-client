@@ -6,7 +6,7 @@ help:
 
 .PHONY: build
 build: ## Construire le projet
-	dotnet build -f net6
+	dotnet build -f net6.0
 
 .PHONY: format
 format:
@@ -22,11 +22,11 @@ test: single-test
 
 .PHONY: single-test
 single-test: build ## Exécuter un test unique. Utilisation : "make single-test test=[nom du test]"
-	dotnet test ./src/PgnNotifications.Client.Tests/PgnNotifications.Client.Tests.csproj -f net6 --no-build -v n --filter $(test)
+	dotnet test ./src/PgnNotifications.Client.Tests/PgnNotifications.Client.Tests.csproj -f net6.0 --no-build -v n --filter $(test)
 
 .PHONY: build-release
 build-release: ## Construire la version de production
-	dotnet build -c Release -f net6
+	dotnet build -c Release -f net6.0
 
 .PHONY: build-package
 build-package: build-release ## Construire et empaqueter le NuGet

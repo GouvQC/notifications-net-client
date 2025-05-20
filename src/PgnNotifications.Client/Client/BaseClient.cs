@@ -146,9 +146,10 @@ namespace PgnNotifications.Client
 
         public Tuple<string, string> ExtractServiceIdAndApiKey(string fromApiKey)
         {
-            if (fromApiKey.Length < 74 || string.IsNullOrWhiteSpace(fromApiKey) || fromApiKey.Contains(" "))
+            if (fromApiKey.Length < 73 || string.IsNullOrWhiteSpace(fromApiKey) || fromApiKey.Contains(" "))
             {
                 throw new NotifyAuthException("The API Key provided is invalid. Please ensure you are using a v2 API Key that is not empty or null");
+                                                 
             }
 
             var serviceId = fromApiKey.Substring(fromApiKey.Length - SERVICE_ID_START_POSITION, GUID_LENGTH);

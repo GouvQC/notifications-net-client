@@ -2,6 +2,12 @@ using System.ComponentModel.DataAnnotations;
 
 public class SmsRequest
 {
+     public SmsRequest(string mobileNumber, string templateId)
+    {
+        MobileNumber = mobileNumber;
+        TemplateId = templateId;
+    }
+
     /// <summary>The mobile phone number to receive the SMS</summary>
     /// <example>+5511999999999</example>
     [Required]
@@ -24,11 +30,11 @@ public class SmsRequest
     /// A client-defined reference that can be used for tracking or grouping notifications. (Optional)
     /// </summary>
     /// <example>order-98765</example>
-    public string ClientReference { get; set; }
+    public string? ClientReference { get; set; }
 
     /// <summary>
     /// The ID of the sender to display as the originator of the SMS. This must be configured in the notification system. (Optional)
     /// </summary>
     /// <example>MyCompanySMS</example>
-    public string SmsSenderId { get; set; }
+    public string? SmsSenderId { get; set; }
 }

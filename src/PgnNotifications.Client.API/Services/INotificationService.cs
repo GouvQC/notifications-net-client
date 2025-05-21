@@ -4,11 +4,11 @@ namespace PgnNotifications.Client.API.Services
 {   
     public interface INotificationService
     {
-        SmsNotificationResponse SendSms(string mobileNumber, string templateId, Dictionary<string, dynamic> personalisation = null,
-                                        string clientReference = null, string smsSenderId = null);
+        SmsNotificationResponse SendSms(string mobileNumber, string templateId, Dictionary<string, dynamic> personalisation,
+                                        string? clientReference, string? smsSenderId);
         EmailNotificationResponse SendEmail(string emailAddress, string templateId, Dictionary<string, dynamic> personalisation,
-                                            string clientReference = null, string emailReplyToId = null, string oneClickUnsubscribeURL = null,
-                                            string scheduledFor = null, string importance = null, string ccAddress = null);
+                                            string? clientReference , string? emailReplyToId , string? oneClickUnsubscribeURL,
+                                            string? scheduledFor, string? importance , string? ccAddress );
         IEnumerable<TemplateList> GetAllTemplates(string templateType);
         object GetTemplateById(string templateId);
         object GetTemplateByIdAndVersion(string templateId, int version);

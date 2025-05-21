@@ -14,13 +14,13 @@ namespace PgnNotifications.Client.API.Services
             _client = new NotificationClient(context.BaseUrl, context.ApiKey, context.ClientId);
         }
 
-        public SmsNotificationResponse SendSms(string mobileNumber, string templateId, Dictionary<string, dynamic> personalisation = null,
-                                        string clientReference = null, string smsSenderId = null)     
+        public SmsNotificationResponse SendSms(string mobileNumber, string templateId, Dictionary<string, dynamic> personalisation ,
+                                        string? clientReference , string? smsSenderId )     
             => _client.SendSms(mobileNumber, templateId, personalisation);
 
         public EmailNotificationResponse SendEmail(string emailAddress, string templateId, Dictionary<string, dynamic> personalisation,
-                                                   string clientReference = null, string emailReplyToId = null, string oneClickUnsubscribeURL = null,
-                                                   string scheduledFor = null, string importance = null, string ccAddress = null)
+                                                   string? clientReference , string? emailReplyToId , string? oneClickUnsubscribeURL ,
+                                                   string? scheduledFor , string? importance , string? ccAddress )
             => _client.SendEmail(emailAddress, templateId, personalisation, clientReference, emailReplyToId, oneClickUnsubscribeURL,
                                  scheduledFor, importance, ccAddress);
         public IEnumerable<TemplateList> GetAllTemplates(string templateType)

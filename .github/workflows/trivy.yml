@@ -1,0 +1,63 @@
+name: Trivy Scan
+
+on:
+  push:
+    branches: ['*']
+  pull_request:
+    branches: ['*']
+  workflow_dispatch:
+
+jobs:
+  docker-scan:
+    name: Scan de securité Trivy (Docker image)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build Docker image
+        run: docker build -t notifications-net-client .
+
+      - name: Scan Docker image with Trivy
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: notifications-net-client
+          format: table
+          exit-code: 1
+          ignore-unfixed: true
+          vuln-type: os,library
+          severity: CRITICAL,HIGH
+
+  filesystem-scan:
+    name: Scan de securité Trivy (filesystem via SBOM)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install CycloneDX for .NET
+        run: dotnet tool install --global CycloneDX
+
+      - name: Generate SBOM
+        run: |
+          export PATH="$PATH:/github/home/.dotnet/tools"
+          dotnet restore PgnNotifications.Client.sln
+          dotnet build PgnNotifications.Client.sln -c Release
+          cycloneDX dotnet -p ./PgnNotifications.Client.sln -o sbom.xml
+
+      - name: Scan SBOM with Trivy
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: sbom
+          scan-ref: sbom.xml
+          format: table
+          exit-code: 1
+          ignore-unfixed: true
+          severity: CRITICAL,HIGH
+
+

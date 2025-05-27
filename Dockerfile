@@ -1,27 +1,35 @@
-# Ã‰tape de build
+# Étape de build
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 
-# Installer les paquets de base
-RUN \
-    echo "Installation des paquets de base" \
-    && apt-get update \
-    && apt-get install -y --no-install-recommends \
-    awscli \
-    gnupg \
-    make \
-    jq
+# Installer les paquets système nécessaires avec versions sécurisées
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+        wget=1.21-1+deb11u2 \
+        libc-bin=2.31-13+deb11u13 \
+        awscli \
+        gnupg \
+        make \
+        jq \
+    && apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
 
-# DÃ©finir le rÃ©pertoire de travail
+# Installer CycloneDX pour .NET
+RUN dotnet tool install --global CycloneDX
+
+# Ajouter les outils .NET au PATH
+ENV PATH="$PATH:/root/.dotnet/tools"
+
+# Définir le répertoire de travail
 WORKDIR /app
 
-# Copier tous les fichiers du projet dans le conteneur
+# Copier les fichiers du projet
 COPY . .
 
-# Restaurer les dÃ©pendances
+# Restaurer les dépendances
 RUN dotnet restore PgnNotifications.Client.sln
 
 # Construire la solution
 RUN dotnet build PgnNotifications.Client.sln --configuration Release --verbosity minimal
 
-# (Facultatif) Publier l'application si nÃ©cessaire
-# RUN dotnet publish PgnNotifications.Client.sln -c Release -o /app/publish
+# Générer le SBOM (Software Bill of Materials)
+RUN cyclonedx dotnet -p ./PgnNotifications.Client.sln -o sbom.xml

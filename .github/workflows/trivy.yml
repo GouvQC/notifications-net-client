@@ -2,14 +2,14 @@ name: Trivy Scan
 
 on:
   push:
-    branches: ['*']
+    branches: ["**"]
   pull_request:
-    branches: ['*']
+    branches: ["**"]
   workflow_dispatch:
 
 jobs:
   docker-scan:
-    name: Scan de securité Trivy (Docker image)
+    name: Scan de sécurité Trivy (Docker image)
     runs-on: ubuntu-latest
 
     steps:
@@ -33,21 +33,27 @@ jobs:
           severity: CRITICAL,HIGH
 
   filesystem-scan:
-    name: Scan de securité Trivy (filesystem via SBOM)
+    name: Scan de sécurité Trivy (filesystem via SBOM)
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Install CycloneDX for .NET
+      - name: Install CycloneDX CLI
         run: dotnet tool install --global CycloneDX
 
-      - name: Generate SBOM
+      - name: Add dotnet tools to PATH
+        run: echo "$HOME/.dotnet/tools" >> $GITHUB_PATH
+
+      - name: Restore and Build the solution
         run: |
-          export PATH="$PATH:/github/home/.dotnet/tools"
           dotnet restore PgnNotifications.Client.sln
           dotnet build PgnNotifications.Client.sln -c Release
+
+      - name: Generate SBOM with CycloneDX
+        run: |
+          export PATH="$PATH:$HOME/.dotnet/tools"
           cyclonedx dotnet -p ./PgnNotifications.Client.sln -o sbom.xml
 
       - name: Scan SBOM with Trivy
@@ -59,5 +65,3 @@ jobs:
           exit-code: 1
           ignore-unfixed: true
           severity: CRITICAL,HIGH
-
-

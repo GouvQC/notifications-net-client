@@ -14,7 +14,8 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 
 # Installer CycloneDX pour .NET
-RUN dotnet tool install --global CycloneDX
+RUN dotnet tool install --global CycloneDX --version 0.7.2
+
 
 # Ajouter les outils .NET au PATH
 ENV PATH="$PATH:/root/.dotnet/tools"

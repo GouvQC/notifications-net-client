@@ -48,7 +48,7 @@ jobs:
           export PATH="$PATH:/github/home/.dotnet/tools"
           dotnet restore PgnNotifications.Client.sln
           dotnet build PgnNotifications.Client.sln -c Release
-          cycloneDX dotnet -p ./PgnNotifications.Client.sln -o sbom.xml
+          cyclonedx dotnet -p ./PgnNotifications.Client.sln -o sbom.xml
 
       - name: Scan SBOM with Trivy
         uses: aquasecurity/trivy-action@master

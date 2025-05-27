@@ -9,7 +9,7 @@ on:
 
 jobs:
   docker-scan:
-    name: Scan de securite Trivy net (Docker image)
+    name: Scan de securite Trivy .net (Docker image)
     runs-on: ubuntu-latest
 
     steps:

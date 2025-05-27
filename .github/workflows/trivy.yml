@@ -9,7 +9,7 @@ on:
 
 jobs:
   docker-scan:
-    name: Scan de securité Trivy (Docker image)
+    name: Scan de securite Trivy (Docker image)
     runs-on: ubuntu-latest
 
     steps:
@@ -33,7 +33,7 @@ jobs:
           severity: CRITICAL,HIGH
 
   filesystem-scan:
-    name: Scan de securité Trivy (filesystem via SBOM)
+    name: Scan de securite Trivy (filesystem via SBOM)
     runs-on: ubuntu-latest
 
     steps:

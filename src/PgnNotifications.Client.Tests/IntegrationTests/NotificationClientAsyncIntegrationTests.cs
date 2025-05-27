@@ -7,6 +7,7 @@ using PgnNotifications.Exceptions;
 using PgnNotifications.Models;
 using PgnNotifications.Models.Responses;
 using NUnit.Framework;
+using System.Net.Http;
 
 namespace Notify.Tests.IntegrationTests
 {
@@ -135,6 +136,70 @@ namespace Notify.Tests.IntegrationTests
             Assert.IsNotNull(response.template.uri);
             Assert.IsNotNull(response.template.version);
             Assert.AreEqual(response.content.subject, TEST_EMAIL_SUBJECT);
+        }
+
+        [Test, Category("Integration"), Category("Integration/NotificationClient")]
+        public void SendBulkNotificationsWithRows_WorksAsExpected()
+        {
+            string functionalTestEmail = Environment.GetEnvironmentVariable("FUNCTIONAL_TEST_EMAIL");
+            string emailTemplateId = Environment.GetEnvironmentVariable("EMAIL_TEMPLATE_ID");
+
+            string name = "Test Bulk Notification Integration";
+            string reference = "bulk_ref_integration_test";
+
+            string templateId = emailTemplateId;
+            var rows = new List<List<string>>
+            {
+                new List<string> { "email_address", "name" },
+                new List<string> { functionalTestEmail, "Name Test" },
+                new List<string> { functionalTestEmail, "Name Test" }
+            };
+
+            HttpResponseMessage response = this.client.SendBulkNotifications(
+                templateId: templateId,
+                name: name,
+                rows: rows,
+                reference: reference
+            );
+
+            Assert.IsNotNull(response);
+            Assert.IsTrue(response.IsSuccessStatusCode);
+        }
+
+
+        [Test, Category("Integration"), Category("Integration/NotificationClient")]
+        public void SendBulkNotificationsWithCsv_WorksAsExpected()
+        {
+            string functionalPhoneNumber = Environment.GetEnvironmentVariable("FUNCTIONAL_TEST_NUMBER");
+            string smsTemplateId = Environment.GetEnvironmentVariable("SMS_TEMPLATE_ID");
+
+            string name = "Bulk send email with personalisation";
+            string reference = "bulk_ref_integration_test_csv";
+
+            string templateId;
+            string csvData;
+
+            templateId = smsTemplateId;
+            csvData = $"phone_number,name\n{functionalPhoneNumber},Name Test\n{functionalPhoneNumber},Name Test";
+
+            var response = this.client.SendBulkNotifications(
+                templateId: templateId,
+                name: name,
+                csv: csvData,
+                reference: reference
+            );
+
+            Assert.IsNotNull(response);
+            Assert.IsTrue(response.IsSuccessStatusCode);
+        }
+
+        [Test, Category("Integration"), Category("Integration/NotificationClient")]
+        public void CheckHealth_WorksAsExpected()
+        {
+            string result = this.client.CheckHealth();
+
+            Assert.IsNotNull(result);
+            Assert.IsTrue(result.Contains("ok") || result.Contains("Healthy") || result.Length > 0);
         }
 
         [Test, Category("Integration"), Category("Integration/NotificationClientAsync")]

@@ -1,4 +1,7 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System;
+using System.Collections.Generic;
 
 namespace Notify.Tests.UnitTests
 {
@@ -22,10 +25,13 @@ namespace Notify.Tests.UnitTests
 
         public static String fakePhoneNumber { get { return "07766565767"; } }
         public static String fakeEmail { get { return "test@mail.com"; } }
-
+        public static String fakeName { get { return "test name"; } }
+        public static String fakeSmsBulkName { get { return "Envoi groupé de test CSV avec phone numbers"; } }
+        public static String fakeEmailBulkName { get { return "Envoi groupé de test Email avec emails et names"; } }
         public static String fakeNotificationId { get { return "902e6534-bc4a-4c87-8c3e-9f4144ca36fd"; } }
         public static String fakeNotificationReference { get { return "some-client-ref"; } }
         public static String fakeoneClickUnsubscribeURL { get { return "https://oneClickUnsubscribeURL.com/unsubscribe"; } }
+        public static String fakeId { get { return "913e9fa6-9cbb-44ad-8f58-38487dccfd82"; } }
         public static String fakeTemplateId { get { return "913e9fa6-9cbb-44ad-8f58-38487dccfd82"; } }
         public static String fakeReplyToId { get { return "78ded4ad-e915-4a89-a314-2940ed141d40"; } }
         public static String fakeSMSSenderId { get { return "88ded4ad-e915-4a89-a314-2940ed141d41"; } }
@@ -278,7 +284,7 @@ namespace Notify.Tests.UnitTests
                     ]
                 }";
             }
-        }        
+        }
         public static String fakeTemplateResponseJson
         {
             get
@@ -394,6 +400,31 @@ namespace Notify.Tests.UnitTests
             }
         }
 
+        public static String fakeCsvBulkJson
+        {
+            get
+            {
+                return
+                        $@"phone_number,name
+                        {fakePhoneNumber},{fakeName}
+                        {fakePhoneNumber},{fakeName}";
+            }
+        }
+
+
+        public static List<List<string>> fakeRowsEmailBulk
+        {
+            get
+            {
+                return new List<List<string>>
+                {
+                    new List<string> { "email_address", "name" },
+                    new List<string> { fakePhoneNumber, fakeName },
+                    new List<string> { fakePhoneNumber, fakeName }
+                };
+                        }
+        }
+
         public static String fakeTemplatePreviewResponseJson
         {
             get
@@ -405,6 +436,40 @@ namespace Notify.Tests.UnitTests
                             ""body"": ""test body"",
                             ""subject"": null
                          }";
+            }
+        }
+
+        public static string fakeEmailBulkResponseJson
+        {
+            get
+            {
+                var rowsJson = JArray.FromObject(fakeRowsEmailBulk).ToString(Formatting.None);
+
+                return $@"{{
+                    ""id"":  ""{fakeId}"",
+                    ""template_id"": ""{fakeTemplateId}"",
+                    ""name"": ""{fakeEmailBulkName}"",
+                    ""rows"": {rowsJson},
+                    ""reference"": ""{fakeNotificationReference}"",
+                    ""replyToId"": ""{fakeReplyToId}""
+                }}";
+            }
+        }
+        
+        public static string fakeSmsBulkResponseJson
+        {
+            get
+            {
+                var csvJson = JsonConvert.ToString(fakeCsvBulkJson);
+
+                return $@"{{
+                    ""id"":  ""{fakeId}"",
+                    ""template_id"": ""{fakeTemplateId}"",
+                    ""name"": ""{fakeSmsBulkName}"",
+                    ""csv"": {csvJson},
+                    ""reference"": ""{fakeNotificationReference}"",
+                    ""replyToId"": ""{fakeReplyToId}""
+                }}";
             }
         }
 

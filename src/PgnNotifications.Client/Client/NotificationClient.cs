@@ -10,6 +10,7 @@ using System.Collections.Specialized;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace PgnNotifications.Client
@@ -17,20 +18,22 @@ namespace PgnNotifications.Client
     public class NotificationClient : BaseClient, INotificationClient, IAsyncNotificationClient
     {
         public string GET_RECEIVED_TEXTS_URL = "v2/received-text-messages";
-        public string GET_NOTIFICATION_URL = "v2/notifications/";        
+        public string GET_NOTIFICATION_URL = "v2/notifications/";
+        public string GET_CHECK_HEALTH_URL = "health";
         public string SEND_SMS_NOTIFICATION_URL = "v2/notifications/sms";
-        public string SEND_EMAIL_NOTIFICATION_URL = "v2/notifications/email";        
+        public string SEND_EMAIL_NOTIFICATION_URL = "v2/notifications/email";
+        public string SEND_BULK_NOTIFICATION_URL = "v2/notifications/bulk";
         public string GET_TEMPLATE_URL = "v2/template/";
         public string GET_ALL_NOTIFICATIONS_URL = "v2/notifications";
         public string GET_ALL_TEMPLATES_URL = "v2/templates";
         public string TYPE_PARAM = "?type=";
         public string VERSION_PARAM = "/version/";
 
-        public NotificationClient(string apiKey, string clientId = null) : base(new HttpClientWrapper(new HttpClient()), apiKey, clientId )
+        public NotificationClient(string apiKey, string clientId = null) : base(new HttpClientWrapper(new HttpClient()), apiKey, clientId)
         {
         }
 
-        public NotificationClient(string baseUrl, string apiKey, string clientId = null) : base(new HttpClientWrapper(new HttpClient()), apiKey, clientId ,
+        public NotificationClient(string baseUrl, string apiKey, string clientId = null) : base(new HttpClientWrapper(new HttpClient()), apiKey, clientId,
             baseUrl)
         {
         }
@@ -133,7 +136,7 @@ namespace PgnNotifications.Client
 
             return receivedTexts;
         }
-        
+
         public async Task<SmsNotificationResponse> SendSmsAsync(
             string mobileNumber,
             string templateId,
@@ -207,6 +210,66 @@ namespace PgnNotifications.Client
             return JsonConvert.DeserializeObject<EmailNotificationResponse>(response);
         }
 
+        public async Task<HttpResponseMessage> SendBulkNotificationsAsync(
+                string templateId,
+                string name,                
+                List<List<string>> rows = null,
+                string csv = null,                
+                string reference = null,
+                string scheduledFor = null,
+                string replyToId = null)
+        {
+            if (rows == null && string.IsNullOrWhiteSpace(csv))
+            {
+                throw new ArgumentException("Vous devez fournir soit 'rows', soit 'csv'.");
+            }
+
+            if (rows != null && !string.IsNullOrWhiteSpace(csv))
+            {
+                throw new ArgumentException("Vous ne pouvez pas fournir à la fois 'rows' et 'csv'.");
+            }
+
+            // Create the object with required and optional parameters
+            var o = new JObject
+            {
+                {"template_id", templateId},
+                { "name", name }
+            };
+
+            if (rows != null)
+                 o.Add(new JProperty("rows", JArray.FromObject(rows)));
+               
+      
+            if (!string.IsNullOrWhiteSpace(csv))
+                 o.Add(new JProperty("csv", csv)); 
+           
+            if (!string.IsNullOrWhiteSpace(reference))
+                o.Add(new JProperty("reference", reference));
+
+            if (!string.IsNullOrWhiteSpace(scheduledFor))
+                 o.Add(new JProperty("scheduledFor", scheduledFor));
+
+            if (!string.IsNullOrWhiteSpace(replyToId))
+                 o.Add(new JProperty("replyToId", replyToId));
+
+            var response = await POST(SEND_BULK_NOTIFICATION_URL, o.ToString(Formatting.None))
+               .ConfigureAwait(false);
+
+            return JsonConvert.DeserializeObject<HttpResponseMessage>(response);
+        }       
+        
+        public async Task<string> CheckHealthAsync()
+        {
+            try
+            {
+                return await GET(GET_CHECK_HEALTH_URL);
+            }
+            catch (Exception ex)
+            {
+                return $"❌ Erreur lors de la vérification de l'état de santé : {ex.Message}";
+            }
+        }       
+
 
         public async Task<TemplateResponse> GetTemplateByIdAsync(string templateId)
         {
@@ -244,7 +307,7 @@ namespace PgnNotifications.Client
             {
                 throw new NotifyClientException("Could not create Template object from response: {0}", response);
             }
-        }        
+        }
 
         public static JObject PrepareUpload(byte[] documentContents, string filename, bool confirmEmailBeforeDownload, string retentionPeriod)
         {
@@ -431,6 +494,18 @@ namespace PgnNotifications.Client
             }
         }
 
+        public string CheckHealth()
+        {
+            try
+            {
+                return CheckHealthAsync().GetAwaiter().GetResult();
+            }
+            catch (Exception ex)
+            {
+                return $"❌ Erreur lors de la synchronisation: {ex.Message}";
+            }
+        }
+
         public SmsNotificationResponse SendSms(string mobileNumber, string templateId, Dictionary<string, dynamic> personalisation = null, string clientReference = null, string smsSenderId = null)
         {
             try
@@ -445,16 +520,29 @@ namespace PgnNotifications.Client
 
         public EmailNotificationResponse SendEmail(string emailAddress, string templateId, Dictionary<string, dynamic> personalisation = null,
                                                    string clientReference = null, string emailReplyToId = null, string oneClickUnsubscribeURL = null,
-                                                   string scheduledFor = null, string importance= null, string ccAddress= null)
+                                                   string scheduledFor = null, string importance = null, string ccAddress = null)
         {
             try
             {
-                return SendEmailAsync(emailAddress, templateId, personalisation, clientReference, emailReplyToId, oneClickUnsubscribeURL,scheduledFor,importance,ccAddress).Result;
+                return SendEmailAsync(emailAddress, templateId, personalisation, clientReference, emailReplyToId, oneClickUnsubscribeURL, scheduledFor, importance, ccAddress).Result;
             }
             catch (AggregateException ex)
             {
                 throw HandleAggregateException(ex);
             }
+        }
+
+        public HttpResponseMessage SendBulkNotifications(string templateId, string name, List<List<string>> rows = null, string csv = null,
+                                                         string reference = null, string scheduledFor = null, string replyToId = null )
+        {
+            try
+            {
+                return SendBulkNotificationsAsync(templateId, name, rows, csv, reference, scheduledFor, replyToId).Result;
+            }
+            catch (AggregateException ex)
+            {
+                throw HandleAggregateException(ex);
+            }          
         }
     }
 }

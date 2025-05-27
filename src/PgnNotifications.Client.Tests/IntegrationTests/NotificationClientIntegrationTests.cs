@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using Newtonsoft.Json.Linq;
+using NUnit.Framework;
 using PgnNotifications.Client;
 using PgnNotifications.Exceptions;
 using PgnNotifications.Interfaces;
@@ -7,6 +8,7 @@ using PgnNotifications.Models.Responses;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Net.Http;
 using System.Threading;
 
 namespace Notify.Tests.IntegrationTests
@@ -30,8 +32,6 @@ namespace Notify.Tests.IntegrationTests
         private readonly String SMS_SENDER_ID = Environment.GetEnvironmentVariable("SMS_SENDER_ID");
         private readonly String INBOUND_SMS_QUERY_KEY = Environment.GetEnvironmentVariable("INBOUND_SMS_QUERY_KEY");
 
-        private String smsNotificationId;
-        private String emailNotificationId;     
         const String TEST_TEMPLATE_SMS_BODY = "HELLO WORLD v2";
         const String TEST_SMS_BODY = "HELLO WORLD v2";
         const String TEST_TEMPLATE_EMAIL_BODY = "HELLO WORLD";
@@ -55,7 +55,6 @@ namespace Notify.Tests.IntegrationTests
 
             SmsNotificationResponse response =
                 this.client.SendSms(FUNCTIONAL_TEST_NUMBER, SMS_TEMPLATE_ID, personalisation, "sample-test-ref");
-            this.smsNotificationId = response.id;
             Assert.IsNotNull(response);
             Assert.AreEqual(response.content.body, TEST_SMS_BODY);
 
@@ -73,7 +72,6 @@ namespace Notify.Tests.IntegrationTests
 
             EmailNotificationResponse response =
                 this.client.SendEmail(FUNCTIONAL_TEST_EMAIL, EMAIL_TEMPLATE_ID, personalisation);
-            this.emailNotificationId = response.id;
 
             Assert.IsNotNull(response);
             Assert.AreEqual(response.content.body, TEST_EMAIL_BODY);
@@ -137,6 +135,64 @@ namespace Notify.Tests.IntegrationTests
             Assert.IsNotNull(response.template.version);
             Assert.AreEqual(response.content.subject, TEST_EMAIL_SUBJECT);
         }
+
+
+        [Test, Category("Integration"), Category("Integration/NotificationClient")]
+        public void SendBulkNotificationsWithRows_WorksAsExpected()
+        {
+            string functionalTestEmail = Environment.GetEnvironmentVariable("FUNCTIONAL_TEST_EMAIL");
+            string emailTemplateId = Environment.GetEnvironmentVariable("EMAIL_TEMPLATE_ID");
+          
+            string name = "Test Bulk Notification Integration";
+            string reference = "bulk_ref_integration_test";
+
+            string templateId = emailTemplateId;
+            var rows = new List<List<string>>
+            {
+                new List<string> { "email_address", "name" },
+                new List<string> { functionalTestEmail, "Name Test" },
+                new List<string> { functionalTestEmail, "Name Test" }
+            };
+
+            HttpResponseMessage response = this.client.SendBulkNotifications(
+                templateId: templateId,
+                name: name,
+                rows: rows,
+                reference: reference
+            );
+            
+            Assert.IsNotNull(response);
+            Assert.IsTrue(response.IsSuccessStatusCode);
+        }
+
+
+        [Test, Category("Integration"), Category("Integration/NotificationClient")]
+        public void SendBulkNotificationsWithCsv_WorksAsExpected()
+        {
+            string functionalPhoneNumber = Environment.GetEnvironmentVariable("FUNCTIONAL_TEST_NUMBER");
+            string smsTemplateId = Environment.GetEnvironmentVariable("SMS_TEMPLATE_ID");
+
+            string name = "Bulk send email with personalisation";
+            string reference = "bulk_ref_integration_test_csv";
+
+            string templateId;
+            string csvData;
+
+            templateId = smsTemplateId;
+            csvData = $"phone_number,name\n{functionalPhoneNumber},Name Test\n{functionalPhoneNumber},Name Test";
+
+            var response = this.client.SendBulkNotifications(
+                templateId: templateId,
+                name: name,
+                csv: csvData,
+                reference: reference
+            );
+
+            Assert.IsNotNull(response);
+            Assert.IsTrue(response.IsSuccessStatusCode);
+        }
+
+
 
         [Test, Category("Integration"), Category("Integration/NotificationClient")]
         public void GetAllNotifications()
@@ -285,7 +341,6 @@ namespace Notify.Tests.IntegrationTests
                 emailReplyToId: EMAIL_REPLY_TO_ID,
                 oneClickUnsubscribeURL: null
             );
-            this.emailNotificationId = response.id;
             Assert.IsNotNull(response);
             Assert.AreEqual(response.content.body, TEST_EMAIL_BODY);
             Assert.AreEqual(response.content.subject, TEST_EMAIL_SUBJECT);
@@ -304,8 +359,7 @@ namespace Notify.Tests.IntegrationTests
             NotificationClient client_sending = new NotificationClient(NOTIFY_API_URL, API_SENDING_KEY, CLIENT_ID);
 
             SmsNotificationResponse response =
-                client_sending.SendSms(FUNCTIONAL_TEST_NUMBER, SMS_TEMPLATE_ID, personalisation, "sample-test-ref", SMS_SENDER_ID);
-            this.smsNotificationId = response.id;
+                client_sending.SendSms(FUNCTIONAL_TEST_NUMBER, SMS_TEMPLATE_ID, personalisation, "sample-test-ref", SMS_SENDER_ID);            
             Assert.IsNotNull(response);
             Assert.AreEqual(response.content.body, TEST_SMS_BODY);
 

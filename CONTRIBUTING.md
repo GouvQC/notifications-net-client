@@ -102,9 +102,3 @@ Pour exécuter les tests d’intégration :
 ```
 make integration-test-with-docker
 ```
-
-## Exécuter le client localement
-
-Vous devez vous assurer que .Net Framework 4.6.2 et .Net Core 2.0 sont installés sur votre machine.
-
-Si vous n'utilisez pas Windows, les frameworks .Net ne sont pas pris en charge, mais vous pouvez utiliser le Makefile pour générer et exécuter des tests. Exécutez la commande make sur votre terminal pour afficher les options disponibles.

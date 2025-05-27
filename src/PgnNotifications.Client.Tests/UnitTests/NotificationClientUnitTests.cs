@@ -172,7 +172,7 @@ namespace Notify.Tests.UnitTests
             var responseNotification = client.GetNotificationById(Constants.fakeNotificationId);
             Assert.AreEqual(expectedResponse, responseNotification);
         }
-         
+
         [Test, Category("Unit"), Category("Unit/NotificationClient")]
         public void GetTemplateWithIdReceivesExpectedResponse()
         {
@@ -233,6 +233,21 @@ namespace Notify.Tests.UnitTests
                 AssertGetExpectedContent, expected.ToString(Formatting.None));
 
             client.GenerateTemplatePreview(Constants.fakeTemplateId, personalisation);
+        }
+
+        [Test, Category("Unit"), Category("Unit/NotificationClient")]
+        public void CheckHealth_ReturnsErrorMessage_WhenExceptionThrown()
+        {
+            string result = client.CheckHealth();
+            Assert.IsTrue(result.StartsWith("❌ Erreur lors de la vérification de l'état de santé"));
+            Assert.IsTrue(result.Contains("Handler "));
+        }
+
+        [Test, Category("Unit"), Category("Unit/NotificationClient")]
+        public void CheckHealth_ReturnsSuccess_WhenNoException()
+        {
+            MockRequest("ok", client.GET_CHECK_HEALTH_URL, AssertValidRequest);
+            client.CheckHealth();
         }
 
         [Test, Category("Unit"), Category("Unit/NotificationClient")]
@@ -635,13 +650,74 @@ namespace Notify.Tests.UnitTests
             var actual = NotificationClient.PrepareUpload(fileData, "report.csv", false, "1 weeks");
             var expected = new JObject
             {
-                {"file", System.Convert.ToBase64String(fileData)},
+                {"file", Convert.ToBase64String(fileData)},
                 {"filename", "report.csv"},
                 {"confirm_email_before_download", false},
                 {"retention_period", "1 weeks"}
             };
             Assert.AreEqual(actual, expected);
         }
+
+        [Test, Category("Unit"), Category("Unit/NotificationClient")]
+        public void SendBulkNotificationWithRowsGeneratesExpectedRequest()
+        {         
+            JObject expected = new JObject()
+            {
+                { "template_id", Constants.fakeTemplateId },
+                { "name",        Constants.fakeSmsBulkName },
+                { "rows",        JArray.FromObject(Constants.fakeRowsEmailBulk) },
+                { "reference",   Constants.fakeNotificationReference },
+                { "replyToId",   Constants.fakeReplyToId }
+            };
+
+            MockRequest(
+                Constants.fakeEmailBulkResponseJson,
+                client.SEND_BULK_NOTIFICATION_URL,
+                AssertValidRequest,
+                HttpMethod.Post,
+                AssertGetExpectedContent,
+                expected.ToString(Formatting.None)
+            );
+
+            client.SendBulkNotifications(
+                templateId: Constants.fakeTemplateId,
+                name: Constants.fakeSmsBulkName,
+                rows: Constants.fakeRowsEmailBulk,
+                reference: Constants.fakeNotificationReference,
+                replyToId: Constants.fakeReplyToId
+            );
+        }
+
+        [Test, Category("Unit"), Category("Unit/NotificationClient")]
+        public void SendBulkNotificationsWithPhoneNumberCsvGeneratesExpectedRequest()
+        {
+            JObject expected = new JObject()
+            {
+                { "template_id", Constants.fakeTemplateId },
+                { "name",        Constants.fakeSmsBulkName },
+                { "csv",         Constants.fakeCsvBulkJson },
+                { "reference",   Constants.fakeNotificationReference },
+                { "replyToId",   Constants.fakeReplyToId }
+            };
+
+            MockRequest(
+                Constants.fakeSmsBulkResponseJson,
+                client.SEND_BULK_NOTIFICATION_URL,
+                AssertValidRequest,
+                HttpMethod.Post,
+                AssertGetExpectedContent,
+                expected.ToString(Formatting.None)
+            );
+
+            client.SendBulkNotifications(
+                templateId: Constants.fakeTemplateId,
+                name: Constants.fakeSmsBulkName,
+                csv: Constants.fakeCsvBulkJson,
+                reference: Constants.fakeNotificationReference,
+                replyToId: Constants.fakeReplyToId
+            );
+        }
+
 
         private static void AssertGetExpectedContent(string expected, string content)
         {

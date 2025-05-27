@@ -68,6 +68,7 @@ namespace Notify.Tests.UnitTests
             Assert.That(ex.Message, Does.Contain("Status code 404. Error: non json response"));
         }
 
+
         [Test, Category("Unit"), Category("Unit/NotificationClientAsync")]
         public async Task GetNotificationByIdCreatesExpectedRequest()
         {
@@ -76,6 +77,21 @@ namespace Notify.Tests.UnitTests
                 AssertValidRequest);
 
             await client.GetNotificationByIdAsync(Constants.fakeNotificationId);
+        }
+
+        [Test, Category("Unit"), Category("Unit/NotificationClient")]
+        public async Task CheckHealth_ReturnsErrorMessage_WhenExceptionThrown()
+        {
+            string result = await client.CheckHealthAsync();
+            Assert.IsTrue(result.StartsWith("❌ Erreur lors de la vérification de l'état de santé"));
+            Assert.IsTrue(result.Contains("Handler "));
+        }
+
+        [Test, Category("Unit"), Category("Unit/NotificationClient")]
+        public async Task CheckHealth_ReturnsSuccess_WhenNoException()
+        {
+            MockRequest("ok", client.GET_CHECK_HEALTH_URL, AssertValidRequest);
+            await client.CheckHealthAsync();
         }
 
         [Test, Category("Unit"), Category("Unit/NotificationClientAsync")]
@@ -657,7 +673,67 @@ namespace Notify.Tests.UnitTests
                     () => { NotificationClient.PrepareUpload(new byte[3 * 1024 * 1024]); },
                     Throws.ArgumentException
                     );
-        } 
+        }
+
+        [Test, Category("Unit"), Category("Unit/NotificationClient")]
+        public void SendBulkNotificationWithRowsGeneratesExpectedRequest()
+        {
+            JObject expected = new JObject()
+            {
+                { "template_id", Constants.fakeTemplateId },
+                { "name",        Constants.fakeSmsBulkName },
+                { "rows",        JArray.FromObject(Constants.fakeRowsEmailBulk) },
+                { "reference",   Constants.fakeNotificationReference },
+                { "replyToId",   Constants.fakeReplyToId }
+            };
+
+            MockRequest(
+                Constants.fakeEmailBulkResponseJson,
+                client.SEND_BULK_NOTIFICATION_URL,
+                AssertValidRequest,
+                HttpMethod.Post,
+                AssertGetExpectedContent,
+                expected.ToString(Formatting.None)
+            );
+
+            _ = client.SendBulkNotificationsAsync(
+                templateId: Constants.fakeTemplateId,
+                name: Constants.fakeSmsBulkName,
+                rows: Constants.fakeRowsEmailBulk,
+                reference: Constants.fakeNotificationReference,
+                replyToId: Constants.fakeReplyToId
+            );
+        }
+
+        [Test, Category("Unit"), Category("Unit/NotificationClient")]
+        public void SendBulkNotificationsWithPhoneNumberCsvGeneratesExpectedRequest()
+        {
+            JObject expected = new JObject()
+            {
+                { "template_id", Constants.fakeTemplateId },
+                { "name",        Constants.fakeSmsBulkName },
+                { "csv",         Constants.fakeCsvBulkJson },
+                { "reference",   Constants.fakeNotificationReference },
+                { "replyToId",   Constants.fakeReplyToId }
+            };
+
+            MockRequest(
+                Constants.fakeSmsBulkResponseJson,
+                client.SEND_BULK_NOTIFICATION_URL,
+                AssertValidRequest,
+                HttpMethod.Post,
+                AssertGetExpectedContent,
+                expected.ToString(Formatting.None)
+            );
+
+            _ = client.SendBulkNotificationsAsync(
+                templateId: Constants.fakeTemplateId,
+                name: Constants.fakeSmsBulkName,
+                csv: Constants.fakeCsvBulkJson,
+                reference: Constants.fakeNotificationReference,
+                replyToId: Constants.fakeReplyToId
+            );
+        }
 
         private static void AssertGetExpectedContent(string expected, string content)
         {

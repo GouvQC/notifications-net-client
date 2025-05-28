@@ -22,7 +22,7 @@ COPY . .
 # Nettoyer les sorties précédentes (après avoir copié la solution)
 RUN dotnet clean PgnNotifications.Client.sln
 
-# Restaurer les dépendances
+# #Restaurer les dépendances
 RUN dotnet restore PgnNotifications.Client.sln
 
 # Construire la solution

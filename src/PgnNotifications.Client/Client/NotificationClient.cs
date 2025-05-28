@@ -141,11 +141,11 @@ namespace PgnNotifications.Client
             string mobileNumber,
             string templateId,
             Dictionary<string, dynamic> personalisation = null,
-            string clientReference = null,
+            string reference = null,
             string smsSenderId = null)
         {
             // Create the object with required and optional parameters
-            var o = CreateRequestParams(templateId, personalisation, clientReference);
+            var o = CreateRequestParams(templateId, personalisation, reference);
 
             // Add phone number to the object
             o.AddFirst(new JProperty("phone_number", mobileNumber));
@@ -165,7 +165,7 @@ namespace PgnNotifications.Client
             string emailAddress,
             string templateId,
             Dictionary<string, dynamic> personalisation = null,
-            string clientReference = null,
+            string reference = null,
             string emailReplyToId = null,
             string oneClickUnsubscribeURL = null,
             string scheduledFor = null,
@@ -173,7 +173,7 @@ namespace PgnNotifications.Client
             string ccAddress = null)
         {
             // Create the object with required and optional parameters
-            var o = CreateRequestParams(templateId, personalisation, clientReference);
+            var o = CreateRequestParams(templateId, personalisation, reference);
 
             // Add email address at the beginning of the JSON object
             o.AddFirst(new JProperty("email_address", emailAddress));
@@ -370,7 +370,7 @@ namespace PgnNotifications.Client
         }
 
         private static JObject CreateRequestParams(string templateId, Dictionary<string, dynamic> personalisation = null,
-            string clientReference = null)
+            string reference = null)
         {
             var personalisationJson = new JObject();
 
@@ -385,9 +385,9 @@ namespace PgnNotifications.Client
                 {"personalisation", personalisationJson}
             };
 
-            if (clientReference != null)
+            if (reference != null)
             {
-                o.Add("reference", clientReference);
+                o.Add("reference", reference);
             }
 
             return o;
@@ -506,11 +506,11 @@ namespace PgnNotifications.Client
             }
         }
 
-        public SmsNotificationResponse SendSms(string mobileNumber, string templateId, Dictionary<string, dynamic> personalisation = null, string clientReference = null, string smsSenderId = null)
+        public SmsNotificationResponse SendSms(string mobileNumber, string templateId, Dictionary<string, dynamic> personalisation = null, string reference = null, string smsSenderId = null)
         {
             try
             {
-                return SendSmsAsync(mobileNumber, templateId, personalisation, clientReference, smsSenderId).Result;
+                return SendSmsAsync(mobileNumber, templateId, personalisation, reference, smsSenderId).Result;
             }
             catch (AggregateException ex)
             {
@@ -519,12 +519,12 @@ namespace PgnNotifications.Client
         }
 
         public EmailNotificationResponse SendEmail(string emailAddress, string templateId, Dictionary<string, dynamic> personalisation = null,
-                                                   string clientReference = null, string emailReplyToId = null, string oneClickUnsubscribeURL = null,
+                                                   string reference = null, string emailReplyToId = null, string oneClickUnsubscribeURL = null,
                                                    string scheduledFor = null, string importance = null, string ccAddress = null)
         {
             try
             {
-                return SendEmailAsync(emailAddress, templateId, personalisation, clientReference, emailReplyToId, oneClickUnsubscribeURL, scheduledFor, importance, ccAddress).Result;
+                return SendEmailAsync(emailAddress, templateId, personalisation, reference, emailReplyToId, oneClickUnsubscribeURL, scheduledFor, importance, ccAddress).Result;
             }
             catch (AggregateException ex)
             {

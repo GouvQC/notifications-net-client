@@ -192,8 +192,6 @@ namespace Notify.Tests.IntegrationTests
             Assert.IsTrue(response.IsSuccessStatusCode);
         }
 
-
-
         [Test, Category("Integration"), Category("Integration/NotificationClient")]
         public void GetAllNotifications()
         {
@@ -337,7 +335,7 @@ namespace Notify.Tests.IntegrationTests
                 FUNCTIONAL_TEST_EMAIL,
                 EMAIL_TEMPLATE_ID,
                 personalisation,
-                clientReference: "TestReference",
+                reference: "TestReference",
                 emailReplyToId: EMAIL_REPLY_TO_ID,
                 oneClickUnsubscribeURL: null
             );

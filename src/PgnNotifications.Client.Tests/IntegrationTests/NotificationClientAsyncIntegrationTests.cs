@@ -344,7 +344,7 @@ namespace Notify.Tests.IntegrationTests
                 FUNCTIONAL_TEST_EMAIL,
                 EMAIL_TEMPLATE_ID,
                 personalisation,
-                clientReference: "TestReference",
+                reference: "TestReference",
                 emailReplyToId: EMAIL_REPLY_TO_ID,
                 oneClickUnsubscribeURL: null
             );

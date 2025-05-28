@@ -1,24 +1,16 @@
 using System.ComponentModel.DataAnnotations;
 
-public class EmailRequest
+public class EmailRequest(string emailAddress, string templateId)
 {
-
-    public EmailRequest(string emailAddress, string templateId)
-    {
-        EmailAddress = emailAddress;
-        TemplateId = templateId;
-    }
-
-   
     [Required]
-    public string EmailAddress { get; set; }
+    public string EmailAddress { get; set; } = emailAddress;
 
     /// <summary>
     /// The unique identifier of the email template to use. (Required)
     /// </summary>
     /// <example>template-abc123-uuid</example>
     [Required]
-    public string TemplateId { get; set; }
+    public string TemplateId { get; set; } = templateId;
 
     /// <summary>
     /// A dictionary containing the personalisation data to fill in the template placeholders. (Optional)
@@ -30,7 +22,7 @@ public class EmailRequest
     /// A client-defined reference used for tracking or grouping email notifications. (Optional)
     /// </summary>
     /// <example>invoice-001</example>
-    public string? ClientReference { get; set; }
+    public string? Reference { get; set; }
 
     /// <summary>
     /// The ID of the reply-to email address configured in the system. (Optional)

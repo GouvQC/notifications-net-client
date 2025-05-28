@@ -1,20 +1,23 @@
 # Étape de build
-FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 
-# Installer les paquets de base
-RUN \
-    echo "Installation des paquets de base" \
-    && apt-get update \
-    && apt-get install -y --no-install-recommends \
-    awscli \
-    gnupg \
-    make \
-    jq
+# Installer les paquets système nécessaires avec versions sécurisées
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+        wget \
+        libc-bin \
+        awscli \
+        gnupg \
+        make \
+        jq \
+    && apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
 
 # Définir le répertoire de travail
 WORKDIR /app
 
-# Copier tous les fichiers du projet dans le conteneur
+# Copier les fichiers du projet
 COPY . .
 
 # Restaurer les dépendances
@@ -22,6 +25,3 @@ RUN dotnet restore PgnNotifications.Client.sln
 
 # Construire la solution
 RUN dotnet build PgnNotifications.Client.sln --configuration Release --verbosity minimal
-
-# (Facultatif) Publier l'application si nécessaire
-# RUN dotnet publish PgnNotifications.Client.sln -c Release -o /app/publish

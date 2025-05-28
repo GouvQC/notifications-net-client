@@ -14,11 +14,11 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 
 # Installer CycloneDX pour .NET
-RUN dotnet tool install --global CycloneDX --version 0.7.2
+RUN dotnet tool install CycloneDX --tool-path /tools
 
 
 # Ajouter les outils .NET au PATH
-ENV PATH="$PATH:/root/.dotnet/tools"
+ENV PATH="/tools:$PATH"
 
 # Définir le répertoire de travail
 WORKDIR /app
@@ -32,7 +32,7 @@ RUN dotnet restore PgnNotifications.Client.sln
 # Construire la solution
 RUN dotnet build PgnNotifications.Client.sln --configuration Release --verbosity minimal
 
-# Générer le SBOM (Software Bill of Materials)
-RUN cyclonedx dotnet -p ./PgnNotifications.Client.sln -o sbom.xml
+# Générer le SBOM
+RUN /tools/cyclonedx dotnet -p ./PgnNotifications.Client.sln -o sbom.xml
 
 

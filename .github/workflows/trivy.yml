@@ -55,7 +55,7 @@ jobs:
           dotnet build PgnNotifications.Client.sln -c Release
 
       - name: Generate SBOM with CycloneDX
-        run: ./cyclonedx-tools/cyclonedx dotnet -p ./PgnNotifications.Client.sln -o sbom.xml
+        run: cyclonedx dotnet -p ./PgnNotifications.Client.sln -o sbom.xml
 
       - name: Scan SBOM with Trivy
         uses: aquasecurity/trivy-action@master

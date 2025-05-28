@@ -29,7 +29,6 @@ RUN dotnet restore PgnNotifications.Client.sln
 # Construire la solution
 RUN dotnet build PgnNotifications.Client.sln --configuration Release --verbosity minimal
 
-# Exécuter l’image officielle CycloneDX pour générer le SBOM
-RUN docker run --rm -v $(pwd):/src cyclonedx/cyclonedx-dotnet -p /src/PgnNotifications.Client.sln -o /src/sbom.xml
+
 
 

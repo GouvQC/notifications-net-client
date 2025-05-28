@@ -3,8 +3,6 @@ name: Trivy Scan
 on:
   push:
     branches: ["*"]
-  # pull_request:
-  #   branches: ["*"]
   workflow_dispatch:
 
 jobs:
@@ -40,7 +38,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Setup .NET
+      - name: Set up .NET
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: '8.0.x'
@@ -50,9 +48,14 @@ jobs:
           dotnet restore PgnNotifications.Client.sln
           dotnet build PgnNotifications.Client.sln -c Release
 
-      - name: Generate SBOM with CycloneDX Docker image
+      - name: Generate SBOM with CycloneDX (via Docker)
         run: |
-          docker run --rm -v "${{ github.workspace }}":/src cyclonedx/cyclonedx-dotnet:latest -p /src/PgnNotifications.Client.sln -o /src/sbom.xml
+          docker run --rm \
+            -v "${{ github.workspace }}:/src" \
+            cyclonedx/cyclonedx-dotnet \
+            /src/PgnNotifications.Client.sln \
+            -o /src \
+            -fn sbom.xml
 
       - name: Scan SBOM with Trivy
         uses: aquasecurity/trivy-action@master

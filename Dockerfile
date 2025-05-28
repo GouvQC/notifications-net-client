@@ -13,8 +13,8 @@ RUN apt-get update && \
     && apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-# Installer CycloneDX pour .NET
-RUN dotnet tool install CycloneDX --tool-path /tools
+# Installer CycloneDX compatible avec .NET 6
+RUN dotnet tool install CycloneDX --tool-path /tools --version 0.7.2
 
 
 # Ajouter les outils .NET au PATH

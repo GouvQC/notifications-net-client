@@ -34,3 +34,4 @@ RUN dotnet build PgnNotifications.Client.sln --configuration Release --verbosity
 
 # Générer le SBOM (Software Bill of Materials)
 RUN cyclonedx dotnet -p ./PgnNotifications.Client.sln -o sbom.xml
+

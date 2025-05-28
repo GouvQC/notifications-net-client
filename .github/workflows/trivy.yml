@@ -8,7 +8,7 @@ on:
 jobs:
   docker-scan:
     name: Scan de sécurité Trivy (Docker image)
-    runs-on: ubuntu-latest
+    runs-on: docker build --no-cache -t my-app:latest 
 
     steps:
       - name: Checkout code

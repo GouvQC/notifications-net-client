@@ -13,7 +13,9 @@ RUN apt-get update && \
     && apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-
+RUN dotnet clean
+RUN dotnet restore
+    
 # Définir le répertoire de travail
 WORKDIR /app
 

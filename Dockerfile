@@ -1,5 +1,5 @@
 # Étape de build
-FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 
 # Installer les paquets système nécessaires avec versions sécurisées
 RUN apt-get update && \
@@ -14,7 +14,7 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 
 # Installer CycloneDX compatible avec .NET 6
-RUN dotnet tool install CycloneDX.Dotnet --tool-path /tools --version 1.0.6
+RUN dotnet tool install CycloneDX.Dotnet --tool-path /tools 
 
 # Ajouter les outils .NET au PATH
 ENV PATH="/tools:$PATH"

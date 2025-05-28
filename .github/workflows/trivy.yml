@@ -56,12 +56,13 @@ jobs:
             /src/PgnNotifications.Client.sln \
             -o /src \
             -fn sbom.xml
+            -j
 
       - name: Scan SBOM with Trivy
         uses: aquasecurity/trivy-action@master
         with:
           scan-type: sbom
-          scan-ref: sbom.xml
+          scan-ref: sbom.json
           format: table
           exit-code: 1
           ignore-unfixed: true

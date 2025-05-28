@@ -14,9 +14,6 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 
 
-# Installer CycloneDX
-RUN dotnet tool install CycloneDX.Dotnet --tool-path /tools 
-
 # Définir le répertoire de travail
 WORKDIR /app
 

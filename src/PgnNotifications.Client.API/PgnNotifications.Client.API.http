@@ -1,0 +1,6 @@
+@PgnNotifications.Client.API_HostAddress = http://localhost:5108
+
+GET {{PgnNotifications.Client.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

@@ -13,14 +13,14 @@ RUN apt-get update && \
     && apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-RUN dotnet clean
-RUN dotnet restore
-    
+
 # Définir le répertoire de travail
 WORKDIR /app
 
 # Copier les fichiers du projet
 COPY . .
+# Nettoyer les sorties précédentes (après avoir copié la solution)
+RUN dotnet clean PgnNotifications.Client.sln
 
 # Restaurer les dépendances
 RUN dotnet restore PgnNotifications.Client.sln

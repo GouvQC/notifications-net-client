@@ -14,8 +14,7 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 
 # Installer CycloneDX compatible avec .NET 6
-RUN dotnet tool install CycloneDX --tool-path /tools --version 0.7.2
-
+RUN dotnet tool install CycloneDX.Dotnet --tool-path /tools --version 1.0.6
 
 # Ajouter les outils .NET au PATH
 ENV PATH="/tools:$PATH"
@@ -33,6 +32,6 @@ RUN dotnet restore PgnNotifications.Client.sln
 RUN dotnet build PgnNotifications.Client.sln --configuration Release --verbosity minimal
 
 # Générer le SBOM
-RUN /tools/cyclonedx dotnet -p ./PgnNotifications.Client.sln -o sbom.xml
+RUN cyclonedx-dotnet -p ./PgnNotifications.Client.sln -o sbom.xml
 
 

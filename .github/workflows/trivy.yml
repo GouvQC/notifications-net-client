@@ -55,7 +55,7 @@ jobs:
             cyclonedx/cyclonedx-dotnet \
             /src/PgnNotifications.Client.sln \
             -o /src \
-            -fn sbom.xml \
+            -fn sbom.json \
             -j
 
       - name: Scan SBOM with Trivy

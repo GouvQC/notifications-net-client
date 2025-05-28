@@ -31,39 +31,39 @@ jobs:
           severity: CRITICAL,HIGH
 
   filesystem-scan:
-    name: Scan de sécurité Trivy (via SBOM)
-    runs-on: ubuntu-latest
+      name: Scan de sécurité Trivy (via SBOM)
+      runs-on: ubuntu-latest
 
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      steps:
+        - name: Checkout code
+          uses: actions/checkout@v4
 
-      - name: Set up .NET
-        uses: actions/setup-dotnet@v3
-        with:
-          dotnet-version: '8.0.x'
+        - name: Set up .NET 6.0
+          uses: actions/setup-dotnet@v3
+          with:
+            dotnet-version: '6.0.x'
 
-      - name: Restore and Build the solution
-        run: |
-          dotnet restore PgnNotifications.Client.sln
-          dotnet build PgnNotifications.Client.sln -c Release
+        - name: Restore and Build the solution (en .NET 6.0)
+          run: |
+            dotnet restore PgnNotifications.Client.sln
+            dotnet build PgnNotifications.Client.sln -c Release
 
-      - name: Generate SBOM with CycloneDX (via Docker)
-        run: |
-          docker run --rm \
-            -v "${{ github.workspace }}:/src" \
-            cyclonedx/cyclonedx-dotnet \
-            /src/PgnNotifications.Client.sln \
-            -o /src \
-            -fn sbom.json \
-            -j
+        - name: Generate SBOM with CycloneDX (via Docker .NET 8)
+          run: |
+            docker run --rm \
+              -v "${{ github.workspace }}:/src" \
+              cyclonedx/cyclonedx-dotnet:latest \
+              /src/PgnNotifications.Client.sln \
+              -o /src \
+              -fn sbom.json \
+              -j
 
-      - name: Scan SBOM with Trivy
-        uses: aquasecurity/trivy-action@master
-        with:
-          scan-type: sbom
-          scan-ref: sbom.json
-          format: table
-          exit-code: 1
-          ignore-unfixed: true
-          severity: CRITICAL,HIGH
+        - name: Scan SBOM with Trivy
+          uses: aquasecurity/trivy-action@master
+          with:
+            scan-type: sbom
+            scan-ref: sbom.json
+            format: table
+            exit-code: 1
+            ignore-unfixed: true
+            severity: CRITICAL,HIGH

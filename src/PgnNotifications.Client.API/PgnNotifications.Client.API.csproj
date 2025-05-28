@@ -16,10 +16,10 @@
     <ProjectReference Include="..\PgnNotifications.Client\PgnNotifications.Client.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
+  <!-- <ItemGroup>
     <Reference Include="PgnNotifications.Client">
       <HintPath>..\PgnNotifications.Client\bin\Debug\net462\PgnNotifications.Client.dll</HintPath>
     </Reference>
-  </ItemGroup>
+  </ItemGroup> -->
 
 </Project>

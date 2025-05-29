@@ -346,7 +346,7 @@ namespace Notify.Tests.IntegrationTests
         [Test, Category("Integration"), Category("Integration/NotificationClient")]
         public void GetAllTemplates()
         {
-            mockNotificationClient.Setup(client => client.GetAllTemplates()).Returns(
+            mockNotificationClient.Setup(client => client.GetAllTemplates("", "", "", "", false)).Returns(
                 new TemplateList
                 {
                     templates = new List<TemplateResponse> {

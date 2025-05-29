@@ -20,15 +20,15 @@ namespace Notify.Tests.IntegrationTests
     {
         //private NotificationClient client;
         private Mock<INotificationClient> mockClient;
-        private readonly string mockPhoneNumber = "+15145550000";
-        private readonly string mockEmail = "fake@example.com";
-        private readonly string mockTemplateId = "mock-sms-template";
-        private readonly string mockTemplateIdEmail = "mock-email-template";
-        private readonly string mockReplyToId = "mock-reply-to-id";
-        private readonly string mockReference = "sample-test-ref";
-        private readonly string mockBulkReference = "bulk_ref_integration_test";
-        private readonly string mockCsvBulkReference = "bulk_ref_integration_test_csv";
-        private readonly string mockNotificationId = "mock-notification-id";
+        private string mockPhoneNumber = "+15145550000";
+        private string mockEmail = "fake@example.com";
+        private string mockTemplateId = "mock-sms-template";
+        private string mockTemplateIdEmail = "mock-email-template";
+        private string mockReplyToId = "mock-reply-to-id";
+        private string mockReference = "sample-test-ref";
+        private string mockBulkReference = "bulk_ref_integration_test";
+        private string mockCsvBulkReference = "bulk_ref_integration_test_csv";
+        private string mockNotificationId = "mock-notification-id";
 
 
         // private readonly String NOTIFY_API_URL = Environment.GetEnvironmentVariable("NOTIFY_API_URL");
@@ -52,7 +52,7 @@ namespace Notify.Tests.IntegrationTests
         const String TEST_EMAIL_SUBJECT = "BASIC";        
       
         [SetUp]
-        [Test, Category("Integration"), Category("Integration/NotificationClient")]
+        //[Test, Category("Integration"), Category("Integration/NotificationClient")]
         public void SetUp()
         {
             mockClient = new Mock<INotificationClient>();

@@ -30,21 +30,6 @@ namespace Notify.Tests.IntegrationTests
         private string mockCsvBulkReference = "bulk_ref_integration_test_csv";
         private string mockNotificationId = "mock-notification-id";
 
-
-        // private readonly String NOTIFY_API_URL = Environment.GetEnvironmentVariable("NOTIFY_API_URL");
-        // private readonly String API_KEY = Environment.GetEnvironmentVariable("API_KEY");
-        // private readonly String CLIENT_ID = Environment.GetEnvironmentVariable("CLIENT_ID");
-        // private readonly String API_SENDING_KEY = Environment.GetEnvironmentVariable("API_SENDING_KEY");
-
-        // private readonly String FUNCTIONAL_TEST_NUMBER = Environment.GetEnvironmentVariable("FUNCTIONAL_TEST_NUMBER");
-        // private readonly String FUNCTIONAL_TEST_EMAIL = Environment.GetEnvironmentVariable("FUNCTIONAL_TEST_EMAIL");
-
-        // private readonly String EMAIL_TEMPLATE_ID = Environment.GetEnvironmentVariable("EMAIL_TEMPLATE_ID");
-        // private readonly String SMS_TEMPLATE_ID = Environment.GetEnvironmentVariable("SMS_TEMPLATE_ID");        
-        // private readonly String EMAIL_REPLY_TO_ID = Environment.GetEnvironmentVariable("EMAIL_REPLY_TO_ID");
-        // private readonly String SMS_SENDER_ID = Environment.GetEnvironmentVariable("SMS_SENDER_ID");
-        // private readonly String INBOUND_SMS_QUERY_KEY = Environment.GetEnvironmentVariable("INBOUND_SMS_QUERY_KEY");
-
         const String TEST_TEMPLATE_SMS_BODY = "HELLO WORLD v2";
         const String TEST_SMS_BODY = "HELLO WORLD v2";
         const String TEST_TEMPLATE_EMAIL_BODY = "HELLO WORLD";
@@ -55,14 +40,14 @@ namespace Notify.Tests.IntegrationTests
         //[Test, Category("Integration"), Category("Integration/NotificationClient")]
         public void SetUp()
         {
-            mockClient = new Mock<INotificationClient>();
+                mockClient = new Mock<INotificationClient>();
+                client = mockClient.Object;
         }
 
 
         [Test, Category("Integration"), Category("Integration/NotificationClient")]
         public void SendSmsTestWithPersonalisation()
         {
-            // Étape 1 : Configurer le mock avant l'appel réel
             mockClient
                 .Setup(c => c.SendSms(
                     It.IsAny<string>(),
@@ -72,25 +57,28 @@ namespace Notify.Tests.IntegrationTests
                     It.IsAny<string>()))
                 .Returns(new SmsNotificationResponse
                 {
-                    content = new SmsNotificationContent { body = TEST_SMS_BODY },
+                    content = new SmsResponseContent { body = TEST_SMS_BODY, fromNumber = mockPhoneNumber }, // ✅ CORRECT TYPE
                     reference = "sample-test-ref"
                 });
 
-            // Étape 2 : Exécuter comme si réel
-            Dictionary<String, dynamic> personalisation = new Dictionary<String, dynamic>
+            Dictionary<string, dynamic> personalisation = new Dictionary<string, dynamic>
             {
                 { "name", "someone" }
             };
 
-            SmsNotificationResponse response =
-                this.client.SendSms(mockPhoneNumber,  mockTemplateId, personalisation, "sample-test-ref");
+            SmsNotificationResponse response = this.client.SendSms(
+                mockPhoneNumber,
+                mockTemplateId,
+                personalisation,
+                "sample-test-ref"
+            );
 
-            // Étape 3 : Assertions
             Assert.IsNotNull(response);
-            Assert.AreEqual(response.content.body, TEST_SMS_BODY);
+            Assert.AreEqual(TEST_SMS_BODY, response.content.body);
             Assert.IsNotNull(response.reference);
-            Assert.AreEqual(response.reference, "sample-test-ref");
+            Assert.AreEqual("sample-test-ref", response.reference);
         }
+
 
 
         [Test, Category("Integration"), Category("Integration/NotificationClient")]

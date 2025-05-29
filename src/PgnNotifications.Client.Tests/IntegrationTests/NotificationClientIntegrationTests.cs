@@ -19,7 +19,6 @@ namespace Notify.Tests.IntegrationTests
     public class NotificationClientIntegrationTests
     {
         //private NotificationClient client;
-        private INotificationClient client;
         private Mock<INotificationClient> mockClient;
         private readonly string mockPhoneNumber = "+15145550000";
         private readonly string mockEmail = "fake@example.com";
@@ -57,7 +56,6 @@ namespace Notify.Tests.IntegrationTests
         public void SetUp()
         {
             mockClient = new Mock<INotificationClient>();
-            this.client = mockClient.Object;
         }
 
 
@@ -71,7 +69,7 @@ namespace Notify.Tests.IntegrationTests
                     It.IsAny<string>(),
                     It.IsAny<Dictionary<string, dynamic>>(),
                     It.IsAny<string>(),
-                    null))
+                    It.IsAny<string>()))
                 .Returns(new SmsNotificationResponse
                 {
                     content = new SmsNotificationContent { body = TEST_SMS_BODY },
@@ -106,11 +104,12 @@ namespace Notify.Tests.IntegrationTests
 
             var expectedResponse = new EmailNotificationResponse
             {
-                content = new EmailContent
+                content = new EmailResponseContent
                 {
                     body = "HELLO WORLD",
-                    subject = "BASIC"
-                }
+                    subject = "BASIC",
+                    oneClickUnsubscribeURL = null
+                },
             };
 
             var mockClient = new Mock<INotificationClient>();
@@ -155,7 +154,7 @@ namespace Notify.Tests.IntegrationTests
                 id = Guid.NewGuid().ToString(),
                 template = new Template
                 {
-                    id = EMAIL_TEMPLATE_ID,
+                    id = mockTemplateIdEmail,
                     uri = "http://fake.template.uri",
                     version = 1
                 },
@@ -208,7 +207,7 @@ namespace Notify.Tests.IntegrationTests
                 id = Guid.NewGuid().ToString(),
                 template = new Template
                 {
-                    id = EMAIL_TEMPLATE_ID,
+                    id = mockTemplateIdEmail,
                     uri = "http://fake.template.uri",
                     version = 1
                 },
@@ -459,12 +458,17 @@ namespace Notify.Tests.IntegrationTests
                 personalisation,
                 It.IsAny<string>(),
                 mockReplyToId,
-                null
-            )).Returns(new EmailNotificationResponse
-            {
-                content = new EmailContent { body = "HELLO WORLD", subject = "BASIC" },
-                reference = "TestReference"
-            });
+                It.IsAny<string>()
+                )).Returns(new EmailNotificationResponse
+                {
+                    content = new EmailResponseContent
+                    {
+                        body = "HELLO WORLD",
+                        subject = "BASIC",
+                        oneClickUnsubscribeURL = null
+                    },
+                    reference = "TestReference"
+                });
 
             EmailNotificationResponse response = mockNotificationClient.Object.SendEmail(
                 mockEmail,
@@ -497,7 +501,11 @@ namespace Notify.Tests.IntegrationTests
                 mockSmsSenderId
             )).Returns(new SmsNotificationResponse
             {
-                content = new SmsContent { body = "HELLO WORLD v2" },
+                content = new SmsResponseContent
+                {
+                    body = "HELLO WORLD v2",
+                    fromNumber = "+15145550000"
+                },
                 reference = "sample-test-ref"
             });
 

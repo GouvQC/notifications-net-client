@@ -67,7 +67,7 @@ namespace Notify.Tests.IntegrationTests
                 { "name", "someone" }
             };
 
-            SmsNotificationResponse response = this.client.SendSms(
+            SmsNotificationResponse response = mockClient.Object.SendSms(
                 mockPhoneNumber,
                 mockTemplateId,
                 personalisation,

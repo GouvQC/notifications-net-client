@@ -226,59 +226,6 @@ namespace Notify.Tests.IntegrationTests
                 pdfContents = File.ReadAllBytes("IntegrationTests/test_files/one_page_pdf.pdf");
             }
 
-            Dictionary<String, dynamic> personalisation = new Dictionary<String, dynamic>
-            {
-                { "name", "someone" }
-            };
-
-            // Arrange
-            var fakeResponse = new EmailNotificationResponse
-            {
-                id = Guid.NewGuid().ToString(),
-                template = new Template
-                {
-                    id = mockTemplateIdEmail,
-                    uri = "http://fake.template.uri",
-                    version = 1
-                },
-                content = new EmailNotificationResponse
-                {
-                    subject = TEST_EMAIL_SUBJECT,
-                    body = TEST_EMAIL_BODY
-                }
-            };
-
-            mockNotificationClient.Setup(x =>
-                x.SendEmail(mockEmail, mockTemplateIdEmail, personalisation, mockReference, mockReplyToId, null)
-            ).Returns(fakeResponse);
-
-            // Act
-            EmailNotificationResponse response =
-                client.SendEmail(mockEmail, mockTemplateId, personalisation);
-
-            // Assert
-            Assert.IsNotNull(response.id);
-            Assert.IsNotNull(response.template.id);
-            Assert.IsNotNull(response.template.uri);
-            Assert.IsNotNull(response.template.version);
-            Assert.AreEqual(response.content.subject, TEST_EMAIL_SUBJECT);
-        }
-
-
-        [Test, Category("Integration"), Category("Integration/NotificationClient")]
-        public void SendEmailWithCSVDocumentPersonalisationTestUsingEmailConfirmationAndRetentionPeriod()
-        {
-            byte[] pdfContents;
-
-            try
-            {
-                pdfContents = File.ReadAllBytes("../../../IntegrationTests/test_files/one_page_pdf.pdf");
-            }
-            catch (DirectoryNotFoundException)
-            {
-                pdfContents = File.ReadAllBytes("IntegrationTests/test_files/one_page_pdf.pdf");
-            }
-
             Dictionary<string, dynamic> personalisation = new Dictionary<string, dynamic>
             {
                 { "name", "someone" }

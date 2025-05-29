@@ -28,8 +28,6 @@ namespace Notify.Tests.IntegrationTests
         private string mockReplyToId = "mock-reply-to-id";
         private string mockReference = "sample-test-ref";
         private string mockSmsSenderId = "mock-sender-id";
-        private string mockCsvBulkReference = "bulk_ref_integration_test_csv";
-        private string mockNotificationId = "mock-notification-id";
 
         const String TEST_TEMPLATE_SMS_BODY = "HELLO WORLD v2";
         const String TEST_SMS_BODY = "HELLO WORLD v2";
@@ -289,17 +287,25 @@ namespace Notify.Tests.IntegrationTests
         [Test, Category("Integration"), Category("Integration/NotificationClient")]
         public void GetAllNotifications()
         {
-            mockNotificationClient.Setup(client => client.GetNotifications()).Returns(
-                new NotificationList
-                {
-                    notifications = new List<Notification> {
-                        new Notification { id = "mock-id-1" },
-                        new Notification { id = "mock-id-2" }
+            mockNotificationClient
+                .Setup(client => client.GetNotifications(
+                    "",    // templateType
+                    "",    // status
+                    "",    // reference
+                    "",    // olderThanId
+                    false  // includeSpreadsheetUploads
+                ))
+                .Returns(
+                    new NotificationList
+                    {
+                        notifications = new List<Notification> {
+                            new Notification { id = "mock-id-1" },
+                            new Notification { id = "mock-id-2" }
+                        }
                     }
-                }
-            );
+                );
 
-            var notificationsResponse = mockNotificationClient.Object.GetNotifications();
+            var notificationsResponse = mockNotificationClient.Object.GetNotifications("", "", "", "", false);
             Assert.IsNotNull(notificationsResponse);
             Assert.IsNotNull(notificationsResponse.notifications);
         }

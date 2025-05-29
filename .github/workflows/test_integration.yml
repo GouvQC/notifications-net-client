@@ -39,7 +39,7 @@ jobs:
 
       - name: Run integration tests
         run: >
-          dotnet test ./src/PgnNotifications.Client.Tests/IntegrationTests/NotificationClientIntegrationTests.cs
+          dotnet test ./src/PgnNotifications.Client.Tests/PgnNotifications.Client.Tests.csproj 
           --filter Category=Integration
           --configuration Release
           --logger "trx;LogFileName=test-results.trx"

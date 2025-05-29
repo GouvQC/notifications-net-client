@@ -20,6 +20,7 @@ namespace Notify.Tests.IntegrationTests
     {
         //private NotificationClient client;
         private Mock<INotificationClient> mockClient;
+        private INotificationClient client;
         private string mockPhoneNumber = "+15145550000";
         private string mockEmail = "fake@example.com";
         private string mockTemplateId = "mock-sms-template";

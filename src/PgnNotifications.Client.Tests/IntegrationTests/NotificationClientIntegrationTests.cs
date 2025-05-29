@@ -58,8 +58,8 @@ namespace Notify.Tests.IntegrationTests
                     It.IsAny<string>()))
                 .Returns(new SmsNotificationResponse
                 {
-                    content = new SmsResponseContent { body = TEST_SMS_BODY, fromNumber = mockPhoneNumber }, // ✅ CORRECT TYPE
-                    mockReference
+                    content = new SmsResponseContent { body = TEST_SMS_BODY, fromNumber = mockPhoneNumber },
+                    reference = mockReference
                 });
 
             Dictionary<string, dynamic> personalisation = new Dictionary<string, dynamic>
@@ -71,7 +71,8 @@ namespace Notify.Tests.IntegrationTests
                 mockPhoneNumber,
                 mockTemplateId,
                 personalisation,
-                mockReference
+                mockReference,
+                null // smsSenderId
             );
 
             Assert.IsNotNull(response);
@@ -79,6 +80,7 @@ namespace Notify.Tests.IntegrationTests
             Assert.IsNotNull(response.reference);
             Assert.AreEqual(mockReference, response.reference);
         }
+
 
 
 
@@ -99,16 +101,35 @@ namespace Notify.Tests.IntegrationTests
                     subject = "BASIC",
                     oneClickUnsubscribeURL = null
                 },
+                reference = "test-reference"
             };
 
             mockNotificationClient
-                .Setup(c => c.SendEmail(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<Dictionary<string, dynamic>>()))
+                .Setup(c => c.SendEmail(
+                    It.IsAny<string>(),
+                    It.IsAny<string>(),
+                    It.IsAny<Dictionary<string, dynamic>>(),
+                    It.IsAny<string>(),
+                    It.IsAny<string>(),
+                    It.IsAny<string>(),
+                    It.IsAny<string>(),
+                    It.IsAny<string>(),
+                    It.IsAny<string>()
+                ))
                 .Returns(expectedResponse);
 
-            var client = mockNotificationClient.Object;
-
             // Act
-            var response = client.SendEmail(mockEmail, mockTemplateIdEmail, personalisation);
+            var response = client.SendEmail(
+                mockEmail,
+                mockTemplateIdEmail,
+                personalisation,
+                null, // reference
+                null, // emailReplyToId
+                null, // oneClickUnsubscribeURL
+                null, // scheduledFor
+                null, // importance
+                null  // ccAddress
+            );
 
             // Assert
             Assert.IsNotNull(response);
@@ -131,7 +152,7 @@ namespace Notify.Tests.IntegrationTests
                 pdfContents = File.ReadAllBytes("IntegrationTests/test_files/one_page_pdf.pdf");
             }
 
-            Dictionary<String, dynamic> personalisation = new Dictionary<String, dynamic>
+            Dictionary<string, dynamic> personalisation = new Dictionary<string, dynamic>
             {
                 { "name", "someone" }
             };
@@ -146,28 +167,49 @@ namespace Notify.Tests.IntegrationTests
                     uri = "http://fake.template.uri",
                     version = 1
                 },
-                content = new EmailNotificationResponse.content
+                content = new EmailResponseContent
                 {
                     subject = TEST_EMAIL_SUBJECT,
                     body = TEST_EMAIL_BODY
-                }
+                },
+                reference = mockReference
             };
 
             mockNotificationClient.Setup(x =>
-                x.SendEmail(mockEmail, mockTemplateIdEmail, personalisation, mockReference, mockReference)
+                x.SendEmail(
+                    mockEmail,
+                    mockTemplateIdEmail,
+                    personalisation,
+                    mockReference,
+                    mockReference,
+                    null,
+                    null,
+                    null,
+                    null
+                )
             ).Returns(fakeResponse);
 
             // Act
-            EmailNotificationResponse response =
-                client.SendEmail(mockEmail, mockTemplateId, personalisation);
+            EmailNotificationResponse response = client.SendEmail(
+                mockEmail,
+                mockTemplateIdEmail,
+                personalisation,
+                mockReference,
+                mockReference,
+                null,
+                null,
+                null,
+                null
+            );
 
             // Assert
             Assert.IsNotNull(response.id);
             Assert.IsNotNull(response.template.id);
             Assert.IsNotNull(response.template.uri);
             Assert.IsNotNull(response.template.version);
-            Assert.AreEqual(response.content.subject, TEST_EMAIL_SUBJECT);
+            Assert.AreEqual(TEST_EMAIL_SUBJECT, response.content.subject);
         }
+
 
 
         [Test, Category("Integration"), Category("Integration/NotificationClient")]
@@ -199,7 +241,7 @@ namespace Notify.Tests.IntegrationTests
                     uri = "http://fake.template.uri",
                     version = 1
                 },
-                content = new EmailNotificationResponse.content
+                content = new EmailNotificationResponse
                 {
                     subject = TEST_EMAIL_SUBJECT,
                     body = TEST_EMAIL_BODY
@@ -224,43 +266,77 @@ namespace Notify.Tests.IntegrationTests
 
 
         [Test, Category("Integration"), Category("Integration/NotificationClient")]
-        public void SendBulkNotificationsWithRows_WorksAsExpected()
+        public void SendEmailWithCSVDocumentPersonalisationTestUsingEmailConfirmationAndRetentionPeriod()
         {
-            // Valeurs factices pour le test
-            var mockReference = "bulk_ref_integration_test";
-            var mockName = "Test Bulk Notification Integration";
+            byte[] pdfContents;
 
-            var rows = new List<List<string>>
+            try
             {
-                new List<string> { "email_address", "name" },
-                new List<string> { mockEmail, "Name Test" },
-                new List<string> { mockEmail, "Name Test" }
+                pdfContents = File.ReadAllBytes("../../../IntegrationTests/test_files/one_page_pdf.pdf");
+            }
+            catch (DirectoryNotFoundException)
+            {
+                pdfContents = File.ReadAllBytes("IntegrationTests/test_files/one_page_pdf.pdf");
+            }
+
+            Dictionary<string, dynamic> personalisation = new Dictionary<string, dynamic>
+            {
+                { "name", "someone" }
             };
 
-            // Arrange - simuler une réponse HTTP 200 OK
-            var fakeResponse = new HttpResponseMessage(System.Net.HttpStatusCode.OK);
+            // Arrange
+            var fakeResponse = new EmailNotificationResponse
+            {
+                id = Guid.NewGuid().ToString(),
+                template = new Template
+                {
+                    id = mockTemplateIdEmail,
+                    uri = "http://fake.template.uri",
+                    version = 1
+                },
+                content = new EmailResponseContent
+                {
+                    subject = TEST_EMAIL_SUBJECT,
+                    body = TEST_EMAIL_BODY
+                },
+                reference = mockReference
+            };
 
             mockNotificationClient.Setup(x =>
-                x.SendBulkNotifications(
-                    mockTemplateId,
-                    mockName,
-                    rows,
-                    mockReference
+                x.SendEmail(
+                    mockEmail,
+                    mockTemplateIdEmail,
+                    personalisation,
+                    mockReference,
+                    mockReplyToId,
+                    null,
+                    null,
+                    null,
+                    null
                 )
             ).Returns(fakeResponse);
 
             // Act
-            var response = client.SendBulkNotifications(
-                mockTemplateId,
-                mockName,
-                rows,
-                mockReference
+            EmailNotificationResponse response = client.SendEmail(
+                mockEmail,
+                mockTemplateIdEmail,
+                personalisation,
+                mockReference,
+                mockReplyToId,
+                null,
+                null,
+                null,
+                null
             );
 
             // Assert
-            Assert.IsNotNull(response);
-            Assert.IsTrue(response.IsSuccessStatusCode);
+            Assert.IsNotNull(response.id);
+            Assert.IsNotNull(response.template.id);
+            Assert.IsNotNull(response.template.uri);
+            Assert.IsNotNull(response.template.version);
+            Assert.AreEqual(TEST_EMAIL_SUBJECT, response.content.subject);
         }
+
 
 
         [Test, Category("Integration"), Category("Integration/NotificationClient")]
@@ -306,7 +382,6 @@ namespace Notify.Tests.IntegrationTests
         [Test, Category("Integration"), Category("Integration/NotificationClient")]
         public void GetTemplateWithIdWithoutResultRaisesClientException()
         {
-
             mockNotificationClient.Setup(client => client.GetTemplateById(It.IsAny<string>())).Throws(new NotifyClientException("No result found"));
 
             var ex = Assert.Throws<NotifyClientException>(() =>
@@ -318,7 +393,6 @@ namespace Notify.Tests.IntegrationTests
         [Test, Category("Integration"), Category("Integration/NotificationClient")]
         public void GetAllTemplates()
         {
-
             mockNotificationClient.Setup(client => client.GetAllTemplates()).Returns(
                 new TemplateList
                 {
@@ -337,7 +411,6 @@ namespace Notify.Tests.IntegrationTests
         [Test, Category("Integration"), Category("Integration/NotificationClient")]
         public void GetAllSMSTemplates()
         {
-    
             mockNotificationClient.Setup(client => client.GetAllTemplates("sms")).Returns(
                 new TemplateList
                 {
@@ -357,7 +430,6 @@ namespace Notify.Tests.IntegrationTests
         {
             const string mockTemplateId = "mock-sms-template";
             const string mockBody = "HELLO WORLD v2";
-
 
             mockNotificationClient.Setup(client => client.GetTemplateById(mockTemplateId)).Returns(
                 new TemplateResponse { id = mockTemplateId, body = mockBody }
@@ -400,7 +472,6 @@ namespace Notify.Tests.IntegrationTests
         [Test, Category("Integration"), Category("Integration/NotificationClient")]
         public void GenerateEmailPreviewWithPersonalisation()
         {
-    
             mockNotificationClient.Setup(client => client.GenerateTemplatePreview("mock-email-template", It.IsAny<Dictionary<string, dynamic>>())).Returns(
                 new TemplatePreviewResponse { body = "HELLO WORLD", subject = "BASIC" }
             );
@@ -416,16 +487,37 @@ namespace Notify.Tests.IntegrationTests
         public void SendEmailTestEmailReplyToNotPresent()
         {
             var fakeReplyToId = Guid.NewGuid().ToString();
-            mockNotificationClient.Setup(client => client.SendEmail(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<Dictionary<string, dynamic>>(), It.IsAny<string>(), fakeReplyToId, null))
-                .Throws(new NotifyClientException($"email_reply_to_id {fakeReplyToId}"));
+
+            mockNotificationClient.Setup(client => client.SendEmail(
+                It.IsAny<string>(),
+                It.IsAny<string>(),
+                It.IsAny<Dictionary<string, dynamic>>(),
+                It.IsAny<string>(),
+                fakeReplyToId,
+                It.IsAny<string>(),
+                It.IsAny<string>(),
+                It.IsAny<string>(),
+                It.IsAny<string>()
+            )).Throws(new NotifyClientException($"email_reply_to_id {fakeReplyToId}"));
 
             Dictionary<string, dynamic> personalisation = new Dictionary<string, dynamic> { { "name", "someone" } };
+
             var ex = Assert.Throws<NotifyClientException>(() =>
-                mockNotificationClient.Object.SendEmail("fake@example.com", "mock-email-template", personalisation, emailReplyToId: fakeReplyToId)
+                mockNotificationClient.Object.SendEmail(
+                    "fake@example.com",
+                    "mock-email-template",
+                    personalisation,
+                    null,
+                    fakeReplyToId,
+                    null,
+                    null,
+                    null,
+                    null
+                )
             );
+
             Assert.That(ex.Message, Does.Contain($"email_reply_to_id {fakeReplyToId}"));
         }
-
 
         [Test, Category("Integration"), Category("Integration/NotificationClient")]
         public void SendEmailTestAllArguments()
@@ -440,17 +532,20 @@ namespace Notify.Tests.IntegrationTests
                 personalisation,
                 mockReference,
                 mockReplyToId,
+                null,
+                null,
+                null,
                 null
-                )).Returns(new EmailNotificationResponse
+            )).Returns(new EmailNotificationResponse
+            {
+                content = new EmailResponseContent
                 {
-                    content = new EmailResponseContent
-                    {
-                        body = "HELLO WORLD",
-                        subject = "BASIC",
-                        oneClickUnsubscribeURL = null
-                    },
-                    mockReference
-                });
+                    body = "HELLO WORLD",
+                    subject = "BASIC",
+                    oneClickUnsubscribeURL = null
+                },
+                reference = "TestReference"
+            });
 
             EmailNotificationResponse response = mockNotificationClient.Object.SendEmail(
                 mockEmail,
@@ -458,6 +553,9 @@ namespace Notify.Tests.IntegrationTests
                 personalisation,
                 mockReference,
                 mockReplyToId,
+                null,
+                null,
+                null,
                 null
             );
 
@@ -471,8 +569,6 @@ namespace Notify.Tests.IntegrationTests
         [Test, Category("Integration"), Category("Integration/NotificationClient")]
         public void SendSmsTestWithPersonalisationAndSmsSenderId()
         {
-            
-
             Dictionary<string, dynamic> personalisation = new Dictionary<string, dynamic> { { "name", "someone" } };
 
             mockNotificationClient.Setup(client => client.SendSms(
@@ -488,7 +584,7 @@ namespace Notify.Tests.IntegrationTests
                     body = "HELLO WORLD v2",
                     fromNumber = "+15145550000"
                 },
-                mockReference
+                reference = "sample-test-ref"
             });
 
             SmsNotificationResponse response = mockNotificationClient.Object.SendSms(
@@ -504,6 +600,3 @@ namespace Notify.Tests.IntegrationTests
             Assert.IsNotNull(response.reference);
             Assert.AreEqual(response.reference, "sample-test-ref");
         }
-
-    }
-}

@@ -28,7 +28,6 @@ namespace Notify.Tests.IntegrationTests
         private string mockReplyToId = "mock-reply-to-id";
         private string mockReference = "sample-test-ref";
         private string mockSmsSenderId = "mock-sender-id";
-        private string mockBulkReference = "bulk_ref_integration_test";
         private string mockCsvBulkReference = "bulk_ref_integration_test_csv";
         private string mockNotificationId = "mock-notification-id";
 
@@ -60,7 +59,7 @@ namespace Notify.Tests.IntegrationTests
                 .Returns(new SmsNotificationResponse
                 {
                     content = new SmsResponseContent { body = TEST_SMS_BODY, fromNumber = mockPhoneNumber }, // ✅ CORRECT TYPE
-                    reference = "sample-test-ref"
+                    mockReference
                 });
 
             Dictionary<string, dynamic> personalisation = new Dictionary<string, dynamic>
@@ -72,13 +71,13 @@ namespace Notify.Tests.IntegrationTests
                 mockPhoneNumber,
                 mockTemplateId,
                 personalisation,
-                "sample-test-ref"
+                mockReference
             );
 
             Assert.IsNotNull(response);
             Assert.AreEqual(TEST_SMS_BODY, response.content.body);
             Assert.IsNotNull(response.reference);
-            Assert.AreEqual("sample-test-ref", response.reference);
+            Assert.AreEqual(mockReference, response.reference);
         }
 
 
@@ -147,7 +146,7 @@ namespace Notify.Tests.IntegrationTests
                     uri = "http://fake.template.uri",
                     version = 1
                 },
-                content = new EmailNotificationResponse.Content
+                content = new EmailNotificationResponse.content
                 {
                     subject = TEST_EMAIL_SUBJECT,
                     body = TEST_EMAIL_BODY
@@ -450,7 +449,7 @@ namespace Notify.Tests.IntegrationTests
                         subject = "BASIC",
                         oneClickUnsubscribeURL = null
                     },
-                    reference = "TestReference"
+                    mockReference
                 });
 
             EmailNotificationResponse response = mockNotificationClient.Object.SendEmail(
@@ -489,7 +488,7 @@ namespace Notify.Tests.IntegrationTests
                     body = "HELLO WORLD v2",
                     fromNumber = "+15145550000"
                 },
-                reference = "sample-test-ref"
+                mockReference
             });
 
             SmsNotificationResponse response = mockNotificationClient.Object.SendSms(

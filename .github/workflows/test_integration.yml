@@ -1,7 +1,13 @@
 name: Test Intégration PGN
 
 on:
-  workflow_dispatch: 
+    push:
+        branches:
+          - main
+    pull_request:
+        branches:
+          - main
+    workflow_dispatch:
 
 jobs:
   integration-tests:

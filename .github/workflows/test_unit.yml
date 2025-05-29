@@ -1,0 +1,41 @@
+name: Run Unit Tests Only
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  unit-tests:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: |
+          6.0.x
+          8.0.x
+
+    - name: Restore dependencies
+      run: dotnet restore src/PgnNotifications.Client.Tests/PgnNotifications.Client.Tests.csproj
+
+    - name: Run unit tests only
+      run: >
+        dotnet test src/PgnNotifications.Client.Tests/PgnNotifications.Client.Tests.csproj
+        --filter "Category=Unit"
+        --configuration Release
+        --logger "trx;LogFileName=test-results.trx"
+        --results-directory ./TestResults
+
+    - name: Upload test results
+      if: always()
+      uses: actions/upload-artifact@v3
+      with:
+        name: unit-test-results
+        path: ./TestResults/test-results.trx

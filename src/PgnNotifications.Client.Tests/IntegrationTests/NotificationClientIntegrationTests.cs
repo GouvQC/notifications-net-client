@@ -19,7 +19,7 @@ namespace Notify.Tests.IntegrationTests
     public class NotificationClientIntegrationTests
     {
         //private NotificationClient client;
-        private Mock<INotificationClient> mockClient;
+        private Mock<INotificationClient> mockNotificationClient;
         private INotificationClient client;
         private string mockPhoneNumber = "+15145550000";
         private string mockEmail = "fake@example.com";
@@ -27,6 +27,7 @@ namespace Notify.Tests.IntegrationTests
         private string mockTemplateIdEmail = "mock-email-template";
         private string mockReplyToId = "mock-reply-to-id";
         private string mockReference = "sample-test-ref";
+        private string mockSmsSenderId = "mock-sender-id";
         private string mockBulkReference = "bulk_ref_integration_test";
         private string mockCsvBulkReference = "bulk_ref_integration_test_csv";
         private string mockNotificationId = "mock-notification-id";
@@ -41,15 +42,15 @@ namespace Notify.Tests.IntegrationTests
         //[Test, Category("Integration"), Category("Integration/NotificationClient")]
         public void SetUp()
         {
-                mockClient = new Mock<INotificationClient>();
-                client = mockClient.Object;
+                mockNotificationClient = new Mock<INotificationClient>();
+                client = mockNotificationClient.Object;
         }
 
 
         [Test, Category("Integration"), Category("Integration/NotificationClient")]
         public void SendSmsTestWithPersonalisation()
         {
-            mockClient
+            mockNotificationClient
                 .Setup(c => c.SendSms(
                     It.IsAny<string>(),
                     It.IsAny<string>(),
@@ -67,7 +68,7 @@ namespace Notify.Tests.IntegrationTests
                 { "name", "someone" }
             };
 
-            SmsNotificationResponse response = mockClient.Object.SendSms(
+            SmsNotificationResponse response = mockNotificationClient.Object.SendSms(
                 mockPhoneNumber,
                 mockTemplateId,
                 personalisation,
@@ -101,12 +102,12 @@ namespace Notify.Tests.IntegrationTests
                 },
             };
 
-            var mockClient = new Mock<INotificationClient>();
-            mockClient
+            var mockNotificationClient = new Mock<INotificationClient>();
+            mockNotificationClient
                 .Setup(c => c.SendEmail(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<Dictionary<string, dynamic>>()))
                 .Returns(expectedResponse);
 
-            var client = mockClient.Object;
+            var client = mockNotificationClient.Object;
 
             // Act
             var response = client.SendEmail(mockEmail, mockTemplateIdEmail, personalisation);
@@ -154,8 +155,8 @@ namespace Notify.Tests.IntegrationTests
                 }
             };
 
-            mockClient.Setup(x =>
-                x.SendEmail(mockEmail, mockTemplateIdEmail, personalisation, null, null, null)
+            mockNotificationClient.Setup(x =>
+                x.SendEmail(mockEmail, mockTemplateIdEmail, personalisation, mockReference, mockReference, null)
             ).Returns(fakeResponse);
 
             // Act
@@ -207,8 +208,8 @@ namespace Notify.Tests.IntegrationTests
                 }
             };
 
-            mockClient.Setup(x =>
-                x.SendEmail(mockEmail, mockTemplateIdEmail, personalisation, null, null, null)
+            mockNotificationClient.Setup(x =>
+                x.SendEmail(mockEmail, mockTemplateIdEmail, personalisation, mockReference, mockReplyToId, null)
             ).Returns(fakeResponse);
 
             // Act
@@ -241,7 +242,7 @@ namespace Notify.Tests.IntegrationTests
             // Arrange - simuler une réponse HTTP 200 OK
             var fakeResponse = new HttpResponseMessage(System.Net.HttpStatusCode.OK);
 
-            mockClient.Setup(x =>
+            mockNotificationClient.Setup(x =>
                 x.SendBulkNotifications(
                     mockTemplateId,
                     mockName,
@@ -445,9 +446,9 @@ namespace Notify.Tests.IntegrationTests
                 mockEmail,
                 mockTemplateIdEmail,
                 personalisation,
-                It.IsAny<string>(),
+                mockReference,
                 mockReplyToId,
-                It.IsAny<string>()
+                null
                 )).Returns(new EmailNotificationResponse
                 {
                     content = new EmailResponseContent
@@ -478,7 +479,7 @@ namespace Notify.Tests.IntegrationTests
         [Test, Category("Integration"), Category("Integration/NotificationClient")]
         public void SendSmsTestWithPersonalisationAndSmsSenderId()
         {
-            var mockSmsSenderId = "mock-sender-id";
+            
 
             Dictionary<string, dynamic> personalisation = new Dictionary<string, dynamic> { { "name", "someone" } };
 
@@ -486,7 +487,7 @@ namespace Notify.Tests.IntegrationTests
                 mockPhoneNumber,
                 mockTemplateId,
                 personalisation,
-                It.IsAny<string>(),
+                mockReference,
                 mockSmsSenderId
             )).Returns(new SmsNotificationResponse
             {

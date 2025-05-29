@@ -600,3 +600,5 @@ namespace Notify.Tests.IntegrationTests
             Assert.IsNotNull(response.reference);
             Assert.AreEqual(response.reference, "sample-test-ref");
         }
+    }
+}

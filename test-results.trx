@@ -1,0 +1,129 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="be2a1397-bbf8-464a-bb6e-b4d4baeb4d4c" name="@fv-az1057-205 2025-05-29 18:38:32" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2025-05-29T18:38:32.4476920+00:00" queuing="2025-05-29T18:38:32.4476920+00:00" start="2025-05-29T18:38:31.3195309+00:00" finish="2025-05-29T18:38:32.4847584+00:00" />
+  <TestSettings name="default" id="263a97ea-5b92-4443-acf7-13cf8be7c1f2">
+    <Deployment runDeploymentRoot="_fv-az1057-205_2025-05-29_18_38_32" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="2f20f408-3b3e-42d6-b7b1-764b254d5299" testId="e896941b-686b-73c3-b257-0fd1ccd26b2c" testName="GenerateEmailPreviewWithPersonalisation" computerName="fv-az1057-205" duration="00:00:00.1122920" startTime="2025-05-29T18:38:32.2185187+00:00" endTime="2025-05-29T18:38:32.3307389+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="2f20f408-3b3e-42d6-b7b1-764b254d5299" />
+    <UnitTestResult executionId="ecfd5600-eb66-4533-a22c-5e78fcc2f868" testId="d7ed82db-9ba5-0230-63c7-21aed40216f5" testName="GetAllSMSTemplates" computerName="fv-az1057-205" duration="00:00:00.0044530" startTime="2025-05-29T18:38:32.3345378+00:00" endTime="2025-05-29T18:38:32.3389910+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="ecfd5600-eb66-4533-a22c-5e78fcc2f868" />
+    <UnitTestResult executionId="e28a7dbe-deac-4d24-986a-9035329002e7" testId="77e9c808-aeba-f398-a765-b913349f6d85" testName="GetSMSTemplateWithId" computerName="fv-az1057-205" duration="00:00:00.0003070" startTime="2025-05-29T18:38:32.3457480+00:00" endTime="2025-05-29T18:38:32.3460550+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="e28a7dbe-deac-4d24-986a-9035329002e7" />
+    <UnitTestResult executionId="fafdfa80-2e6b-48f2-ae99-56155c2bbbea" testId="0625680a-fd66-0127-40f2-7e69906c294a" testName="SendEmailTestEmailReplyToNotPresent" computerName="fv-az1057-205" duration="00:00:00.0084470" startTime="2025-05-29T18:38:32.3546396+00:00" endTime="2025-05-29T18:38:32.3630865+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="fafdfa80-2e6b-48f2-ae99-56155c2bbbea" />
+    <UnitTestResult executionId="c967f589-b4ef-45ee-9d0b-a37d9e0133cc" testId="281e4649-d89a-1a68-51d3-315bf3199cf8" testName="GenerateSMSPreviewWithPersonalisation" computerName="fv-az1057-205" duration="00:00:00.0012120" startTime="2025-05-29T18:38:32.3323722+00:00" endTime="2025-05-29T18:38:32.3335848+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="c967f589-b4ef-45ee-9d0b-a37d9e0133cc" />
+    <UnitTestResult executionId="b26be551-d7db-45fa-9b04-322698a6c64f" testId="3648a573-2759-4451-9976-80027c3c06e7" testName="SendEmailWithDocumentPersonalisationTest" computerName="fv-az1057-205" duration="00:00:00.0021240" startTime="2025-05-29T18:38:32.3668619+00:00" endTime="2025-05-29T18:38:32.3689856+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="b26be551-d7db-45fa-9b04-322698a6c64f" />
+    <UnitTestResult executionId="098ceb09-a17c-45c6-a16b-1637f89319d6" testId="0493d994-d063-f988-7d95-a7c2da9ee76e" testName="SendEmailWithCSVDocumentPersonalisationTestUsingEmailConfirmationAndRetentionPeriod" computerName="fv-az1057-205" duration="00:00:00.0023060" startTime="2025-05-29T18:38:32.3645424+00:00" endTime="2025-05-29T18:38:32.3668488+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="098ceb09-a17c-45c6-a16b-1637f89319d6" />
+    <UnitTestResult executionId="5e6b2852-7289-4e28-b5f6-8bddb2fbc94b" testId="75de5ffb-b74a-f51e-ea78-569bf1521f4d" testName="GetTemplateWithIdWithoutResultRaisesClientException" computerName="fv-az1057-205" duration="00:00:00.0005450" startTime="2025-05-29T18:38:32.3460673+00:00" endTime="2025-05-29T18:38:32.3466122+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="5e6b2852-7289-4e28-b5f6-8bddb2fbc94b" />
+    <UnitTestResult executionId="67870320-7ac2-45d2-9703-a4b4b726d750" testId="999f39f3-29d0-a97a-db42-0a4998f65f80" testName="GetAllNotifications" computerName="fv-az1057-205" duration="00:00:00.0009150" startTime="2025-05-29T18:38:32.3336095+00:00" endTime="2025-05-29T18:38:32.3345248+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="67870320-7ac2-45d2-9703-a4b4b726d750" />
+    <UnitTestResult executionId="29128c9a-fc94-4d59-8a28-d83cd9a72acb" testId="4e2a4949-2030-1b76-b920-62b1cb3f55c0" testName="GetTemplateWithInvalidIdRaisesClientException" computerName="fv-az1057-205" duration="00:00:00.0004880" startTime="2025-05-29T18:38:32.3466251+00:00" endTime="2025-05-29T18:38:32.3471134+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="29128c9a-fc94-4d59-8a28-d83cd9a72acb" />
+    <UnitTestResult executionId="19cff4f1-4d80-41fc-96c2-27f7d20c452d" testId="9b7a5828-8aa6-0f6a-ba6b-6f3434e5381b" testName="SendEmailTestWithPersonalisation_Mocked" computerName="fv-az1057-205" duration="00:00:00.0014220" startTime="2025-05-29T18:38:32.3631079+00:00" endTime="2025-05-29T18:38:32.3645297+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="19cff4f1-4d80-41fc-96c2-27f7d20c452d" />
+    <UnitTestResult executionId="d77c5ef2-9aa9-447f-bf03-beb2b8b94090" testId="2403f37c-328f-526e-410b-12b0489547c5" testName="GetAllTemplates" computerName="fv-az1057-205" duration="00:00:00.0004180" startTime="2025-05-29T18:38:32.3390063+00:00" endTime="2025-05-29T18:38:32.3394239+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="d77c5ef2-9aa9-447f-bf03-beb2b8b94090" />
+    <UnitTestResult executionId="2dec6e78-cdfd-4e5c-b808-82e7f38941a8" testId="925817b1-1943-0cf9-f7a8-5e046c0d4c34" testName="SendSmsTestWithPersonalisationAndSmsSenderId" computerName="fv-az1057-205" duration="00:00:00.0022039" startTime="2025-05-29T18:38:32.3702680+00:00" endTime="2025-05-29T18:38:32.3724714+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="2dec6e78-cdfd-4e5c-b808-82e7f38941a8" />
+    <UnitTestResult executionId="31d2e91e-6ebb-4abd-848a-6fa25e9f58c4" testId="21a7b1a4-4651-d29f-93f2-0e7230b2620d" testName="SendSmsTestWithPersonalisation" computerName="fv-az1057-205" duration="00:00:00.0012560" startTime="2025-05-29T18:38:32.3689988+00:00" endTime="2025-05-29T18:38:32.3702545+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="31d2e91e-6ebb-4abd-848a-6fa25e9f58c4" />
+    <UnitTestResult executionId="540f198a-7cdd-42df-ac22-5c71831b9f6e" testId="1ee911ee-f399-e945-dab8-e9ab54371261" testName="SendEmailTestAllArguments" computerName="fv-az1057-205" duration="00:00:00.0074990" startTime="2025-05-29T18:38:32.3471257+00:00" endTime="2025-05-29T18:38:32.3546240+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="540f198a-7cdd-42df-ac22-5c71831b9f6e" />
+    <UnitTestResult executionId="fea2f645-21df-44e6-bfb6-c6ac3db7c381" testId="84e1fb1e-0aa6-7463-eb48-945f2089e1db" testName="GetNotificationWithInvalidIdRaisesClientException" computerName="fv-az1057-205" duration="00:00:00.0057019" startTime="2025-05-29T18:38:32.3400315+00:00" endTime="2025-05-29T18:38:32.3457336+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="fea2f645-21df-44e6-bfb6-c6ac3db7c381" />
+    <UnitTestResult executionId="6ea7c740-91e1-4db9-9cad-74a9e9e7cb13" testId="12ed92eb-1a03-d623-2798-1e2ee37e6e52" testName="GetEmailTemplateWithId" computerName="fv-az1057-205" duration="00:00:00.0005820" startTime="2025-05-29T18:38:32.3394364+00:00" endTime="2025-05-29T18:38:32.3400187+00:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="6ea7c740-91e1-4db9-9cad-74a9e9e7cb13" />
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="SendEmailWithCSVDocumentPersonalisationTestUsingEmailConfirmationAndRetentionPeriod" storage="/home/runner/work/notifications-net-client/notifications-net-client/src/pgnnotifications.client.tests/bin/release/net6.0/pgnnotifications.client.tests.dll" id="0493d994-d063-f988-7d95-a7c2da9ee76e">
+      <Execution id="098ceb09-a17c-45c6-a16b-1637f89319d6" />
+      <TestMethod codeBase="/home/runner/work/notifications-net-client/notifications-net-client/src/PgnNotifications.Client.Tests/bin/Release/net6.0/PgnNotifications.Client.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="Notify.Tests.IntegrationTests.NotificationClientIntegrationTests" name="SendEmailWithCSVDocumentPersonalisationTestUsingEmailConfirmationAndRetentionPeriod" />
+    </UnitTest>
+    <UnitTest name="GenerateEmailPreviewWithPersonalisation" storage="/home/runner/work/notifications-net-client/notifications-net-client/src/pgnnotifications.client.tests/bin/release/net6.0/pgnnotifications.client.tests.dll" id="e896941b-686b-73c3-b257-0fd1ccd26b2c">
+      <Execution id="2f20f408-3b3e-42d6-b7b1-764b254d5299" />
+      <TestMethod codeBase="/home/runner/work/notifications-net-client/notifications-net-client/src/PgnNotifications.Client.Tests/bin/Release/net6.0/PgnNotifications.Client.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="Notify.Tests.IntegrationTests.NotificationClientIntegrationTests" name="GenerateEmailPreviewWithPersonalisation" />
+    </UnitTest>
+    <UnitTest name="GetEmailTemplateWithId" storage="/home/runner/work/notifications-net-client/notifications-net-client/src/pgnnotifications.client.tests/bin/release/net6.0/pgnnotifications.client.tests.dll" id="12ed92eb-1a03-d623-2798-1e2ee37e6e52">
+      <Execution id="6ea7c740-91e1-4db9-9cad-74a9e9e7cb13" />
+      <TestMethod codeBase="/home/runner/work/notifications-net-client/notifications-net-client/src/PgnNotifications.Client.Tests/bin/Release/net6.0/PgnNotifications.Client.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="Notify.Tests.IntegrationTests.NotificationClientIntegrationTests" name="GetEmailTemplateWithId" />
+    </UnitTest>
+    <UnitTest name="GetSMSTemplateWithId" storage="/home/runner/work/notifications-net-client/notifications-net-client/src/pgnnotifications.client.tests/bin/release/net6.0/pgnnotifications.client.tests.dll" id="77e9c808-aeba-f398-a765-b913349f6d85">
+      <Execution id="e28a7dbe-deac-4d24-986a-9035329002e7" />
+      <TestMethod codeBase="/home/runner/work/notifications-net-client/notifications-net-client/src/PgnNotifications.Client.Tests/bin/Release/net6.0/PgnNotifications.Client.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="Notify.Tests.IntegrationTests.NotificationClientIntegrationTests" name="GetSMSTemplateWithId" />
+    </UnitTest>
+    <UnitTest name="SendEmailTestWithPersonalisation_Mocked" storage="/home/runner/work/notifications-net-client/notifications-net-client/src/pgnnotifications.client.tests/bin/release/net6.0/pgnnotifications.client.tests.dll" id="9b7a5828-8aa6-0f6a-ba6b-6f3434e5381b">
+      <Execution id="19cff4f1-4d80-41fc-96c2-27f7d20c452d" />
+      <TestMethod codeBase="/home/runner/work/notifications-net-client/notifications-net-client/src/PgnNotifications.Client.Tests/bin/Release/net6.0/PgnNotifications.Client.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="Notify.Tests.IntegrationTests.NotificationClientIntegrationTests" name="SendEmailTestWithPersonalisation_Mocked" />
+    </UnitTest>
+    <UnitTest name="GetAllNotifications" storage="/home/runner/work/notifications-net-client/notifications-net-client/src/pgnnotifications.client.tests/bin/release/net6.0/pgnnotifications.client.tests.dll" id="999f39f3-29d0-a97a-db42-0a4998f65f80">
+      <Execution id="67870320-7ac2-45d2-9703-a4b4b726d750" />
+      <TestMethod codeBase="/home/runner/work/notifications-net-client/notifications-net-client/src/PgnNotifications.Client.Tests/bin/Release/net6.0/PgnNotifications.Client.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="Notify.Tests.IntegrationTests.NotificationClientIntegrationTests" name="GetAllNotifications" />
+    </UnitTest>
+    <UnitTest name="GetTemplateWithIdWithoutResultRaisesClientException" storage="/home/runner/work/notifications-net-client/notifications-net-client/src/pgnnotifications.client.tests/bin/release/net6.0/pgnnotifications.client.tests.dll" id="75de5ffb-b74a-f51e-ea78-569bf1521f4d">
+      <Execution id="5e6b2852-7289-4e28-b5f6-8bddb2fbc94b" />
+      <TestMethod codeBase="/home/runner/work/notifications-net-client/notifications-net-client/src/PgnNotifications.Client.Tests/bin/Release/net6.0/PgnNotifications.Client.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="Notify.Tests.IntegrationTests.NotificationClientIntegrationTests" name="GetTemplateWithIdWithoutResultRaisesClientException" />
+    </UnitTest>
+    <UnitTest name="GetTemplateWithInvalidIdRaisesClientException" storage="/home/runner/work/notifications-net-client/notifications-net-client/src/pgnnotifications.client.tests/bin/release/net6.0/pgnnotifications.client.tests.dll" id="4e2a4949-2030-1b76-b920-62b1cb3f55c0">
+      <Execution id="29128c9a-fc94-4d59-8a28-d83cd9a72acb" />
+      <TestMethod codeBase="/home/runner/work/notifications-net-client/notifications-net-client/src/PgnNotifications.Client.Tests/bin/Release/net6.0/PgnNotifications.Client.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="Notify.Tests.IntegrationTests.NotificationClientIntegrationTests" name="GetTemplateWithInvalidIdRaisesClientException" />
+    </UnitTest>
+    <UnitTest name="GetAllTemplates" storage="/home/runner/work/notifications-net-client/notifications-net-client/src/pgnnotifications.client.tests/bin/release/net6.0/pgnnotifications.client.tests.dll" id="2403f37c-328f-526e-410b-12b0489547c5">
+      <Execution id="d77c5ef2-9aa9-447f-bf03-beb2b8b94090" />
+      <TestMethod codeBase="/home/runner/work/notifications-net-client/notifications-net-client/src/PgnNotifications.Client.Tests/bin/Release/net6.0/PgnNotifications.Client.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="Notify.Tests.IntegrationTests.NotificationClientIntegrationTests" name="GetAllTemplates" />
+    </UnitTest>
+    <UnitTest name="SendSmsTestWithPersonalisationAndSmsSenderId" storage="/home/runner/work/notifications-net-client/notifications-net-client/src/pgnnotifications.client.tests/bin/release/net6.0/pgnnotifications.client.tests.dll" id="925817b1-1943-0cf9-f7a8-5e046c0d4c34">
+      <Execution id="2dec6e78-cdfd-4e5c-b808-82e7f38941a8" />
+      <TestMethod codeBase="/home/runner/work/notifications-net-client/notifications-net-client/src/PgnNotifications.Client.Tests/bin/Release/net6.0/PgnNotifications.Client.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="Notify.Tests.IntegrationTests.NotificationClientIntegrationTests" name="SendSmsTestWithPersonalisationAndSmsSenderId" />
+    </UnitTest>
+    <UnitTest name="SendEmailTestAllArguments" storage="/home/runner/work/notifications-net-client/notifications-net-client/src/pgnnotifications.client.tests/bin/release/net6.0/pgnnotifications.client.tests.dll" id="1ee911ee-f399-e945-dab8-e9ab54371261">
+      <Execution id="540f198a-7cdd-42df-ac22-5c71831b9f6e" />
+      <TestMethod codeBase="/home/runner/work/notifications-net-client/notifications-net-client/src/PgnNotifications.Client.Tests/bin/Release/net6.0/PgnNotifications.Client.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="Notify.Tests.IntegrationTests.NotificationClientIntegrationTests" name="SendEmailTestAllArguments" />
+    </UnitTest>
+    <UnitTest name="SendEmailTestEmailReplyToNotPresent" storage="/home/runner/work/notifications-net-client/notifications-net-client/src/pgnnotifications.client.tests/bin/release/net6.0/pgnnotifications.client.tests.dll" id="0625680a-fd66-0127-40f2-7e69906c294a">
+      <Execution id="fafdfa80-2e6b-48f2-ae99-56155c2bbbea" />
+      <TestMethod codeBase="/home/runner/work/notifications-net-client/notifications-net-client/src/PgnNotifications.Client.Tests/bin/Release/net6.0/PgnNotifications.Client.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="Notify.Tests.IntegrationTests.NotificationClientIntegrationTests" name="SendEmailTestEmailReplyToNotPresent" />
+    </UnitTest>
+    <UnitTest name="GetNotificationWithInvalidIdRaisesClientException" storage="/home/runner/work/notifications-net-client/notifications-net-client/src/pgnnotifications.client.tests/bin/release/net6.0/pgnnotifications.client.tests.dll" id="84e1fb1e-0aa6-7463-eb48-945f2089e1db">
+      <Execution id="fea2f645-21df-44e6-bfb6-c6ac3db7c381" />
+      <TestMethod codeBase="/home/runner/work/notifications-net-client/notifications-net-client/src/PgnNotifications.Client.Tests/bin/Release/net6.0/PgnNotifications.Client.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="Notify.Tests.IntegrationTests.NotificationClientIntegrationTests" name="GetNotificationWithInvalidIdRaisesClientException" />
+    </UnitTest>
+    <UnitTest name="GenerateSMSPreviewWithPersonalisation" storage="/home/runner/work/notifications-net-client/notifications-net-client/src/pgnnotifications.client.tests/bin/release/net6.0/pgnnotifications.client.tests.dll" id="281e4649-d89a-1a68-51d3-315bf3199cf8">
+      <Execution id="c967f589-b4ef-45ee-9d0b-a37d9e0133cc" />
+      <TestMethod codeBase="/home/runner/work/notifications-net-client/notifications-net-client/src/PgnNotifications.Client.Tests/bin/Release/net6.0/PgnNotifications.Client.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="Notify.Tests.IntegrationTests.NotificationClientIntegrationTests" name="GenerateSMSPreviewWithPersonalisation" />
+    </UnitTest>
+    <UnitTest name="SendSmsTestWithPersonalisation" storage="/home/runner/work/notifications-net-client/notifications-net-client/src/pgnnotifications.client.tests/bin/release/net6.0/pgnnotifications.client.tests.dll" id="21a7b1a4-4651-d29f-93f2-0e7230b2620d">
+      <Execution id="31d2e91e-6ebb-4abd-848a-6fa25e9f58c4" />
+      <TestMethod codeBase="/home/runner/work/notifications-net-client/notifications-net-client/src/PgnNotifications.Client.Tests/bin/Release/net6.0/PgnNotifications.Client.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="Notify.Tests.IntegrationTests.NotificationClientIntegrationTests" name="SendSmsTestWithPersonalisation" />
+    </UnitTest>
+    <UnitTest name="SendEmailWithDocumentPersonalisationTest" storage="/home/runner/work/notifications-net-client/notifications-net-client/src/pgnnotifications.client.tests/bin/release/net6.0/pgnnotifications.client.tests.dll" id="3648a573-2759-4451-9976-80027c3c06e7">
+      <Execution id="b26be551-d7db-45fa-9b04-322698a6c64f" />
+      <TestMethod codeBase="/home/runner/work/notifications-net-client/notifications-net-client/src/PgnNotifications.Client.Tests/bin/Release/net6.0/PgnNotifications.Client.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="Notify.Tests.IntegrationTests.NotificationClientIntegrationTests" name="SendEmailWithDocumentPersonalisationTest" />
+    </UnitTest>
+    <UnitTest name="GetAllSMSTemplates" storage="/home/runner/work/notifications-net-client/notifications-net-client/src/pgnnotifications.client.tests/bin/release/net6.0/pgnnotifications.client.tests.dll" id="d7ed82db-9ba5-0230-63c7-21aed40216f5">
+      <Execution id="ecfd5600-eb66-4533-a22c-5e78fcc2f868" />
+      <TestMethod codeBase="/home/runner/work/notifications-net-client/notifications-net-client/src/PgnNotifications.Client.Tests/bin/Release/net6.0/PgnNotifications.Client.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="Notify.Tests.IntegrationTests.NotificationClientIntegrationTests" name="GetAllSMSTemplates" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="e896941b-686b-73c3-b257-0fd1ccd26b2c" executionId="2f20f408-3b3e-42d6-b7b1-764b254d5299" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="d7ed82db-9ba5-0230-63c7-21aed40216f5" executionId="ecfd5600-eb66-4533-a22c-5e78fcc2f868" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="77e9c808-aeba-f398-a765-b913349f6d85" executionId="e28a7dbe-deac-4d24-986a-9035329002e7" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="0625680a-fd66-0127-40f2-7e69906c294a" executionId="fafdfa80-2e6b-48f2-ae99-56155c2bbbea" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="281e4649-d89a-1a68-51d3-315bf3199cf8" executionId="c967f589-b4ef-45ee-9d0b-a37d9e0133cc" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="3648a573-2759-4451-9976-80027c3c06e7" executionId="b26be551-d7db-45fa-9b04-322698a6c64f" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="0493d994-d063-f988-7d95-a7c2da9ee76e" executionId="098ceb09-a17c-45c6-a16b-1637f89319d6" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="75de5ffb-b74a-f51e-ea78-569bf1521f4d" executionId="5e6b2852-7289-4e28-b5f6-8bddb2fbc94b" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="999f39f3-29d0-a97a-db42-0a4998f65f80" executionId="67870320-7ac2-45d2-9703-a4b4b726d750" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="4e2a4949-2030-1b76-b920-62b1cb3f55c0" executionId="29128c9a-fc94-4d59-8a28-d83cd9a72acb" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="9b7a5828-8aa6-0f6a-ba6b-6f3434e5381b" executionId="19cff4f1-4d80-41fc-96c2-27f7d20c452d" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="2403f37c-328f-526e-410b-12b0489547c5" executionId="d77c5ef2-9aa9-447f-bf03-beb2b8b94090" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="925817b1-1943-0cf9-f7a8-5e046c0d4c34" executionId="2dec6e78-cdfd-4e5c-b808-82e7f38941a8" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="21a7b1a4-4651-d29f-93f2-0e7230b2620d" executionId="31d2e91e-6ebb-4abd-848a-6fa25e9f58c4" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="1ee911ee-f399-e945-dab8-e9ab54371261" executionId="540f198a-7cdd-42df-ac22-5c71831b9f6e" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="84e1fb1e-0aa6-7463-eb48-945f2089e1db" executionId="fea2f645-21df-44e6-bfb6-c6ac3db7c381" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="12ed92eb-1a03-d623-2798-1e2ee37e6e52" executionId="6ea7c740-91e1-4db9-9cad-74a9e9e7cb13" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Completed">
+    <Counters total="17" executed="17" passed="17" failed="0" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>NUnit Adapter 4.5.0.0: Test execution started
+Running selected tests in /home/runner/work/notifications-net-client/notifications-net-client/src/PgnNotifications.Client.Tests/bin/Release/net6.0/PgnNotifications.Client.Tests.dll
+   NUnit3TestExecutor discovered 17 of 17 NUnit test cases using Current Discovery mode, Non-Explicit run
+NUnit Adapter 4.5.0.0: Test execution complete
+</StdOut>
+    </Output>
+  </ResultSummary>
+</TestRun>

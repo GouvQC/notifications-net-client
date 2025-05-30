@@ -3,7 +3,7 @@ using PgnNotifications.Models;
 using PgnNotifications.Models.Responses;
 using NUnit.Framework;
 
-namespace Notify.Tests.IntegrationTests
+namespace PgnNotifications.Client.Tests.IntegrationTests
 {
     public class NotifyAssertions
     {

@@ -104,6 +104,9 @@ namespace PgnNotifications.Client
             var response = await GET(finalUrl).ConfigureAwait(false);
 
             var notifications = JsonConvert.DeserializeObject<NotificationList>(response);
+            Console.WriteLine($"RESPONSE TYPE: {response.GetType()}");
+            Console.WriteLine($"RESPONSE CONTENT: {response}");
+
             return notifications;
         }
 

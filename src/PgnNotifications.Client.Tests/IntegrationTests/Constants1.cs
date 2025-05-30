@@ -3,9 +3,9 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 
-namespace PgnNotifications.Client.Tests.UnitTests
+namespace PgnNotifications.Client.Tests.IntegrationTests
 {
-    public static class Constants
+    public static class Constants1
     {
         public static String fakeApiKey
         {
@@ -35,10 +35,62 @@ namespace PgnNotifications.Client.Tests.UnitTests
         public static String fakeTemplateId { get { return "913e9fa6-9cbb-44ad-8f58-38487dccfd82"; } }
         public static String fakeReplyToId { get { return "78ded4ad-e915-4a89-a314-2940ed141d40"; } }
         public static String fakeSMSSenderId { get { return "88ded4ad-e915-4a89-a314-2940ed141d41"; } }
+        public const string fakeReference = "sample-test-ref";
         public const String TemplateIdSms = "mock-sms-template";
         public const String TemplateIdEmail = "mock-email-template";
         public const String SmsBody = "HELLO WORLD v2";
         public const String EmailBody = "HELLO WORLD";
+        
+        public static string fakeTemplateListJson = @"{
+        ""templates"": [
+            {
+            ""id"": ""913e9fa6-9cbb-44ad-8f58-38487dccfd82"",
+            ""body"": ""Fake Email"",
+            ""subject"": ""Test Email Subject"",
+            ""type"": ""email"",
+            ""version"": 1
+            }
+        ]
+        }";
+
+        public const string fakeSmsBody = "Fake SMS";
+        public const string fakeEmailBody = "Fake Email";
+        public const string fakeEmailSubject = "Subject";
+
+        public const string fakeEmailPreviewResponseJson = @"{
+        ""id"": ""d683f7f9-df04-4b9c-8019-15092c4674fd"",
+        ""type"": ""email"",
+        ""version"": 2,
+        ""body"": ""Fake Email"",
+        ""subject"": ""Subject""
+        }";
+
+        public const string fakeSmsPreviewResponseJson = @"{
+        ""id"": ""d683f7f9-df04-4b9c-8019-15092c4674fd"",
+        ""type"": ""sms"",
+        ""version"": 2,
+        ""body"": ""Fake SMS"",
+        ""subject"": null
+        }";
+
+
+        public static string fakeNotificationListJson = @"{
+            ""notifications"": [
+                {
+                    ""id"": ""902e4312-bc4a-4c87-8c3e-9f4144ca36fd"",
+                    ""status"": ""sending"",
+                    ""template"": {
+                        ""id"": ""913e9fa6-9cbb-44ad-8f58-38487dccfd82"",
+                        ""version"": 1,
+                        ""uri"": ""/service/fake/template""
+                    },
+                    ""phone_number"": ""+14185551234"",
+                    ""created_at"": ""2024-01-01T00:00:00Z"",
+                    ""type"": ""sms""
+                }
+            ]
+        }";
+
         public static String fakeNotificationJson
         {
             get
@@ -105,8 +157,11 @@ namespace PgnNotifications.Client.Tests.UnitTests
                             ""template"": {
                                 ""id"": ""913e9fa6-9cbb-44ad-8f58-38487dccfd82"",
                                 ""uri"": ""/service/fd29e421-24b6-4f45-ac5c-e642a1d68641/template/323e9fa6-9cbb-44ad-8f64-38487dccfd43"",
-                                ""version"": 2  },
+                                ""version"": 2
+                            },
                             ""type"": ""sms"",
+                            ""subject"": ""Test SMS Subject"",
+                            ""body"": ""This is a test SMS body."",
                             ""one_click_unsubscribe_url"": null,
                             ""is_cost_data_ready"": true,
                             ""cost_in_pounds"": 0.5,
@@ -137,17 +192,26 @@ namespace PgnNotifications.Client.Tests.UnitTests
                             ""template"": {
                                 ""id"": ""913e9fa6-9cbb-44ad-8f58-38487dccfd84"",
                                 ""uri"": ""/service/fd29e421-24b6-4f45-ac5c-e642a1d68641/template/323e9fa6-9cbb-44ad-8f64-38487dccfd43"",
-                                ""version"": 2  },
+                                ""version"": 2
+                            },
                             ""type"": ""email"",
+                            ""subject"": ""Test Email Subject"",
+                            ""body"": ""This is a test email body."",
                             ""one_click_unsubscribe_url"": ""https://www.example.com/unsubscribe"",
                             ""is_cost_data_ready"": true,
                             ""cost_in_pounds"": 0.5,
                             ""cost_details"": {}
                         }
-                    ]
+                    ],
+                    ""links"": {
+                        ""current"": ""http://example.com/notifications?page=1"",
+                        ""next"": null
+                    }
                 }";
             }
         }
+
+
         public static String fakeSmsNotificationsJson
         {
             get
@@ -289,33 +353,27 @@ namespace PgnNotifications.Client.Tests.UnitTests
                 }";
             }
         }
-        public static String fakeTemplateResponseJson
-        {
-            get
-            {
-                return @"{
-                            ""updated_at"": null,
-                            ""created_at"": ""2016-11-22T11:21:13.133522Z"",
-                            ""created_by"": ""someone@example.com"",
-                            ""id"": ""902e4312-bc4a-4c87-8c3e-9f4144ca36fd"",
-                            ""body"": ""test body"",
-                            ""subject"": null,
-                            ""type"": ""sms"",
-                            ""version"": 2
-                        }";
-            }
-        }
+
+        public static string fakeTemplateResponseJson => @"{
+        ""id"": ""913e9fa6-9cbb-44ad-8f58-38487dccfd82"",
+        ""body"": ""Fake Email"",
+        ""subject"": ""Subject"",
+        ""type"": ""email"",
+        ""version"": 1
+        }";
 
         public static String fakeTemplateListResponseJson
         {
             get
             {
-                return @"{ ""templates"": [
-						{
+                return @"{
+                    ""templates"": [
+                        {
                             ""updated_at"": null,
                             ""created_at"": ""2016-11-22T11:21:13.133522Z"",
                             ""created_by"": ""someone@example.com"",
                             ""id"": ""902e4312-bc4a-4c87-8c3e-9f4144ca36fd"",
+                            ""name"": ""SMS Template 1"",
                             ""body"": ""test body"",
                             ""subject"": null,
                             ""type"": ""sms"",
@@ -326,15 +384,17 @@ namespace PgnNotifications.Client.Tests.UnitTests
                             ""created_at"": ""2016-12-22T11:21:13.133522Z"",
                             ""created_by"": ""someoneelse@example.com"",
                             ""id"": ""902e4312-bc4a-4c86-8c3e-9f4144ca36fd"",
+                            ""name"": ""Email Template 1"",
                             ""body"": ""test body 2"",
                             ""subject"": ""test subject 1"",
                             ""type"": ""email"",
                             ""version"": 3
                         }
-					]
-				}";
+                    ]
+                }";
             }
         }
+
 
         public static String fakeReceivedTextListResponseJson
         {
@@ -370,22 +430,30 @@ namespace PgnNotifications.Client.Tests.UnitTests
             }
         }
 
-        public static String fakeTemplateSmsListResponseJson
-        {
-            get
+        public const string fakeTemplateSmsListResponseJson = @"{
+            ""templates"": [
+                {
+                    ""id"": ""913e9fa6-9cbb-44ad-8f58-38487dccfd82"",
+                    ""name"": ""Fake SMS Template"",
+                    ""body"": ""Fake SMS"",
+                    ""subject"": null,
+                    ""type"": ""sms"",
+                    ""version"": 1,
+                    ""created_at"": ""2016-11-22T11:21:13.133522Z"",
+                    ""created_by"": ""test@example.com""
+                }
+            ]
+        }";
+
+        public static string fakeTemplateSmsResponseJson => @"
             {
-                return @"{ ""templates"": [{
-                            ""updated_at"": null,
-                            ""created_at"": ""2016-11-22T11:21:13.133522Z"",
-                            ""created_by"": ""someone@example.com"",
-                            ""id"": ""902e4312-bc4a-4c87-8c3e-9f4144ca36fd"",
-                            ""body"": ""test body"",
-                            ""subject"": null,
-                            ""type"": ""sms"",
-                            ""version"": 2
-                        }]}";
-            }
-        }
+            ""id"": ""913e9fa6-9cbb-44ad-8f58-38487dccfd82"",
+            ""body"": ""Fake SMS"",
+            ""subject"": null,
+            ""type"": ""sms"",
+            ""version"": 1
+            }";
+
 
         public static String fakeTemplateEmailListResponseJson
         {
@@ -477,22 +545,24 @@ namespace PgnNotifications.Client.Tests.UnitTests
             }
         }
 
-        public static String fakeSmsNotificationResponseJson
+        public static string fakeSmsNotificationResponseJson
         {
             get
             {
                 return @"{
-                            ""content"": {
-                                ""body"": ""test"",
-                                ""from_number"": null },
-                            ""id"": ""d683f7f9-df04-4b9c-8019-15092c4674fd"",
-                            ""reference"": null,
-                            ""template"": {
-                                ""id"": ""be35a391-e912-42e9-82e6-3f4953f6cbb0"",
-                                ""uri"": ""http://someurl/v2/templates/be35a391-e912-42e9-82e6-3f4953f6cbb0"",
-                                ""version"": 1 },
-                            ""uri"": ""http://some_url//v2/notifications/d683f7f9-df04-4b9c-8019-15092c4674fd""
-                         }";
+                    ""id"": ""d683f7f9-df04-4b9c-8019-15092c4674fd"",
+                    ""reference"": ""sample-test-ref"",
+                    ""content"": {
+                        ""body"": ""Fake SMS"",
+                        ""from_number"": null
+                    },
+                    ""template"": {
+                        ""id"": ""be35a391-e912-42e9-82e6-3f4953f6cbb0"",
+                        ""uri"": ""http://someurl/v2/templates/be35a391-e912-42e9-82e6-3f4953f6cbb0"",
+                        ""version"": 1
+                    },
+                    ""uri"": ""http://some_url/v2/notifications/d683f7f9-df04-4b9c-8019-15092c4674fd""
+                }";
             }
         }
 
@@ -503,7 +573,7 @@ namespace PgnNotifications.Client.Tests.UnitTests
                 return @"{
                             ""content"": {
                                 ""body"": ""test"",
-                                ""from_number"": ""GOV.UK"" },
+                                ""from_number"": ""PGN"" },
                             ""id"": ""d683f7f9-df04-4b9c-8019-15092c4674fd"",
                             ""reference"":  null,
                             ""template"": {
@@ -521,19 +591,19 @@ namespace PgnNotifications.Client.Tests.UnitTests
             {
                 return @"{
                             ""content"": {
-                                ""body"": ""Hello someone\n\nFake"",
+                                ""body"": ""Fake Email"",
                                 ""from_email"": ""someone@mail.com"",
-                                ""subject"": ""Test"",
-                                ""one_click_unsubscribe_url"": ""https://www.example.com/unsubscribe""
+                                ""subject"": ""Subject"",
+                                ""one_click_unsubscribe_url"": null
                             },
                             ""id"": ""731b9c83-563f-4b59-afc5-87e9ca717833"",
-                            ""reference"":  ""some-client-ref"",
+                            ""reference"":  ""sample-test-ref"",
                             ""template"": {
                                 ""id"": ""f0bb62f7-5ddb-4bf8-aac7-7ey6aefd1524"",
                                 ""uri"": ""https://someurl/v2/templates/c0bs62f7-4ddb-6bf8-cac7-c1e6aefd1524"",
                                 ""version"": 5
                             },
-                            ""uri"": ""https://someurl/v2/notifications/321b9c43-563f-4c59-sac5-87e9ca325833""
+                            ""uri"": ""https://someurl//v2/notifications/321b9c43-563f-4c59-sac5-87e9ca325833""
                         }";
             }
         }

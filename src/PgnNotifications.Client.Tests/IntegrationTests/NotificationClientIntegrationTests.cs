@@ -10,101 +10,139 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net.Http;
 using System.Threading;
+using System.Net;
+using Moq;
+using Newtonsoft.Json;
+using System.Text;
+using Moq.Protected;
+using System.Threading.Tasks;
 
-namespace Notify.Tests.IntegrationTests
+
+
+namespace PgnNotifications.Client.Tests.IntegrationTests
 {
     [TestFixture]
     public class NotificationClientIntegrationTests
     {
+        private Mock<HttpMessageHandler> handler;
         private NotificationClient client;
-
-        private readonly String NOTIFY_API_URL = Environment.GetEnvironmentVariable("NOTIFY_API_URL");
-        private readonly String API_KEY = Environment.GetEnvironmentVariable("API_KEY");
-        private readonly String CLIENT_ID = Environment.GetEnvironmentVariable("CLIENT_ID");
-        private readonly String API_SENDING_KEY = Environment.GetEnvironmentVariable("API_SENDING_KEY");
-
-        private readonly String FUNCTIONAL_TEST_NUMBER = Environment.GetEnvironmentVariable("FUNCTIONAL_TEST_NUMBER");
-        private readonly String FUNCTIONAL_TEST_EMAIL = Environment.GetEnvironmentVariable("FUNCTIONAL_TEST_EMAIL");
-
-        private readonly String EMAIL_TEMPLATE_ID = Environment.GetEnvironmentVariable("EMAIL_TEMPLATE_ID");
-        private readonly String SMS_TEMPLATE_ID = Environment.GetEnvironmentVariable("SMS_TEMPLATE_ID");        
-        private readonly String EMAIL_REPLY_TO_ID = Environment.GetEnvironmentVariable("EMAIL_REPLY_TO_ID");
-        private readonly String SMS_SENDER_ID = Environment.GetEnvironmentVariable("SMS_SENDER_ID");
-        private readonly String INBOUND_SMS_QUERY_KEY = Environment.GetEnvironmentVariable("INBOUND_SMS_QUERY_KEY");
-
-        const String TEST_TEMPLATE_SMS_BODY = "HELLO WORLD v2";
-        const String TEST_SMS_BODY = "HELLO WORLD v2";
-        const String TEST_TEMPLATE_EMAIL_BODY = "HELLO WORLD";
-        const String TEST_EMAIL_BODY = "HELLO WORLD";
-        const String TEST_EMAIL_SUBJECT = "BASIC";        
       
         [SetUp]
-        [Test, Category("Integration"), Category("Integration/NotificationClient")]
         public void SetUp()
         {
-            this.client = new NotificationClient(NOTIFY_API_URL, API_KEY, CLIENT_ID);
+            handler = new Mock<HttpMessageHandler>();
+            var w = new HttpClientWrapper(new HttpClient(handler.Object));
+            client = new NotificationClient(w, Constants1.fakeApiKey, Constants1.fakeClientId);
         }
 
         [Test, Category("Integration"), Category("Integration/NotificationClient")]
         public void SendSmsTestWithPersonalisation()
         {
-            Dictionary<String, dynamic> personalisation = new Dictionary<String, dynamic>
+            var responseContent = Constants1.fakeSmsNotificationResponseJson;
+            var httpResponse = new HttpResponseMessage
             {
-                { "name", "someone" }
+                StatusCode = HttpStatusCode.OK,
+                Content = new StringContent(responseContent)
             };
 
-            SmsNotificationResponse response =
-                this.client.SendSms(FUNCTIONAL_TEST_NUMBER, SMS_TEMPLATE_ID, personalisation, "sample-test-ref");
-            Assert.IsNotNull(response);
-            Assert.AreEqual(response.content.body, TEST_SMS_BODY);
+            handler.Protected()
+                .Setup<Task<HttpResponseMessage>>(
+                    "SendAsync", 
+                    ItExpr.IsAny<HttpRequestMessage>(), 
+                    ItExpr.IsAny<CancellationToken>()
+                )
+                .ReturnsAsync(httpResponse);
 
+            var personalisation = new Dictionary<string, dynamic> { { "name", "someone" } };
+
+            var response = client.SendSms(
+                Constants1.fakePhoneNumber,
+                Constants1.fakeTemplateId,
+                personalisation,
+                Constants1.fakeNotificationReference,
+                null
+            );
+
+            Assert.IsNotNull(response);
+            Assert.AreEqual(Constants1.fakeSmsBody, response.content.body);
             Assert.IsNotNull(response.reference);
-            Assert.AreEqual(response.reference, "sample-test-ref");
+            Assert.AreEqual("sample-test-ref", response.reference);
         }
+
 
         [Test, Category("Integration"), Category("Integration/NotificationClient")]
         public void SendEmailTestWithPersonalisation()
         {
-            Dictionary<String, dynamic> personalisation = new Dictionary<String, dynamic>
+            var responseContent = Constants1.fakeEmailNotificationResponseJson;
+
+            var httpResponse = new HttpResponseMessage
             {
-                { "name", "someone" }
+                StatusCode = HttpStatusCode.OK,
+                Content = new StringContent(responseContent, Encoding.UTF8, "application/json")
             };
 
-            EmailNotificationResponse response =
-                this.client.SendEmail(FUNCTIONAL_TEST_EMAIL, EMAIL_TEMPLATE_ID, personalisation);
+            handler.Protected()
+                .Setup<Task<HttpResponseMessage>>(
+                    "SendAsync",
+                    ItExpr.IsAny<HttpRequestMessage>(),
+                    ItExpr.IsAny<CancellationToken>()
+                )
+                .ReturnsAsync(httpResponse);
+
+            var personalisation = new Dictionary<string, dynamic> { { "name", "someone" } };
+
+            var response = client.SendEmail(
+                Constants1.fakeEmail,
+                Constants1.fakeTemplateId,
+                personalisation,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null
+            );
 
             Assert.IsNotNull(response);
-            Assert.AreEqual(response.content.body, TEST_EMAIL_BODY);
-            Assert.AreEqual(response.content.subject, TEST_EMAIL_SUBJECT);
+            Assert.AreEqual("Subject", response.content.subject);
         }
+
 
         [Test, Category("Integration"), Category("Integration/NotificationClient")]
         public void SendEmailWithDocumentPersonalisationTest()
         {
-            byte[] pdfContents;
-
-            try
+            var responseContent = Constants1.fakeEmailNotificationResponseJson;
+            var httpResponse = new HttpResponseMessage
             {
-                pdfContents = File.ReadAllBytes("../../../IntegrationTests/test_files/one_page_pdf.pdf");
-            }
-            catch (DirectoryNotFoundException)
-            {
-                pdfContents = File.ReadAllBytes("IntegrationTests/test_files/one_page_pdf.pdf");
-            }
-           
-             Dictionary<String, dynamic> personalisation = new Dictionary<String, dynamic>
-            {
-                { "name", "someone" }
+                StatusCode = HttpStatusCode.OK,
+                Content = new StringContent(responseContent, Encoding.UTF8, "application/json")
             };
 
-            EmailNotificationResponse response =
-                this.client.SendEmail(FUNCTIONAL_TEST_EMAIL, EMAIL_TEMPLATE_ID, personalisation);
+            handler.Protected()
+                .Setup<Task<HttpResponseMessage>>(
+                    "SendAsync",
+                    ItExpr.IsAny<HttpRequestMessage>(),
+                    ItExpr.IsAny<CancellationToken>()
+                )
+                .ReturnsAsync(httpResponse);
 
-            Assert.IsNotNull(response.id);
-            Assert.IsNotNull(response.template.id);
-            Assert.IsNotNull(response.template.uri);
-            Assert.IsNotNull(response.template.version);
-            Assert.AreEqual(response.content.subject, TEST_EMAIL_SUBJECT);
+            var personalisation = new Dictionary<string, dynamic> { { "name", "someone" } };
+
+            var response = client.SendEmail(
+                Constants1.fakeEmail,
+                Constants1.fakeTemplateId,
+                personalisation,
+                Constants1.fakeNotificationReference,
+                Constants1.fakeReplyToId,
+                null,
+                null,
+                null,
+                null
+            );
+
+            Assert.IsNotNull(response);
+            Assert.AreEqual(Constants1.fakeEmailBody, response.content.body); // = TEST_EMAIL_BODY
+            Assert.AreEqual("Subject", response.content.subject);               // = TEST_EMAIL_SUBJECT
         }
 
         [Test, Category("Integration"), Category("Integration/NotificationClient")]
@@ -121,32 +159,66 @@ namespace Notify.Tests.IntegrationTests
                 pdfContents = File.ReadAllBytes("IntegrationTests/test_files/one_page_pdf.pdf");
             }
 
-            Dictionary<String, dynamic> personalisation = new Dictionary<String, dynamic>
+            var responseContent = Constants1.fakeEmailNotificationResponseJson;
+            var httpResponse = new HttpResponseMessage
             {
-                { "name", "someone" }
+                StatusCode = HttpStatusCode.OK,
+                Content = new StringContent(responseContent)
             };
 
-            EmailNotificationResponse response =
-                this.client.SendEmail(FUNCTIONAL_TEST_EMAIL, EMAIL_TEMPLATE_ID, personalisation);
+            handler.Protected()
+                .Setup<Task<HttpResponseMessage>>("SendAsync",
+                    ItExpr.IsAny<HttpRequestMessage>(),
+                    ItExpr.IsAny<CancellationToken>())
+                .ReturnsAsync(httpResponse);
 
+            var personalisation = new Dictionary<string, dynamic>
+            {
+                { "name", "someone" },
+                { "document", Convert.ToBase64String(pdfContents) }
+            };
+
+            var response = client.SendEmail(
+                Constants1.fakeEmail,
+                Constants1.fakeTemplateId,
+                personalisation,
+                Constants1.fakeNotificationReference,
+                Constants1.fakeReplyToId,
+                null,
+                null,
+                null,
+                null
+            );
+
+            Assert.IsNotNull(response);
             Assert.IsNotNull(response.id);
             Assert.IsNotNull(response.template.id);
             Assert.IsNotNull(response.template.uri);
             Assert.IsNotNull(response.template.version);
-            Assert.AreEqual(response.content.subject, TEST_EMAIL_SUBJECT);
+            Assert.AreEqual("Subject", response.content.subject);
         }
-
 
         [Test, Category("Integration"), Category("Integration/NotificationClient")]
         public void SendBulkNotificationsWithRows_WorksAsExpected()
         {
-            string functionalTestEmail = Environment.GetEnvironmentVariable("FUNCTIONAL_TEST_EMAIL");
-            string emailTemplateId = Environment.GetEnvironmentVariable("EMAIL_TEMPLATE_ID");
-          
+            var responseContent = Constants1.fakeSmsBulkResponseJson; 
+            var httpResponse = new HttpResponseMessage
+            {
+                StatusCode = HttpStatusCode.OK,
+                Content = new StringContent(responseContent)
+            };
+
+            handler.Protected()
+                .Setup<Task<HttpResponseMessage>>("SendAsync",
+                    ItExpr.IsAny<HttpRequestMessage>(),
+                    ItExpr.IsAny<CancellationToken>())
+                .ReturnsAsync(httpResponse);
+
+            string functionalTestEmail = Constants1.fakeEmail;
+            string templateId = Constants1.fakeTemplateId;
             string name = "Test Bulk Notification Integration";
             string reference = "bulk_ref_integration_test";
 
-            string templateId = emailTemplateId;
             var rows = new List<List<string>>
             {
                 new List<string> { "email_address", "name" },
@@ -154,34 +226,50 @@ namespace Notify.Tests.IntegrationTests
                 new List<string> { functionalTestEmail, "Name Test" }
             };
 
-            HttpResponseMessage response = this.client.SendBulkNotifications(
+            var response = client.SendBulkNotifications(
                 templateId: templateId,
                 name: name,
                 rows: rows,
                 reference: reference
             );
-            
+
             Assert.IsNotNull(response);
             Assert.IsTrue(response.IsSuccessStatusCode);
         }
 
-
         [Test, Category("Integration"), Category("Integration/NotificationClient")]
         public void SendBulkNotificationsWithCsv_WorksAsExpected()
         {
-            string functionalPhoneNumber = Environment.GetEnvironmentVariable("FUNCTIONAL_TEST_NUMBER");
-            string smsTemplateId = Environment.GetEnvironmentVariable("SMS_TEMPLATE_ID");
+            var responseContent = @"{
+            ""id"": ""bulk-csv-id"",
+            ""template_id"": ""913e9fa6-9cbb-44ad-8f58-38487dccfd82"",
+            ""name"": ""Bulk send email with personalisation"",
+            ""csv"": ""phone_number,name\n07766565767,Name Test\n07766565767,Name Test"",
+            ""reference"": ""bulk_ref_integration_test_csv"",
+            ""replyToId"": ""78ded4ad-e915-4a89-a314-2940ed141d40""
+            }";
+
+            var httpResponse = new HttpResponseMessage
+            {
+                StatusCode = HttpStatusCode.OK,
+                Content = new StringContent(responseContent)
+            };
+
+            handler.Protected()
+                .Setup<Task<HttpResponseMessage>>("SendAsync",
+                    ItExpr.IsAny<HttpRequestMessage>(),
+                    ItExpr.IsAny<CancellationToken>())
+                .ReturnsAsync(httpResponse);
+
+            string functionalPhoneNumber = Constants1.fakePhoneNumber;
+            string templateId = Constants1.fakeTemplateId;
 
             string name = "Bulk send email with personalisation";
             string reference = "bulk_ref_integration_test_csv";
 
-            string templateId;
-            string csvData;
+            string csvData = $"phone_number,name\n{functionalPhoneNumber},Name Test\n{functionalPhoneNumber},Name Test";
 
-            templateId = smsTemplateId;
-            csvData = $"phone_number,name\n{functionalPhoneNumber},Name Test\n{functionalPhoneNumber},Name Test";
-
-            var response = this.client.SendBulkNotifications(
+            var response = client.SendBulkNotifications(
                 templateId: templateId,
                 name: name,
                 csv: csvData,
@@ -192,27 +280,54 @@ namespace Notify.Tests.IntegrationTests
             Assert.IsTrue(response.IsSuccessStatusCode);
         }
 
+
         [Test, Category("Integration"), Category("Integration/NotificationClient")]
         public void GetAllNotifications()
         {
-            NotificationList notificationsResponse = this.client.GetNotifications();
-            Assert.IsNotNull(notificationsResponse);
-            Assert.IsNotNull(notificationsResponse.notifications);
+            var responseContent = Constants1.fakeNotificationsJson;
 
-            List<Notification> notifications = notificationsResponse.notifications;
+            handler.Protected()
+                .Setup<Task<HttpResponseMessage>>("SendAsync",
+                    ItExpr.IsAny<HttpRequestMessage>(),
+                    ItExpr.IsAny<CancellationToken>())
+                .ReturnsAsync(new HttpResponseMessage
+                {
+                    StatusCode = HttpStatusCode.OK,
+                    Content = new StringContent(Constants1.fakeNotificationsJson, Encoding.UTF8, "application/json")
+                });
 
-            foreach (Notification notification in notifications)
+
+            var notificationsResponse = client.GetNotifications();
+            Console.WriteLine($"RESPONSE FROM GET: {notificationsResponse}");
+            Console.WriteLine("RESPONSE FROM GET: " + JsonConvert.SerializeObject(notificationsResponse));
+
+            Assert.IsNotNull(notificationsResponse, "NotificationList is null");
+            Assert.IsNotNull(notificationsResponse.notifications, "notifications list is null");
+            Assert.IsNotEmpty(notificationsResponse.notifications, "notifications list is empty");
+
+            foreach (Notification notification in notificationsResponse.notifications)
             {
                 NotifyAssertions.AssertNotification(notification);
             }
-
         }
 
         [Test, Category("Integration"), Category("Integration/NotificationClient")]
         public void GetNotificationWithInvalidIdRaisesClientException()
         {
+            var httpResponse = new HttpResponseMessage
+            {
+                StatusCode = HttpStatusCode.NotFound,
+                Content = new StringContent("{\"errors\": [\"No result found\"]}")
+            };
+
+            handler.Protected()
+                .Setup<Task<HttpResponseMessage>>("SendAsync",
+                    ItExpr.IsAny<HttpRequestMessage>(),
+                    ItExpr.IsAny<CancellationToken>())
+                .ReturnsAsync(httpResponse);
+
             var ex = Assert.Throws<NotifyClientException>(() =>
-                this.client.GetNotificationById("fa5f0a6e-5293-49f1-b99f-3fade784382f")
+                client.GetNotificationById("fa5f0a6e-5293-49f1-b99f-3fade784382f")
             );
             Assert.That(ex.Message, Does.Contain("No result found"));
         }
@@ -220,8 +335,20 @@ namespace Notify.Tests.IntegrationTests
         [Test, Category("Integration"), Category("Integration/NotificationClient")]
         public void GetTemplateWithInvalidIdRaisesClientException()
         {
+            var httpResponse = new HttpResponseMessage
+            {
+                StatusCode = HttpStatusCode.NotFound,
+                Content = new StringContent("{\"errors\": [\"Status code 404\"]}")
+            };
+
+            handler.Protected()
+                .Setup<Task<HttpResponseMessage>>("SendAsync",
+                    ItExpr.IsAny<HttpRequestMessage>(),
+                    ItExpr.IsAny<CancellationToken>())
+                .ReturnsAsync(httpResponse);
+
             var ex = Assert.Throws<NotifyClientException>(() =>
-                this.client.GetTemplateById("id is not a valid UUID")
+                client.GetTemplateById("id is not a valid UUID")
             );
             Assert.That(ex.Message, Does.Contain("Status code 404"));
         }
@@ -229,8 +356,20 @@ namespace Notify.Tests.IntegrationTests
         [Test, Category("Integration"), Category("Integration/NotificationClient")]
         public void GetTemplateWithIdWithoutResultRaisesClientException()
         {
+            var httpResponse = new HttpResponseMessage
+            {
+                StatusCode = HttpStatusCode.NotFound,
+                Content = new StringContent("{\"errors\": [\"No result found\"]}")
+            };
+
+            handler.Protected()
+                .Setup<Task<HttpResponseMessage>>("SendAsync",
+                    ItExpr.IsAny<HttpRequestMessage>(),
+                    ItExpr.IsAny<CancellationToken>())
+                .ReturnsAsync(httpResponse);
+
             var ex = Assert.Throws<NotifyClientException>(() =>
-                this.client.GetTemplateById("fa5f0a6e-5293-49f1-b99f-3fade784382f")
+                client.GetTemplateById("fa5f0a6e-5293-49f1-b99f-3fade784382f")
             );
             Assert.That(ex.Message, Does.Contain("No result found"));
         }
@@ -238,7 +377,20 @@ namespace Notify.Tests.IntegrationTests
         [Test, Category("Integration"), Category("Integration/NotificationClient")]
         public void GetAllTemplates()
         {
-            TemplateList templateList = this.client.GetAllTemplates();
+            var responseContent = Constants1.fakeTemplateListResponseJson;
+            var httpResponse = new HttpResponseMessage
+            {
+                StatusCode = HttpStatusCode.OK,
+                Content = new StringContent(responseContent, Encoding.UTF8, "application/json")
+            };
+
+            handler.Protected()
+                .Setup<Task<HttpResponseMessage>>("SendAsync",
+                    ItExpr.IsAny<HttpRequestMessage>(),
+                    ItExpr.IsAny<CancellationToken>())
+                .ReturnsAsync(httpResponse);
+
+            TemplateList templateList = client.GetAllTemplates();
             Assert.IsNotNull(templateList);
             Assert.AreNotEqual(templateList.templates.Count, 0);
 
@@ -251,8 +403,21 @@ namespace Notify.Tests.IntegrationTests
         [Test, Category("Integration"), Category("Integration/NotificationClient")]
         public void GetAllSMSTemplates()
         {
-            const String type = "sms";
-            TemplateList templateList = this.client.GetAllTemplates(type);
+            var responseContent = Constants1.fakeTemplateSmsListResponseJson;
+            var httpResponse = new HttpResponseMessage
+            {
+                StatusCode = HttpStatusCode.OK,
+                Content = new StringContent(responseContent, Encoding.UTF8, "application/json")
+            };
+
+            handler.Protected()
+                .Setup<Task<HttpResponseMessage>>("SendAsync",
+                    ItExpr.IsAny<HttpRequestMessage>(),
+                    ItExpr.IsAny<CancellationToken>())
+                .ReturnsAsync(httpResponse);
+
+            const string type = "sms";
+            TemplateList templateList = client.GetAllTemplates(type);
             Assert.IsNotNull(templateList);
             Assert.AreNotEqual(templateList.templates.Count, 0);
 
@@ -260,109 +425,207 @@ namespace Notify.Tests.IntegrationTests
             {
                 NotifyAssertions.AssertTemplateResponse(template, type);
             }
-        }    
+        }
 
         [Test, Category("Integration"), Category("Integration/NotificationClient")]
         public void GetSMSTemplateWithId()
         {
-            TemplateResponse template = this.client.GetTemplateById(SMS_TEMPLATE_ID);
-            Assert.AreEqual(template.id, SMS_TEMPLATE_ID);
-            Assert.AreEqual(template.body, TEST_TEMPLATE_SMS_BODY);
+            var responseContent = Constants1.fakeTemplateSmsResponseJson;
+            var httpResponse = new HttpResponseMessage
+            {
+                StatusCode = HttpStatusCode.OK,
+                Content = new StringContent(responseContent)
+            };
+
+            handler.Protected()
+                .Setup<Task<HttpResponseMessage>>("SendAsync",
+                    ItExpr.IsAny<HttpRequestMessage>(),
+                    ItExpr.IsAny<CancellationToken>())
+                .ReturnsAsync(httpResponse);
+
+            TemplateResponse template = client.GetTemplateById(Constants1.fakeTemplateId);
+            Assert.AreEqual(template.id, Constants1.fakeTemplateId);
+            Assert.AreEqual(template.body, Constants1.fakeSmsBody);
         }
 
         [Test, Category("Integration"), Category("Integration/NotificationClient")]
         public void GetEmailTemplateWithId()
         {
-            TemplateResponse template = this.client.GetTemplateById(EMAIL_TEMPLATE_ID);
-            Assert.AreEqual(template.id, EMAIL_TEMPLATE_ID);
-            Assert.AreEqual(template.body, TEST_TEMPLATE_EMAIL_BODY);
+            var responseContent = Constants1.fakeTemplateResponseJson;
+            var httpResponse = new HttpResponseMessage
+            {
+                StatusCode = HttpStatusCode.OK,
+                Content = new StringContent(responseContent)
+            };
+
+            handler.Protected()
+                .Setup<Task<HttpResponseMessage>>("SendAsync",
+                    ItExpr.IsAny<HttpRequestMessage>(),
+                    ItExpr.IsAny<CancellationToken>())
+                .ReturnsAsync(httpResponse);
+
+            TemplateResponse template = client.GetTemplateById(Constants1.fakeTemplateId);
+            Assert.AreEqual(template.id, Constants1.fakeTemplateId);
+            Assert.AreEqual(template.body, Constants1.fakeEmailBody);
         }
 
         [Test, Category("Integration"), Category("Integration/NotificationClient")]
         public void GenerateSMSPreviewWithPersonalisation()
         {
-            Dictionary<String, dynamic> personalisation = new Dictionary<String, dynamic>
+            var responseContent = Constants1.fakeSmsPreviewResponseJson;
+            var httpResponse = new HttpResponseMessage
             {
-                { "name", "someone" }
+                StatusCode = HttpStatusCode.OK,
+                Content = new StringContent(responseContent)
             };
 
-            TemplatePreviewResponse response =
-                this.client.GenerateTemplatePreview(SMS_TEMPLATE_ID, personalisation);
+            handler.Protected()
+                .Setup<Task<HttpResponseMessage>>("SendAsync",
+                    ItExpr.IsAny<HttpRequestMessage>(),
+                    ItExpr.IsAny<CancellationToken>())
+                .ReturnsAsync(httpResponse);
+
+            Dictionary<string, dynamic> personalisation = new() { { "name", "someone" } };
+
+            TemplatePreviewResponse response = client.GenerateTemplatePreview(Constants1.fakeTemplateId, personalisation);
 
             Assert.IsNotNull(response);
-            Assert.AreEqual(response.body, TEST_SMS_BODY);
+            Assert.AreEqual(response.body, Constants1.fakeSmsBody);
             Assert.AreEqual(response.subject, null);
         }
 
         [Test, Category("Integration"), Category("Integration/NotificationClient")]
         public void GenerateEmailPreviewWithPersonalisation()
         {
-            Dictionary<String, dynamic> personalisation = new Dictionary<String, dynamic>
+            var responseContent = Constants1.fakeEmailPreviewResponseJson;
+            var httpResponse = new HttpResponseMessage
             {
-                { "name", "someone" }
+                StatusCode = HttpStatusCode.OK,
+                Content = new StringContent(responseContent)
             };
 
-            TemplatePreviewResponse response =
-                this.client.GenerateTemplatePreview(EMAIL_TEMPLATE_ID, personalisation);
+            handler.Protected()
+                .Setup<Task<HttpResponseMessage>>("SendAsync",
+                    ItExpr.IsAny<HttpRequestMessage>(),
+                    ItExpr.IsAny<CancellationToken>())
+                .ReturnsAsync(httpResponse);
+
+            Dictionary<string, dynamic> personalisation = new() { { "name", "someone" } };
+
+            TemplatePreviewResponse response = client.GenerateTemplatePreview(Constants1.fakeTemplateId, personalisation);
 
             Assert.IsNotNull(response);
-            Assert.AreEqual(response.body, TEST_EMAIL_BODY);
-            Assert.AreEqual(response.subject, TEST_EMAIL_SUBJECT);
-        }    
-
+            Assert.AreEqual(response.body, Constants1.fakeEmailBody);
+            Assert.AreEqual(response.subject, Constants1.fakeEmailSubject);
+        }
         [Test, Category("Integration"), Category("Integration/NotificationClient")]
         public void SendEmailTestEmailReplyToNotPresent()
         {
-            String fakeReplayToId = System.Guid.NewGuid().ToString();
-            Dictionary<String, dynamic> personalisation = new Dictionary<String, dynamic>
+            string fakeReplyToId = Guid.NewGuid().ToString();
+
+            var httpResponse = new HttpResponseMessage
+            {
+                StatusCode = HttpStatusCode.BadRequest,
+                Content = new StringContent("{\"errors\": [\"email_reply_to_id " + fakeReplyToId + " does not exist\"]}")
+            };
+
+            handler.Protected()
+                .Setup<Task<HttpResponseMessage>>("SendAsync",
+                    ItExpr.IsAny<HttpRequestMessage>(),
+                    ItExpr.IsAny<CancellationToken>())
+                .ReturnsAsync(httpResponse);
+
+            var personalisation = new Dictionary<string, dynamic>
             {
                 { "name", "someone" }
             };
 
-            var ex = Assert.Throws<NotifyClientException>(() => this.client.SendEmail(FUNCTIONAL_TEST_EMAIL, EMAIL_TEMPLATE_ID, personalisation, emailReplyToId: fakeReplayToId));
-            Assert.That(ex.Message, Does.Contain("email_reply_to_id " + fakeReplayToId));
+            var ex = Assert.Throws<NotifyClientException>(() =>
+                client.SendEmail(
+                    Constants1.fakeEmail,
+                    Constants1.fakeTemplateId,
+                    personalisation,
+                    emailReplyToId: fakeReplyToId
+                )
+            );
+
+            Assert.That(ex.Message, Does.Contain("email_reply_to_id " + fakeReplyToId));
         }
 
         [Test, Category("Integration"), Category("Integration/NotificationClient")]
         public void SendEmailTestAllArguments()
         {
-            Dictionary<String, dynamic> personalisation = new Dictionary<String, dynamic>
+            var responseContent = Constants1.fakeEmailNotificationResponseJson;
+
+            var httpResponse = new HttpResponseMessage
+            {
+                StatusCode = HttpStatusCode.OK,
+                Content = new StringContent(responseContent, Encoding.UTF8, "application/json")
+            };
+
+            handler.Protected()
+                .Setup<Task<HttpResponseMessage>>("SendAsync",
+                    ItExpr.IsAny<HttpRequestMessage>(),
+                    ItExpr.IsAny<CancellationToken>())
+                .ReturnsAsync(httpResponse);
+
+            var personalisation = new Dictionary<string, dynamic>
             {
                 { "name", "someone" }
             };
 
-            EmailNotificationResponse response = this.client.SendEmail(
-                FUNCTIONAL_TEST_EMAIL,
-                EMAIL_TEMPLATE_ID,
+            var response = client.SendEmail(
+                Constants1.fakeEmail,
+                Constants1.fakeTemplateId,
                 personalisation,
-                reference: "TestReference",
-                emailReplyToId: EMAIL_REPLY_TO_ID,
+                Constants1.fakeReference,
+                emailReplyToId: Constants1.fakeReplyToId,
                 oneClickUnsubscribeURL: null
             );
+
             Assert.IsNotNull(response);
-            Assert.AreEqual(response.content.body, TEST_EMAIL_BODY);
-            Assert.AreEqual(response.content.subject, TEST_EMAIL_SUBJECT);
-            Assert.AreEqual(response.reference, "TestReference");
-            Assert.AreEqual(response.content.oneClickUnsubscribeURL, null);
+            Assert.AreEqual(Constants1.fakeEmailBody, response.content.body);
+            Assert.AreEqual(Constants1.fakeEmailSubject, response.content.subject);
+            Assert.AreEqual(Constants1.fakeReference, response.reference);
+            Assert.IsNull(response.content.oneClickUnsubscribeURL);
         }
 
         [Test, Category("Integration"), Category("Integration/NotificationClient")]
         public void SendSmsTestWithPersonalisationAndSmsSenderId()
         {
-            Dictionary<String, dynamic> personalisation = new Dictionary<String, dynamic>
+            var responseContent = Constants1.fakeSmsNotificationResponseJson;
+
+            var httpResponse = new HttpResponseMessage
+            {
+                StatusCode = HttpStatusCode.OK,
+                Content = new StringContent(responseContent, Encoding.UTF8, "application/json")
+            };
+
+            handler.Protected()
+                .Setup<Task<HttpResponseMessage>>("SendAsync",
+                    ItExpr.IsAny<HttpRequestMessage>(),
+                    ItExpr.IsAny<CancellationToken>())
+                .ReturnsAsync(httpResponse);
+
+            var personalisation = new Dictionary<string, dynamic>
             {
                 { "name", "someone" }
             };
 
-            NotificationClient client_sending = new NotificationClient(NOTIFY_API_URL, API_SENDING_KEY, CLIENT_ID);
+            var response = client.SendSms(
+                Constants1.fakePhoneNumber,
+                Constants1.fakeTemplateId,
+                personalisation,
+                Constants1.fakeReference,
+                Constants1.fakeSMSSenderId
+            );
 
-            SmsNotificationResponse response =
-                client_sending.SendSms(FUNCTIONAL_TEST_NUMBER, SMS_TEMPLATE_ID, personalisation, "sample-test-ref", SMS_SENDER_ID);            
             Assert.IsNotNull(response);
-            Assert.AreEqual(response.content.body, TEST_SMS_BODY);
-
+            Assert.AreEqual(Constants1.fakeSmsBody, response.content.body);
             Assert.IsNotNull(response.reference);
-            Assert.AreEqual(response.reference, "sample-test-ref");
+            Assert.AreEqual(Constants1.fakeReference, response.reference);
         }
+
     }
+
 }

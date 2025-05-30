@@ -15,7 +15,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Notify.Tests.UnitTests
+namespace PgnNotifications.Client.Tests.UnitTests
 {
     [TestFixture]
     public class NotificationClientUnitTests

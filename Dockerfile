@@ -10,8 +10,11 @@ RUN apt-get update && \
         gnupg \
         make \
         jq \
-    && apt-get clean && \
+        libsystemd0 \
+        libudev1 && \
+    apt-get clean && \
     rm -rf /var/lib/apt/lists/*
+
 
 
 # Définir le répertoire de travail

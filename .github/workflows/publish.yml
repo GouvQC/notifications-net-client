@@ -1,0 +1,32 @@
+name: Publish to NuGet
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - 'v*.*.*'  
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup .NET SDK
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '8.0'
+                    
+      - name: Restore dependencies
+        run: dotnet restore PgnNotifications.Client.sln
+
+      - name: Build
+        run: dotnet build PgnNotifications.Client.sln --configuration Release --no-restore
+
+      - name: Pack NuGet package
+        run: dotnet pack ./src/PgnNotifications.Client/PgnNotifications.Client.csproj --configuration Release -o publish
+
+      - name: Publish to NuGet
+        run: dotnet nuget push publish/*.nupkg --api-key ${{ secrets.PGN_NUGET_KEY }} --source https://api.nuget.org/v3/index.json

@@ -1,0 +1,303 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="4f514980-f011-43fb-9bb2-5dc13d47912d" name="@M371810 2025-05-30 13:52:47" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2025-05-30T13:52:47.8642069-04:00" queuing="2025-05-30T13:52:47.8642069-04:00" start="2025-05-30T13:52:47.1426226-04:00" finish="2025-05-30T13:52:47.8881903-04:00" />
+  <TestSettings name="default" id="2b3430e4-14e3-43e8-83bd-43242908e896">
+    <Deployment runDeploymentRoot="_M371810_2025-05-30_13_52_47" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="d14b207a-bf80-480e-b180-6c7a29ecdcde" testId="88ba0bea-c25f-e49e-8f7d-a9620a996f4b" testName="GetAllSMSTemplates" computerName="M371810" duration="00:00:00.0066950" startTime="2025-05-30T13:52:47.7885010-04:00" endTime="2025-05-30T13:52:47.7951960-04:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="d14b207a-bf80-480e-b180-6c7a29ecdcde" />
+    <UnitTestResult executionId="0010b1f8-2754-4d9a-9a62-1db945ae184f" testId="7907778f-9f79-42db-b7b7-93b8b329b32b" testName="SendSmsTestWithPersonalisation" computerName="M371810" duration="00:00:00.0021650" startTime="2025-05-30T13:52:47.8207899-04:00" endTime="2025-05-30T13:52:47.8229543-04:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="0010b1f8-2754-4d9a-9a62-1db945ae184f" />
+    <UnitTestResult executionId="7ef82a19-6a42-4bd5-89c4-aba3c30be8ea" testId="decc470a-226d-97bb-8b81-90b05faac616" testName="GetTemplateWithInvalidIdRaisesClientException" computerName="M371810" duration="00:00:00.0010970" startTime="2025-05-30T13:52:47.8086873-04:00" endTime="2025-05-30T13:52:47.8097843-04:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="7ef82a19-6a42-4bd5-89c4-aba3c30be8ea" />
+    <UnitTestResult executionId="860cd6d9-92aa-46fb-9045-254df8e95357" testId="953bc172-18ea-1062-9c3d-210a5852f96d" testName="GetAllNotifications" computerName="M371810" duration="00:00:00.0145920" startTime="2025-05-30T13:52:47.7738588-04:00" endTime="2025-05-30T13:52:47.7884507-04:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="860cd6d9-92aa-46fb-9045-254df8e95357">
+      <Output>
+        <StdOut>RESPONSE TYPE: System.String
+RESPONSE CONTENT: {
+                    "notifications": [
+                        {
+                            "completed_at": null,
+                            "created_at": "2016-11-22T11:21:13.133522Z",
+                            "created_by_name": null,
+                            "email_address": null,
+                            "id": "902e4312-bc4a-4c87-8c3e-9f4144ca36fd",
+                            "line_1": null,
+                            "line_2": null,
+                            "line_3": null,
+                            "line_4": null,
+                            "line_5": null,
+                            "line_6": null,
+                            "phone_number": "+447588767647",
+                            "postcode": null,
+                            "postage": null,
+                            "reference": null,
+                            "sent_at": "2016-11-22T16:16:09.885808Z",
+                            "status": "sending",
+                            "template": {
+                                "id": "913e9fa6-9cbb-44ad-8f58-38487dccfd82",
+                                "uri": "/service/fd29e421-24b6-4f45-ac5c-e642a1d68641/template/323e9fa6-9cbb-44ad-8f64-38487dccfd43",
+                                "version": 2
+                            },
+                            "type": "sms",
+                            "subject": "Test SMS Subject",
+                            "body": "This is a test SMS body.",
+                            "one_click_unsubscribe_url": null,
+                            "is_cost_data_ready": true,
+                            "cost_in_pounds": 0.5,
+                            "cost_details": {
+                                "billable_sms_fragments": 1,
+                                "international_rate_multiplier": 0.05,
+                                "sms_rate": 0.5
+                            }
+                        },
+                        {
+                            "completed_at": null,
+                            "created_at": "2016-11-23T11:21:13.133522Z",
+                            "created_by_name": null,
+                            "email_address": "someone@example.com",
+                            "id": "902e4312-bc4a-4c87-8c3e-9f4144ca36fd",
+                            "line_1": null,
+                            "line_2": null,
+                            "line_3": null,
+                            "line_4": null,
+                            "line_5": null,
+                            "line_6": null,
+                            "phone_number": null,
+                            "postcode": null,
+                            "postage": null,
+                            "reference": null,
+                            "sent_at": "2016-11-23T16:16:09.885808Z",
+                            "status": "sending",
+                            "template": {
+                                "id": "913e9fa6-9cbb-44ad-8f58-38487dccfd84",
+                                "uri": "/service/fd29e421-24b6-4f45-ac5c-e642a1d68641/template/323e9fa6-9cbb-44ad-8f64-38487dccfd43",
+                                "version": 2
+                            },
+                            "type": "email",
+                            "subject": "Test Email Subject",
+                            "body": "This is a test email body.",
+                            "one_click_unsubscribe_url": "https://www.example.com/unsubscribe",
+                            "is_cost_data_ready": true,
+                            "cost_in_pounds": 0.5,
+                            "cost_details": {}
+                        }
+                    ],
+                    "links": {
+                        "current": "http://example.com/notifications?page=1",
+                        "next": null
+                    }
+                }
+RESPONSE FROM GET: PgnNotifications.Models.NotificationList
+RESPONSE FROM GET: {"notifications":[{"id":"902e4312-bc4a-4c87-8c3e-9f4144ca36fd","completed_at":null,"created_at":"2016-11-22T11:21:13.133522Z","email_address":null,"body":"This is a test SMS body.","subject":"Test SMS Subject","one_click_unsubscribe_url":null,"line_1":null,"line_2":null,"line_3":null,"line_4":null,"line_5":null,"line_6":null,"phone_number":"+447588767647","postcode":null,"postage":null,"reference":null,"sent_at":"2016-11-22T16:16:09.885808Z","status":"sending","template":{"id":"913e9fa6-9cbb-44ad-8f58-38487dccfd82","uri":"/service/fd29e421-24b6-4f45-ac5c-e642a1d68641/template/323e9fa6-9cbb-44ad-8f64-38487dccfd43","version":2},"type":"sms","created_by_name":null,"is_cost_data_ready":true,"cost_in_pounds":0.5,"cost_details":{"billable_sms_fragments":1,"international_rate_multiplier":0.05,"sms_rate":0.5,"billable_sheets_of_paper":null,"postage":null}},{"id":"902e4312-bc4a-4c87-8c3e-9f4144ca36fd","completed_at":null,"created_at":"2016-11-23T11:21:13.133522Z","email_address":"someone@example.com","body":"This is a test email body.","subject":"Test Email Subject","one_click_unsubscribe_url":"https://www.example.com/unsubscribe","line_1":null,"line_2":null,"line_3":null,"line_4":null,"line_5":null,"line_6":null,"phone_number":null,"postcode":null,"postage":null,"reference":null,"sent_at":"2016-11-23T16:16:09.885808Z","status":"sending","template":{"id":"913e9fa6-9cbb-44ad-8f58-38487dccfd84","uri":"/service/fd29e421-24b6-4f45-ac5c-e642a1d68641/template/323e9fa6-9cbb-44ad-8f64-38487dccfd43","version":2},"type":"email","created_by_name":null,"is_cost_data_ready":true,"cost_in_pounds":0.5,"cost_details":{"billable_sms_fragments":null,"international_rate_multiplier":null,"sms_rate":null,"billable_sheets_of_paper":null,"postage":null}}],"links":{"current":"http://example.com/notifications?page=1","next":null}}</StdOut>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="d5eb4abe-8300-4cd6-bde6-1391c83b0feb" testId="d4a3d5d8-e31b-9a3d-169b-03bec03868d0" testName="GetEmailTemplateWithId" computerName="M371810" duration="00:00:00.0012610" startTime="2025-05-30T13:52:47.7969255-04:00" endTime="2025-05-30T13:52:47.7981862-04:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="d5eb4abe-8300-4cd6-bde6-1391c83b0feb" />
+    <UnitTestResult executionId="6250f820-f759-452d-a366-fe4f0bb94366" testId="00aa31cc-7def-8262-a6b2-ea87f3f77c44" testName="SendEmailTestWithPersonalisation" computerName="M371810" duration="00:00:00.0004560" startTime="2025-05-30T13:52:47.8192875-04:00" endTime="2025-05-30T13:52:47.8197431-04:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="6250f820-f759-452d-a366-fe4f0bb94366" />
+    <UnitTestResult executionId="25545bac-fb8e-4e9c-934a-19311857f4ab" testId="ce8e92ec-e5c3-5b59-a1d2-a9c6804f2158" testName="SendEmailTestEmailReplyToNotPresent" computerName="M371810" duration="00:00:00.0008620" startTime="2025-05-30T13:52:47.8184160-04:00" endTime="2025-05-30T13:52:47.8192778-04:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="25545bac-fb8e-4e9c-934a-19311857f4ab" />
+    <UnitTestResult executionId="b03a3ea0-325c-4511-b110-9c6aaa00a314" testId="39de1f2d-7d99-5e6c-432a-213f05cc2024" testName="SendSmsTestWithPersonalisationAndSmsSenderId" computerName="M371810" duration="00:00:00.0004440" startTime="2025-05-30T13:52:47.8229651-04:00" endTime="2025-05-30T13:52:47.8234086-04:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="b03a3ea0-325c-4511-b110-9c6aaa00a314" />
+    <UnitTestResult executionId="3982dcff-8ddc-4062-a1a0-4bf20e4daadb" testId="b5a976bd-0a7b-72cd-15bd-fa3a040a8b76" testName="SendEmailWithDocumentPersonalisationTest" computerName="M371810" duration="00:00:00.0004040" startTime="2025-05-30T13:52:47.8203780-04:00" endTime="2025-05-30T13:52:47.8207816-04:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="3982dcff-8ddc-4062-a1a0-4bf20e4daadb" />
+    <UnitTestResult executionId="2535bfb3-9645-4169-9bc1-3624853d3b73" testId="77dc345a-b087-4526-97f6-ab8c4a862236" testName="GenerateSMSPreviewWithPersonalisation" computerName="M371810" duration="00:00:00.0011720" startTime="2025-05-30T13:52:47.7726731-04:00" endTime="2025-05-30T13:52:47.7738450-04:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="2535bfb3-9645-4169-9bc1-3624853d3b73" />
+    <UnitTestResult executionId="366ae2c9-6be9-4e6c-b5e0-bd354c6553d4" testId="113be611-636b-20f1-c08a-f51a752691c3" testName="GetNotificationWithInvalidIdRaisesClientException" computerName="M371810" duration="00:00:00.0087600" startTime="2025-05-30T13:52:47.7982233-04:00" endTime="2025-05-30T13:52:47.8069825-04:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="366ae2c9-6be9-4e6c-b5e0-bd354c6553d4" />
+    <UnitTestResult executionId="9298ebee-ec7c-4872-b87f-e194aa484fc5" testId="76a9cc79-9a26-81f8-7e4d-c7d58cffd766" testName="GetAllTemplates" computerName="M371810" duration="00:00:00.0016760" startTime="2025-05-30T13:52:47.7952114-04:00" endTime="2025-05-30T13:52:47.7968870-04:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="9298ebee-ec7c-4872-b87f-e194aa484fc5" />
+    <UnitTestResult executionId="e105b48b-4cd6-4236-a6e5-a2012c0ef9ff" testId="3cd519ea-9344-342f-d318-13c14629978b" testName="SendBulkNotificationsWithRows_WorksAsExpected" computerName="M371810" duration="00:00:00.0016930" startTime="2025-05-30T13:52:47.8134032-04:00" endTime="2025-05-30T13:52:47.8150962-04:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="e105b48b-4cd6-4236-a6e5-a2012c0ef9ff" />
+    <UnitTestResult executionId="0d2a37fb-ff50-421a-8965-2c308749cabc" testId="1a1871a7-c098-67c3-40f5-13c3ed9d3a3c" testName="SendBulkNotificationsWithCsv_WorksAsExpected" computerName="M371810" duration="00:00:00.0035870" startTime="2025-05-30T13:52:47.8097971-04:00" endTime="2025-05-30T13:52:47.8133834-04:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="0d2a37fb-ff50-421a-8965-2c308749cabc" />
+    <UnitTestResult executionId="6f1fe80b-3a5b-4fc5-92c9-b88c2e6f778c" testId="c1de720a-e5e7-b7aa-9693-daedfe87d180" testName="GetTemplateWithIdWithoutResultRaisesClientException" computerName="M371810" duration="00:00:00.0009560" startTime="2025-05-30T13:52:47.8076853-04:00" endTime="2025-05-30T13:52:47.8086409-04:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="6f1fe80b-3a5b-4fc5-92c9-b88c2e6f778c" />
+    <UnitTestResult executionId="a836f1fd-9651-4e67-97da-4d31864ef183" testId="5046b552-c5a8-3210-d42d-f74817e60ea4" testName="GetSMSTemplateWithId" computerName="M371810" duration="00:00:00.0006060" startTime="2025-05-30T13:52:47.8070411-04:00" endTime="2025-05-30T13:52:47.8076472-04:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="a836f1fd-9651-4e67-97da-4d31864ef183" />
+    <UnitTestResult executionId="d35f03a8-c970-431b-9545-56641ffe84bf" testId="0738dff0-47d7-f09d-97ea-ead28333edcb" testName="GenerateEmailPreviewWithPersonalisation" computerName="M371810" duration="00:00:00.0956380" startTime="2025-05-30T13:52:47.6761615-04:00" endTime="2025-05-30T13:52:47.7717579-04:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="d35f03a8-c970-431b-9545-56641ffe84bf" />
+    <UnitTestResult executionId="0623e781-b82d-4c22-aee7-8a5de3ccac02" testId="6ec9ff18-d1ba-75de-f1ff-1c0cc454545d" testName="SendEmailTestAllArguments" computerName="M371810" duration="00:00:00.0032930" startTime="2025-05-30T13:52:47.8151088-04:00" endTime="2025-05-30T13:52:47.8184013-04:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="0623e781-b82d-4c22-aee7-8a5de3ccac02" />
+    <UnitTestResult executionId="a63c608e-1d15-4fab-8d20-42238528cead" testId="59346806-3b7d-e25f-f833-8d7875ace8f6" testName="SendEmailWithCSVDocumentPersonalisationTestUsingEmailConfirmationAndRetentionPeriod" computerName="M371810" duration="00:00:00.0006179" startTime="2025-05-30T13:52:47.8197517-04:00" endTime="2025-05-30T13:52:47.8203695-04:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="a63c608e-1d15-4fab-8d20-42238528cead" />
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="GetAllNotifications" storage="/home/hedka01/azuredevops/pgn/notifications-net-client/src/pgnnotifications.client.tests/bin/release/net6.0/pgnnotifications.client.tests.dll" id="953bc172-18ea-1062-9c3d-210a5852f96d">
+      <Execution id="860cd6d9-92aa-46fb-9045-254df8e95357" />
+      <TestMethod codeBase="/home/hedka01/azuredevops/PGN/notifications-net-client/src/PgnNotifications.Client.Tests/bin/Release/net6.0/PgnNotifications.Client.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="PgnNotifications.Client.Tests.IntegrationTests.NotificationClientIntegrationTests" name="GetAllNotifications" />
+    </UnitTest>
+    <UnitTest name="SendEmailWithDocumentPersonalisationTest" storage="/home/hedka01/azuredevops/pgn/notifications-net-client/src/pgnnotifications.client.tests/bin/release/net6.0/pgnnotifications.client.tests.dll" id="b5a976bd-0a7b-72cd-15bd-fa3a040a8b76">
+      <Execution id="3982dcff-8ddc-4062-a1a0-4bf20e4daadb" />
+      <TestMethod codeBase="/home/hedka01/azuredevops/PGN/notifications-net-client/src/PgnNotifications.Client.Tests/bin/Release/net6.0/PgnNotifications.Client.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="PgnNotifications.Client.Tests.IntegrationTests.NotificationClientIntegrationTests" name="SendEmailWithDocumentPersonalisationTest" />
+    </UnitTest>
+    <UnitTest name="GetTemplateWithIdWithoutResultRaisesClientException" storage="/home/hedka01/azuredevops/pgn/notifications-net-client/src/pgnnotifications.client.tests/bin/release/net6.0/pgnnotifications.client.tests.dll" id="c1de720a-e5e7-b7aa-9693-daedfe87d180">
+      <Execution id="6f1fe80b-3a5b-4fc5-92c9-b88c2e6f778c" />
+      <TestMethod codeBase="/home/hedka01/azuredevops/PGN/notifications-net-client/src/PgnNotifications.Client.Tests/bin/Release/net6.0/PgnNotifications.Client.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="PgnNotifications.Client.Tests.IntegrationTests.NotificationClientIntegrationTests" name="GetTemplateWithIdWithoutResultRaisesClientException" />
+    </UnitTest>
+    <UnitTest name="GetAllTemplates" storage="/home/hedka01/azuredevops/pgn/notifications-net-client/src/pgnnotifications.client.tests/bin/release/net6.0/pgnnotifications.client.tests.dll" id="76a9cc79-9a26-81f8-7e4d-c7d58cffd766">
+      <Execution id="9298ebee-ec7c-4872-b87f-e194aa484fc5" />
+      <TestMethod codeBase="/home/hedka01/azuredevops/PGN/notifications-net-client/src/PgnNotifications.Client.Tests/bin/Release/net6.0/PgnNotifications.Client.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="PgnNotifications.Client.Tests.IntegrationTests.NotificationClientIntegrationTests" name="GetAllTemplates" />
+    </UnitTest>
+    <UnitTest name="GetNotificationWithInvalidIdRaisesClientException" storage="/home/hedka01/azuredevops/pgn/notifications-net-client/src/pgnnotifications.client.tests/bin/release/net6.0/pgnnotifications.client.tests.dll" id="113be611-636b-20f1-c08a-f51a752691c3">
+      <Execution id="366ae2c9-6be9-4e6c-b5e0-bd354c6553d4" />
+      <TestMethod codeBase="/home/hedka01/azuredevops/PGN/notifications-net-client/src/PgnNotifications.Client.Tests/bin/Release/net6.0/PgnNotifications.Client.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="PgnNotifications.Client.Tests.IntegrationTests.NotificationClientIntegrationTests" name="GetNotificationWithInvalidIdRaisesClientException" />
+    </UnitTest>
+    <UnitTest name="SendSmsTestWithPersonalisation" storage="/home/hedka01/azuredevops/pgn/notifications-net-client/src/pgnnotifications.client.tests/bin/release/net6.0/pgnnotifications.client.tests.dll" id="7907778f-9f79-42db-b7b7-93b8b329b32b">
+      <Execution id="0010b1f8-2754-4d9a-9a62-1db945ae184f" />
+      <TestMethod codeBase="/home/hedka01/azuredevops/PGN/notifications-net-client/src/PgnNotifications.Client.Tests/bin/Release/net6.0/PgnNotifications.Client.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="PgnNotifications.Client.Tests.IntegrationTests.NotificationClientIntegrationTests" name="SendSmsTestWithPersonalisation" />
+    </UnitTest>
+    <UnitTest name="GenerateSMSPreviewWithPersonalisation" storage="/home/hedka01/azuredevops/pgn/notifications-net-client/src/pgnnotifications.client.tests/bin/release/net6.0/pgnnotifications.client.tests.dll" id="77dc345a-b087-4526-97f6-ab8c4a862236">
+      <Execution id="2535bfb3-9645-4169-9bc1-3624853d3b73" />
+      <TestMethod codeBase="/home/hedka01/azuredevops/PGN/notifications-net-client/src/PgnNotifications.Client.Tests/bin/Release/net6.0/PgnNotifications.Client.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="PgnNotifications.Client.Tests.IntegrationTests.NotificationClientIntegrationTests" name="GenerateSMSPreviewWithPersonalisation" />
+    </UnitTest>
+    <UnitTest name="SendSmsTestWithPersonalisationAndSmsSenderId" storage="/home/hedka01/azuredevops/pgn/notifications-net-client/src/pgnnotifications.client.tests/bin/release/net6.0/pgnnotifications.client.tests.dll" id="39de1f2d-7d99-5e6c-432a-213f05cc2024">
+      <Execution id="b03a3ea0-325c-4511-b110-9c6aaa00a314" />
+      <TestMethod codeBase="/home/hedka01/azuredevops/PGN/notifications-net-client/src/PgnNotifications.Client.Tests/bin/Release/net6.0/PgnNotifications.Client.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="PgnNotifications.Client.Tests.IntegrationTests.NotificationClientIntegrationTests" name="SendSmsTestWithPersonalisationAndSmsSenderId" />
+    </UnitTest>
+    <UnitTest name="GetAllSMSTemplates" storage="/home/hedka01/azuredevops/pgn/notifications-net-client/src/pgnnotifications.client.tests/bin/release/net6.0/pgnnotifications.client.tests.dll" id="88ba0bea-c25f-e49e-8f7d-a9620a996f4b">
+      <Execution id="d14b207a-bf80-480e-b180-6c7a29ecdcde" />
+      <TestMethod codeBase="/home/hedka01/azuredevops/PGN/notifications-net-client/src/PgnNotifications.Client.Tests/bin/Release/net6.0/PgnNotifications.Client.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="PgnNotifications.Client.Tests.IntegrationTests.NotificationClientIntegrationTests" name="GetAllSMSTemplates" />
+    </UnitTest>
+    <UnitTest name="GetEmailTemplateWithId" storage="/home/hedka01/azuredevops/pgn/notifications-net-client/src/pgnnotifications.client.tests/bin/release/net6.0/pgnnotifications.client.tests.dll" id="d4a3d5d8-e31b-9a3d-169b-03bec03868d0">
+      <Execution id="d5eb4abe-8300-4cd6-bde6-1391c83b0feb" />
+      <TestMethod codeBase="/home/hedka01/azuredevops/PGN/notifications-net-client/src/PgnNotifications.Client.Tests/bin/Release/net6.0/PgnNotifications.Client.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="PgnNotifications.Client.Tests.IntegrationTests.NotificationClientIntegrationTests" name="GetEmailTemplateWithId" />
+    </UnitTest>
+    <UnitTest name="GenerateEmailPreviewWithPersonalisation" storage="/home/hedka01/azuredevops/pgn/notifications-net-client/src/pgnnotifications.client.tests/bin/release/net6.0/pgnnotifications.client.tests.dll" id="0738dff0-47d7-f09d-97ea-ead28333edcb">
+      <Execution id="d35f03a8-c970-431b-9545-56641ffe84bf" />
+      <TestMethod codeBase="/home/hedka01/azuredevops/PGN/notifications-net-client/src/PgnNotifications.Client.Tests/bin/Release/net6.0/PgnNotifications.Client.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="PgnNotifications.Client.Tests.IntegrationTests.NotificationClientIntegrationTests" name="GenerateEmailPreviewWithPersonalisation" />
+    </UnitTest>
+    <UnitTest name="SendBulkNotificationsWithCsv_WorksAsExpected" storage="/home/hedka01/azuredevops/pgn/notifications-net-client/src/pgnnotifications.client.tests/bin/release/net6.0/pgnnotifications.client.tests.dll" id="1a1871a7-c098-67c3-40f5-13c3ed9d3a3c">
+      <Execution id="0d2a37fb-ff50-421a-8965-2c308749cabc" />
+      <TestMethod codeBase="/home/hedka01/azuredevops/PGN/notifications-net-client/src/PgnNotifications.Client.Tests/bin/Release/net6.0/PgnNotifications.Client.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="PgnNotifications.Client.Tests.IntegrationTests.NotificationClientIntegrationTests" name="SendBulkNotificationsWithCsv_WorksAsExpected" />
+    </UnitTest>
+    <UnitTest name="SendEmailTestAllArguments" storage="/home/hedka01/azuredevops/pgn/notifications-net-client/src/pgnnotifications.client.tests/bin/release/net6.0/pgnnotifications.client.tests.dll" id="6ec9ff18-d1ba-75de-f1ff-1c0cc454545d">
+      <Execution id="0623e781-b82d-4c22-aee7-8a5de3ccac02" />
+      <TestMethod codeBase="/home/hedka01/azuredevops/PGN/notifications-net-client/src/PgnNotifications.Client.Tests/bin/Release/net6.0/PgnNotifications.Client.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="PgnNotifications.Client.Tests.IntegrationTests.NotificationClientIntegrationTests" name="SendEmailTestAllArguments" />
+    </UnitTest>
+    <UnitTest name="SendBulkNotificationsWithRows_WorksAsExpected" storage="/home/hedka01/azuredevops/pgn/notifications-net-client/src/pgnnotifications.client.tests/bin/release/net6.0/pgnnotifications.client.tests.dll" id="3cd519ea-9344-342f-d318-13c14629978b">
+      <Execution id="e105b48b-4cd6-4236-a6e5-a2012c0ef9ff" />
+      <TestMethod codeBase="/home/hedka01/azuredevops/PGN/notifications-net-client/src/PgnNotifications.Client.Tests/bin/Release/net6.0/PgnNotifications.Client.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="PgnNotifications.Client.Tests.IntegrationTests.NotificationClientIntegrationTests" name="SendBulkNotificationsWithRows_WorksAsExpected" />
+    </UnitTest>
+    <UnitTest name="GetSMSTemplateWithId" storage="/home/hedka01/azuredevops/pgn/notifications-net-client/src/pgnnotifications.client.tests/bin/release/net6.0/pgnnotifications.client.tests.dll" id="5046b552-c5a8-3210-d42d-f74817e60ea4">
+      <Execution id="a836f1fd-9651-4e67-97da-4d31864ef183" />
+      <TestMethod codeBase="/home/hedka01/azuredevops/PGN/notifications-net-client/src/PgnNotifications.Client.Tests/bin/Release/net6.0/PgnNotifications.Client.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="PgnNotifications.Client.Tests.IntegrationTests.NotificationClientIntegrationTests" name="GetSMSTemplateWithId" />
+    </UnitTest>
+    <UnitTest name="SendEmailTestEmailReplyToNotPresent" storage="/home/hedka01/azuredevops/pgn/notifications-net-client/src/pgnnotifications.client.tests/bin/release/net6.0/pgnnotifications.client.tests.dll" id="ce8e92ec-e5c3-5b59-a1d2-a9c6804f2158">
+      <Execution id="25545bac-fb8e-4e9c-934a-19311857f4ab" />
+      <TestMethod codeBase="/home/hedka01/azuredevops/PGN/notifications-net-client/src/PgnNotifications.Client.Tests/bin/Release/net6.0/PgnNotifications.Client.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="PgnNotifications.Client.Tests.IntegrationTests.NotificationClientIntegrationTests" name="SendEmailTestEmailReplyToNotPresent" />
+    </UnitTest>
+    <UnitTest name="SendEmailTestWithPersonalisation" storage="/home/hedka01/azuredevops/pgn/notifications-net-client/src/pgnnotifications.client.tests/bin/release/net6.0/pgnnotifications.client.tests.dll" id="00aa31cc-7def-8262-a6b2-ea87f3f77c44">
+      <Execution id="6250f820-f759-452d-a366-fe4f0bb94366" />
+      <TestMethod codeBase="/home/hedka01/azuredevops/PGN/notifications-net-client/src/PgnNotifications.Client.Tests/bin/Release/net6.0/PgnNotifications.Client.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="PgnNotifications.Client.Tests.IntegrationTests.NotificationClientIntegrationTests" name="SendEmailTestWithPersonalisation" />
+    </UnitTest>
+    <UnitTest name="SendEmailWithCSVDocumentPersonalisationTestUsingEmailConfirmationAndRetentionPeriod" storage="/home/hedka01/azuredevops/pgn/notifications-net-client/src/pgnnotifications.client.tests/bin/release/net6.0/pgnnotifications.client.tests.dll" id="59346806-3b7d-e25f-f833-8d7875ace8f6">
+      <Execution id="a63c608e-1d15-4fab-8d20-42238528cead" />
+      <TestMethod codeBase="/home/hedka01/azuredevops/PGN/notifications-net-client/src/PgnNotifications.Client.Tests/bin/Release/net6.0/PgnNotifications.Client.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="PgnNotifications.Client.Tests.IntegrationTests.NotificationClientIntegrationTests" name="SendEmailWithCSVDocumentPersonalisationTestUsingEmailConfirmationAndRetentionPeriod" />
+    </UnitTest>
+    <UnitTest name="GetTemplateWithInvalidIdRaisesClientException" storage="/home/hedka01/azuredevops/pgn/notifications-net-client/src/pgnnotifications.client.tests/bin/release/net6.0/pgnnotifications.client.tests.dll" id="decc470a-226d-97bb-8b81-90b05faac616">
+      <Execution id="7ef82a19-6a42-4bd5-89c4-aba3c30be8ea" />
+      <TestMethod codeBase="/home/hedka01/azuredevops/PGN/notifications-net-client/src/PgnNotifications.Client.Tests/bin/Release/net6.0/PgnNotifications.Client.Tests.dll" adapterTypeName="executor://nunit3testexecutor/" className="PgnNotifications.Client.Tests.IntegrationTests.NotificationClientIntegrationTests" name="GetTemplateWithInvalidIdRaisesClientException" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="88ba0bea-c25f-e49e-8f7d-a9620a996f4b" executionId="d14b207a-bf80-480e-b180-6c7a29ecdcde" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="7907778f-9f79-42db-b7b7-93b8b329b32b" executionId="0010b1f8-2754-4d9a-9a62-1db945ae184f" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="decc470a-226d-97bb-8b81-90b05faac616" executionId="7ef82a19-6a42-4bd5-89c4-aba3c30be8ea" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="953bc172-18ea-1062-9c3d-210a5852f96d" executionId="860cd6d9-92aa-46fb-9045-254df8e95357" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="d4a3d5d8-e31b-9a3d-169b-03bec03868d0" executionId="d5eb4abe-8300-4cd6-bde6-1391c83b0feb" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="00aa31cc-7def-8262-a6b2-ea87f3f77c44" executionId="6250f820-f759-452d-a366-fe4f0bb94366" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="ce8e92ec-e5c3-5b59-a1d2-a9c6804f2158" executionId="25545bac-fb8e-4e9c-934a-19311857f4ab" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="39de1f2d-7d99-5e6c-432a-213f05cc2024" executionId="b03a3ea0-325c-4511-b110-9c6aaa00a314" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="b5a976bd-0a7b-72cd-15bd-fa3a040a8b76" executionId="3982dcff-8ddc-4062-a1a0-4bf20e4daadb" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="77dc345a-b087-4526-97f6-ab8c4a862236" executionId="2535bfb3-9645-4169-9bc1-3624853d3b73" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="113be611-636b-20f1-c08a-f51a752691c3" executionId="366ae2c9-6be9-4e6c-b5e0-bd354c6553d4" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="76a9cc79-9a26-81f8-7e4d-c7d58cffd766" executionId="9298ebee-ec7c-4872-b87f-e194aa484fc5" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="3cd519ea-9344-342f-d318-13c14629978b" executionId="e105b48b-4cd6-4236-a6e5-a2012c0ef9ff" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="1a1871a7-c098-67c3-40f5-13c3ed9d3a3c" executionId="0d2a37fb-ff50-421a-8965-2c308749cabc" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="c1de720a-e5e7-b7aa-9693-daedfe87d180" executionId="6f1fe80b-3a5b-4fc5-92c9-b88c2e6f778c" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="5046b552-c5a8-3210-d42d-f74817e60ea4" executionId="a836f1fd-9651-4e67-97da-4d31864ef183" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="0738dff0-47d7-f09d-97ea-ead28333edcb" executionId="d35f03a8-c970-431b-9545-56641ffe84bf" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="6ec9ff18-d1ba-75de-f1ff-1c0cc454545d" executionId="0623e781-b82d-4c22-aee7-8a5de3ccac02" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="59346806-3b7d-e25f-f833-8d7875ace8f6" executionId="a63c608e-1d15-4fab-8d20-42238528cead" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Completed">
+    <Counters total="19" executed="19" passed="19" failed="0" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>NUnit Adapter 4.5.0.0: Test execution started
+Running selected tests in /home/hedka01/azuredevops/PGN/notifications-net-client/src/PgnNotifications.Client.Tests/bin/Release/net6.0/PgnNotifications.Client.Tests.dll
+   NUnit3TestExecutor discovered 19 of 19 NUnit test cases using Current Discovery mode, Non-Explicit run
+NUnit Adapter 4.5.0.0: Test execution complete
+</StdOut>
+    </Output>
+    <RunInfos>
+      <RunInfo computerName="M371810" outcome="Warning" timestamp="2025-05-30T13:52:47.7957278-04:00">
+        <Text>RESPONSE TYPE: System.String
+RESPONSE CONTENT: {
+                    "notifications": [
+                        {
+                            "completed_at": null,
+                            "created_at": "2016-11-22T11:21:13.133522Z",
+                            "created_by_name": null,
+                            "email_address": null,
+                            "id": "902e4312-bc4a-4c87-8c3e-9f4144ca36fd",
+                            "line_1": null,
+                            "line_2": null,
+                            "line_3": null,
+                            "line_4": null,
+                            "line_5": null,
+                            "line_6": null,
+                            "phone_number": "+447588767647",
+                            "postcode": null,
+                            "postage": null,
+                            "reference": null,
+                            "sent_at": "2016-11-22T16:16:09.885808Z",
+                            "status": "sending",
+                            "template": {
+                                "id": "913e9fa6-9cbb-44ad-8f58-38487dccfd82",
+                                "uri": "/service/fd29e421-24b6-4f45-ac5c-e642a1d68641/template/323e9fa6-9cbb-44ad-8f64-38487dccfd43",
+                                "version": 2
+                            },
+                            "type": "sms",
+                            "subject": "Test SMS Subject",
+                            "body": "This is a test SMS body.",
+                            "one_click_unsubscribe_url": null,
+                            "is_cost_data_ready": true,
+                            "cost_in_pounds": 0.5,
+                            "cost_details": {
+                                "billable_sms_fragments": 1,
+                                "international_rate_multiplier": 0.05,
+                                "sms_rate": 0.5
+                            }
+                        },
+                        {
+                            "completed_at": null,
+                            "created_at": "2016-11-23T11:21:13.133522Z",
+                            "created_by_name": null,
+                            "email_address": "someone@example.com",
+                            "id": "902e4312-bc4a-4c87-8c3e-9f4144ca36fd",
+                            "line_1": null,
+                            "line_2": null,
+                            "line_3": null,
+                            "line_4": null,
+                            "line_5": null,
+                            "line_6": null,
+                            "phone_number": null,
+                            "postcode": null,
+                            "postage": null,
+                            "reference": null,
+                            "sent_at": "2016-11-23T16:16:09.885808Z",
+                            "status": "sending",
+                            "template": {
+                                "id": "913e9fa6-9cbb-44ad-8f58-38487dccfd84",
+                                "uri": "/service/fd29e421-24b6-4f45-ac5c-e642a1d68641/template/323e9fa6-9cbb-44ad-8f64-38487dccfd43",
+                                "version": 2
+                            },
+                            "type": "email",
+                            "subject": "Test Email Subject",
+                            "body": "This is a test email body.",
+                            "one_click_unsubscribe_url": "https://www.example.com/unsubscribe",
+                            "is_cost_data_ready": true,
+                            "cost_in_pounds": 0.5,
+                            "cost_details": {}
+                        }
+                    ],
+                    "links": {
+                        "current": "http://example.com/notifications?page=1",
+                        "next": null
+                    }
+                }
+RESPONSE FROM GET: PgnNotifications.Models.NotificationList
+RESPONSE FROM GET: {"notifications":[{"id":"902e4312-bc4a-4c87-8c3e-9f4144ca36fd","completed_at":null,"created_at":"2016-11-22T11:21:13.133522Z","email_address":null,"body":"This is a test SMS body.","subject":"Test SMS Subject","one_click_unsubscribe_url":null,"line_1":null,"line_2":null,"line_3":null,"line_4":null,"line_5":null,"line_6":null,"phone_number":"+447588767647","postcode":null,"postage":null,"reference":null,"sent_at":"2016-11-22T16:16:09.885808Z","status":"sending","template":{"id":"913e9fa6-9cbb-44ad-8f58-38487dccfd82","uri":"/service/fd29e421-24b6-4f45-ac5c-e642a1d68641/template/323e9fa6-9cbb-44ad-8f64-38487dccfd43","version":2},"type":"sms","created_by_name":null,"is_cost_data_ready":true,"cost_in_pounds":0.5,"cost_details":{"billable_sms_fragments":1,"international_rate_multiplier":0.05,"sms_rate":0.5,"billable_sheets_of_paper":null,"postage":null}},{"id":"902e4312-bc4a-4c87-8c3e-9f4144ca36fd","completed_at":null,"created_at":"2016-11-23T11:21:13.133522Z","email_address":"someone@example.com","body":"This is a test email body.","subject":"Test Email Subject","one_click_unsubscribe_url":"https://www.example.com/unsubscribe","line_1":null,"line_2":null,"line_3":null,"line_4":null,"line_5":null,"line_6":null,"phone_number":null,"postcode":null,"postage":null,"reference":null,"sent_at":"2016-11-23T16:16:09.885808Z","status":"sending","template":{"id":"913e9fa6-9cbb-44ad-8f58-38487dccfd84","uri":"/service/fd29e421-24b6-4f45-ac5c-e642a1d68641/template/323e9fa6-9cbb-44ad-8f64-38487dccfd43","version":2},"type":"email","created_by_name":null,"is_cost_data_ready":true,"cost_in_pounds":0.5,"cost_details":{"billable_sms_fragments":null,"international_rate_multiplier":null,"sms_rate":null,"billable_sheets_of_paper":null,"postage":null}}],"links":{"current":"http://example.com/notifications?page=1","next":null}}
+</Text>
+      </RunInfo>
+    </RunInfos>
+  </ResultSummary>
+</TestRun>

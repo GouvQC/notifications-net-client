@@ -26,7 +26,8 @@ jobs:
         run: dotnet build PgnNotifications.Client.sln --configuration Release --no-restore
 
       - name: Pack NuGet package
-        run: dotnet pack ./src/PgnNotifications.Client/PgnNotifications.Client.csproj --configuration Release -o publish
-
+        run: dotnet pack ./src/PgnNotifications.Client/PgnNotifications.Client.csproj --configuration Release -o .
+      
       - name: Publish to NuGet
-        run: dotnet nuget push publish/*.nupkg --api-key ${{ secrets.PGN_NUGET_KEY }} --source https://api.nuget.org/v3/index.json
+        run: dotnet nuget push notifications-net-client-pgn.1.0.0.nupkg --api-key ${{ secrets.PGN_NUGET_KEY }} --source https://api.nuget.org/v3/index.json
+      

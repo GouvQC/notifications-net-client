@@ -2,16 +2,16 @@
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 
 # Installer les paquets système nécessaires avec versions sécurisées
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends \
-        wget \
-        libc-bin \
-        awscli \
-        gnupg \
-        make \
-        jq \
-    && apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
+RUN apt-get install -y --no-install-recommends \
+    wget \
+    libc-bin \
+    awscli \
+    gnupg \
+    make \
+    jq \
+    libsystemd0=252.38-1~deb12u1 \
+    libudev1=252.38-1~deb12u1
+
 
 
 # Définir le répertoire de travail

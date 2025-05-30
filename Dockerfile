@@ -9,8 +9,8 @@ RUN apt-get install -y --no-install-recommends \
     gnupg \
     make \
     jq \
-    libsystemd0=252.38-1~deb12u1 \
-    libudev1=252.38-1~deb12u1
+    libsystemd0 \
+    libudev1
 
 
 

@@ -5,6 +5,6 @@ Utilisez ce client pour envoyer des courriels et des messages texte en utilisant
 Liens utiles :
 
 - [Documentation](https://documentation.notification.gouv.qc.ca/fr/)
-- [Paquet Nuget](https://www.nuget.org/packages/notifications-net-client-pgn)
+- [Paquet Nuget](https://www.nuget.org/packages/notifications-dotnet-client-pgn)
 - [Journal des modifications](https://github.com/GouvQC/notifications-net-client/blob/main/CHANGELOG.md)              
 - [Contribuer à ce client](https://github.com/GouvQC/notifications-net-client/blob/main/CONTRIBUTING.md)

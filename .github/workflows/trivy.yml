@@ -29,6 +29,7 @@ jobs:
           ignore-unfixed: true
           vuln-type: os,library
           severity: CRITICAL,HIGH
+          trivyignores: .trivyignore
 
   filesystem-scan:
     name: Scan de sécurité Trivy (via SBOM)

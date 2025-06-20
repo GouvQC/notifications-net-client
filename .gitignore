@@ -21,5 +21,4 @@ environment.sh
 docker.env
 NotificationClientIntegrationTestsMock
 
-.github/workflows
-trivyignore
+.trivyignore

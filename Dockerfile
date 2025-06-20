@@ -1,5 +1,5 @@
 # Étape de build
-FROM mcr.microsoft.com/dotnet/sdk:8.0.300 AS build
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 
 # Installer les paquets système nécessaires avec versions sécurisées
 RUN apt-get update && \

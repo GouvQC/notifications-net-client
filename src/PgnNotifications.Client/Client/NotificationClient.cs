@@ -103,11 +103,8 @@ namespace PgnNotifications.Client
             var finalUrl = GET_ALL_NOTIFICATIONS_URL + ToQueryString(query);
             var response = await GET(finalUrl).ConfigureAwait(false);
 
-            var notifications = JsonConvert.DeserializeObject<NotificationList>(response);
-            Console.WriteLine($"RESPONSE TYPE: {response.GetType()}");
-            Console.WriteLine($"RESPONSE CONTENT: {response}");
+            return  notifications = JsonConvert.DeserializeObject<NotificationList>(response);
 
-            return notifications;
         }
 
         public async Task<TemplateList> GetAllTemplatesAsync(string templateType = "")

@@ -18,6 +18,8 @@ environment.sh
 .idea/
 /src/GovukNotify.Tests/GovukNotify.Tests.csproj.user
 
-
 docker.env
 NotificationClientIntegrationTestsMock
+
+.github/workflows
+trivyignore

@@ -103,7 +103,7 @@ namespace PgnNotifications.Client
             var finalUrl = GET_ALL_NOTIFICATIONS_URL + ToQueryString(query);
             var response = await GET(finalUrl).ConfigureAwait(false);
 
-            return  notifications = JsonConvert.DeserializeObject<NotificationList>(response);
+            return JsonConvert.DeserializeObject<NotificationList>(response);
 
         }
 

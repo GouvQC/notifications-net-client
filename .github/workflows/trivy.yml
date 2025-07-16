@@ -7,7 +7,7 @@ on:
 
 jobs:
   docker-scan:
-    name: Scan de s�curit� Trivy (Docker image)
+    name: Scan de sécurité Trivy (Docker image)
     runs-on: ubuntu-latest
 
     steps:

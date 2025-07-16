@@ -7,7 +7,7 @@ on:
 
 jobs:
   docker-scan:
-    name: Scan de s�curit� Trivy (Docker image)
+    name: Scan de s�curit� Trivy (Docker image)
     runs-on: ubuntu-latest
 
     steps:
@@ -22,6 +22,7 @@ jobs:
 
       - name: Scan Docker image with Trivy
         uses: aquasecurity/trivy-action@master
+        id: trivy_docker
         with:
           image-ref: notifications-net-client
           format: table
@@ -31,8 +32,26 @@ jobs:
           severity: CRITICAL,HIGH
           trivyignores: .trivyignore
 
+      - name: Send Trivy report by email
+        if: steps.trivy_docker.outcome == 'failure'
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: ${{ secrets.EMAIL_SMTP_HOST }}
+          server_port: ${{ secrets.EMAIL_SMTP_PORT }}
+          username: ${{ secrets.EMAIL_USERNAME }}
+          password: ${{ secrets.EMAIL_PASSWORD }}
+          subject: "Vulnérabilités CRITICAL/HIGH détectées par Trivy - Docker - notifications-net-client"
+          body: |
+            Des vulnérabilités critiques ou majeures ont été détectées lors du scan Docker de Trivy. 
+
+            Consultez le pipeline ici :
+
+            ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }} 
+          to: notifications.pgn@mcn.gouv.qc.ca
+          from: PGN Security Bot <${{ secrets.EMAIL_USERNAME }}>
+
   filesystem-scan:
-    name: Scan de s�curit� Trivy (via SBOM)
+    name: Scan de s�curit� Trivy (via SBOM)
     runs-on: ubuntu-latest
 
     steps:
@@ -60,6 +79,7 @@ jobs:
             -j
 
       - name: Scan SBOM with Trivy
+        id: trivy_sbom
         uses: aquasecurity/trivy-action@master
         with:
           scan-type: sbom
@@ -69,4 +89,21 @@ jobs:
           ignore-unfixed: true
           severity: CRITICAL,HIGH
 
+      - name: Send Trivy report by email
+        if: steps.trivy_sbom.outcome == 'failure'
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: ${{ secrets.EMAIL_SMTP_HOST }}
+          server_port: ${{ secrets.EMAIL_SMTP_PORT }}
+          username: ${{ secrets.EMAIL_USERNAME }}
+          password: ${{ secrets.EMAIL_PASSWORD }}
+          subject: "Vulnérabilités CRITICAL/HIGH détectées par Trivy - SBOM - notifications-net-client"
+          body: |
+            Des vulnérabilités critiques ou majeures ont été détectées lors du scan SBOM de Trivy. 
+
+            Consultez le pipeline ici :
+
+            ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }} 
+          to: notifications.pgn@mcn.gouv.qc.ca
+          from: PGN Security Bot <${{ secrets.EMAIL_USERNAME }}>
 

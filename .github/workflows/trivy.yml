@@ -51,7 +51,7 @@ jobs:
           from: PGN Security Bot <${{ secrets.EMAIL_USERNAME }}>
 
   filesystem-scan:
-    name: Scan de s�curit� Trivy (via SBOM)
+    name: Scan de sécurité Trivy (via SBOM)
     runs-on: ubuntu-latest
 
     steps:

@@ -26,6 +26,7 @@ jobs:
         with:
           image-ref: notifications-net-client
           format: table
+          output: trivy-docker-report.txt
           exit-code: 1
           ignore-unfixed: true
           vuln-type: os,library
@@ -49,6 +50,7 @@ jobs:
             ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }} 
           to: notifications.pgn@mcn.gouv.qc.ca
           from: PGN Security Bot <${{ secrets.EMAIL_USERNAME }}>
+          attachments: trivy-docker-report.txt
 
   filesystem-scan:
     name: Scan de sécurité Trivy (via SBOM)
@@ -85,6 +87,7 @@ jobs:
           scan-type: sbom
           scan-ref: sbom.json
           format: table
+          output: trivy-sbom-report.txt
           exit-code: 1
           ignore-unfixed: true
           severity: CRITICAL,HIGH
@@ -106,4 +109,5 @@ jobs:
             ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }} 
           to: notifications.pgn@mcn.gouv.qc.ca
           from: PGN Security Bot <${{ secrets.EMAIL_USERNAME }}>
+          attachments: trivy-sbom-report.txt
 

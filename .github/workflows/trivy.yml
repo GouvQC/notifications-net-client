@@ -49,7 +49,7 @@ jobs:
 
             ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }} 
           to: ${{ secrets.EMAIL_TO }}
-          from: PGN Security Bot <${{ secrets.EMAIL_USERNAME }}>
+          from: ${{ secrets.EMAIL_FROM }}
           attachments: trivy-docker-report.txt
 
   filesystem-scan:

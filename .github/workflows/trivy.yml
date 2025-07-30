@@ -48,7 +48,7 @@ jobs:
             Consultez le pipeline ici :
 
             ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }} 
-          to: notifications.pgn@mcn.gouv.qc.ca
+          to: ${{ secrets.EMAIL_TO }}
           from: PGN Security Bot <${{ secrets.EMAIL_USERNAME }}>
           attachments: trivy-docker-report.txt
 
@@ -107,7 +107,7 @@ jobs:
             Consultez le pipeline ici :
 
             ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }} 
-          to: notifications.pgn@mcn.gouv.qc.ca
+          to: ${{ secrets.EMAIL_TO }}
           from: PGN Security Bot <${{ secrets.EMAIL_USERNAME }}>
           attachments: trivy-sbom-report.txt
 

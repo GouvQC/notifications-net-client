@@ -22,18 +22,26 @@ namespace PgnNotifications.Utils
                 var jsonBytes = Base64UrlDecode(payload);
                 var json = Encoding.UTF8.GetString(jsonBytes);
 
-                using var doc = JsonDocument.Parse(json);
-                if (doc.RootElement.TryGetProperty("iat", out var iatElement))
+                JsonDocument doc = null;
+                try
                 {
-                    // Certains iat sont double (ex: 1757972643.0)
-                    if (iatElement.ValueKind == JsonValueKind.Number)
+                    doc = JsonDocument.Parse(json);
+                    if (doc.RootElement.TryGetProperty("iat", out var iatElement))
                     {
-                        long seconds = 0;
-                        if (iatElement.TryGetInt64(out var i64)) seconds = i64;
-                        else if (iatElement.TryGetDouble(out var d)) seconds = (long)d;
+                        // Certains iat sont double (ex: 1757972643.0)
+                        if (iatElement.ValueKind == JsonValueKind.Number)
+                        {
+                            long seconds = 0;
+                            if (iatElement.TryGetInt64(out var i64)) seconds = i64;
+                            else if (iatElement.TryGetDouble(out var d)) seconds = (long)d;
 
-                        return DateTimeOffset.FromUnixTimeSeconds(seconds).UtcDateTime;
+                            return DateTimeOffset.FromUnixTimeSeconds(seconds).UtcDateTime;
+                        }
                     }
+                }
+                finally
+                {
+                    if (doc != null) doc.Dispose();
                 }
 
                 return null;

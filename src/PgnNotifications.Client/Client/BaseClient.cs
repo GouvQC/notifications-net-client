@@ -5,7 +5,6 @@ using PgnNotifications.Interfaces;
 using PgnNotifications.Models.Responses;
 using PgnNotifications.Utils;
 using System;
-using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Net.Http;
 using System.Reflection;

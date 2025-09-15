@@ -4,10 +4,14 @@ using PgnNotifications.Exceptions;
 using PgnNotifications.Interfaces;
 using PgnNotifications.Models.Responses;
 using System;
+using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Net.Http;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 
 namespace PgnNotifications.Client
 {
@@ -27,24 +31,36 @@ namespace PgnNotifications.Client
         private readonly string apiKey;
         private readonly string clientId;
         private readonly string proxyPggapi;
+        private ILogger<BaseClient> _logger = NullLogger<BaseClient>.Instance;
 
-        public BaseClient(IHttpClient client, string apiKey, string clientId, string baseUrl = BASE_URL)
-        {           
+       public BaseClient(IHttpClient client, string apiKey, string clientId, string baseUrl = BASE_URL)
+        {
             var serviceCredentials = ExtractServiceIdAndApiKey(apiKey);
             serviceId = serviceCredentials.Item1;
             this.apiKey = serviceCredentials.Item2;
 
             BaseUrl = string.IsNullOrEmpty(baseUrl) ? BASE_URL : baseUrl;
 
-
             this.client = client;
-            this.client.BaseAddress = ValidateBaseUri(BaseUrl);
+
+            if (this.client.BaseAddress == null)
+            {
+                this.client.BaseAddress = ValidateBaseUri(BaseUrl);
+            }
+
             this.proxyPggapi = PROXY_PGGAPI;
             this.clientId = ValidateClientId(clientId, BaseUrl, proxyPggapi);
-            this.client.AddContentHeader("application/json");
 
-            var productVersion = typeof(BaseClient).GetTypeInfo().Assembly.GetName().Version.ToString();
-            this.client.AddUserAgent(NOTIFY_CLIENT_NAME + productVersion);
+            if (!this.client.DefaultRequestHeaders.Accept.Any())
+            {
+                this.client.AddAcceptHeader("application/json");
+            }
+
+            if (!this.client.DefaultRequestHeaders.UserAgent.Any())
+            {
+                var productVersion = typeof(BaseClient).GetTypeInfo().Assembly.GetName().Version.ToString();
+                this.client.AddUserAgent(NOTIFY_CLIENT_NAME + productVersion);
+            }
         }
 
 
@@ -104,6 +120,19 @@ namespace PgnNotifications.Client
 
             var notifyToken = Authenticator.CreateToken(this.apiKey, this.serviceId);
             request.Headers.TryAddWithoutValidation("Authorization", "Bearer " + notifyToken);
+
+            // Décoder le JWT pour lire l’iat
+            var handler = new JwtSecurityTokenHandler();
+            var jwt = handler.ReadJwtToken(notifyToken);
+            var iat = jwt.Claims.FirstOrDefault(c => c.Type == "iat")?.Value;
+
+            // Log du iat (timestamp Unix → UTC)
+            if (iat != null && long.TryParse(iat, out var iatSeconds))
+            {
+                var iatDate = DateTimeOffset.FromUnixTimeSeconds(iatSeconds).UtcDateTime;
+                _logger.LogInformation($"[{DateTime.UtcNow:yyyy-MM-dd HH:mm:ss.fff}] Token généré avec iat={iatDate:o}");
+                _logger.LogInformation("Token généré avec iat={IatDate:o}", iatDate);
+            }
 
             if (!string.IsNullOrWhiteSpace(this.clientId))
             {

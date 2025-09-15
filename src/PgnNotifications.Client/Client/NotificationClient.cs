@@ -38,6 +38,11 @@ namespace PgnNotifications.Client
         {
         }
 
+        public NotificationClient(string baseUrl, string apiKey, HttpClient httpClient, string clientId = null)
+            : base(new HttpClientWrapper(httpClient), apiKey, clientId, baseUrl)
+        {
+        }
+
         public NotificationClient(IHttpClient client, string apiKey, string clientId = null) : base(client, apiKey, clientId)
         {
         }

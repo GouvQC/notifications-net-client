@@ -1,10 +1,12 @@
 ## 1.0.2 (2025-09-15)
 
-### Ajouts
-* Ajout d'un nouveau constructeur dans BaseClient permettant d'injecter un HttpClientWrapper.
-* Implémentation des logs pour l'IAT (Issued At) dans le traitement des JWT.
-* Adaptation de HttpClientWrapper et BaseClient pour gérer correctement les headers HTTP.
-* Préparation du code pour un meilleur test unitaire et multi-targeting.
+### Ajouts / Améliorations
+- Nouveau constructeur dans `BaseClient` permettant d’injecter un `HttpClient` personnalisé.
+- Ajout du champ `iat` (Issued At) dans le `User-Agent` pour le suivi des JWT.
+- Adaptation de `BaseClient` et `HttpClientWrapper` pour gérer correctement les headers HTTP, y compris `User-Agent` et `Accept`.
+- Refactoring pour faciliter les tests unitaires et la compatibilité multi-targeting (`netstandard2.0`, `net462`, `net6.0`, `net8.0`).
+
+---
 
 ## 1.0.1 (2025-06-20)
 

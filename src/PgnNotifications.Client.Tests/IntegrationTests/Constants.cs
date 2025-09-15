@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace PgnNotifications.Client.Tests.IntegrationTests
 {
-    public static class Constants1
+    public static class Constants
     {
         public static String fakeApiKey
         {

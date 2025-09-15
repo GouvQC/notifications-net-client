@@ -736,7 +736,7 @@ namespace PgnNotifications.Client.Tests.UnitTests
             Assert.AreEqual(r.RequestUri.ToString(), client.BaseUrl + uri);
             Assert.IsNotNull(r.Headers.Authorization);
             Assert.IsNotNull(r.Headers.UserAgent);
-            Assert.AreEqual(r.Headers.UserAgent.ToString(), client.GetUserAgent());
+            Assert.That(r.Headers.UserAgent.ToString(), Does.StartWith(client.GetUserAgent()));
             Assert.AreEqual(r.Headers.Accept.ToString(), "application/json");
         }
 

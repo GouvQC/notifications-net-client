@@ -1,3 +1,11 @@
+## 1.0.2 (2025-09-15)
+
+### Ajouts
+* Ajout d'un nouveau constructeur dans BaseClient permettant d'injecter un HttpClientWrapper.
+* Implémentation des logs pour l'IAT (Issued At) dans le traitement des JWT.
+* Adaptation de HttpClientWrapper et BaseClient pour gérer correctement les headers HTTP.
+* Préparation du code pour un meilleur test unitaire et multi-targeting.
+
 ## 1.0.1 (2025-06-20)
 
 ### Ajouts

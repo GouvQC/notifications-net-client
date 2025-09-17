@@ -31,7 +31,8 @@ namespace PgnNotifications.Client.Tests.UnitTests
 
             // Assert
             Assert.NotNull(result);
-            Assert.AreEqual(DateTimeOffset.FromUnixTimeSeconds(1700000000).UtcDateTime, result.Value);
+            Assert.IsTrue(result.HasValue);
+            Assert.AreEqual(DateTimeOffset.FromUnixTimeSeconds(1700000000).UtcDateTime, result!.Value);
         }
 
         [Test]

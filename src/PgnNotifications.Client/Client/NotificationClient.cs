@@ -29,21 +29,16 @@ namespace PgnNotifications.Client
         public string TYPE_PARAM = "?type=";
         public string VERSION_PARAM = "/version/";
 
-        public NotificationClient(string apiKey, string clientId = null) : base(new HttpClientWrapper(new HttpClient()), apiKey, clientId)
+        public NotificationClient(string apiKey, string clientId) : base(new HttpClientWrapper(new HttpClient()), apiKey, clientId)
         {
         }
 
-        public NotificationClient(string baseUrl, string apiKey, string clientId = null) : base(new HttpClientWrapper(new HttpClient()), apiKey, clientId,
+        public NotificationClient(string baseUrl, string apiKey, string clientId) : base(new HttpClientWrapper(new HttpClient()), apiKey, clientId,
             baseUrl)
         {
         }
 
-        public NotificationClient(string baseUrl, string apiKey, HttpClient httpClient, string clientId = null)
-            : base(new HttpClientWrapper(httpClient), apiKey, clientId, baseUrl)
-        {
-        }
-
-        public NotificationClient(IHttpClient client, string apiKey, string clientId = null) : base(client, apiKey, clientId)
+        public NotificationClient(IHttpClient client, string apiKey, string clientId, string baseUrl = null) : base(client, apiKey, clientId, baseUrl)
         {
         }
 
@@ -547,7 +542,7 @@ namespace PgnNotifications.Client
             catch (AggregateException ex)
             {
                 throw HandleAggregateException(ex);
-            }          
+            }
         }
     }
 }

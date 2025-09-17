@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using NUnit.Framework;
 using PgnNotifications.Client;
+using PgnNotifications.Client.Builders;
 using PgnNotifications.Utils;
 using System.Collections.Generic;
 
@@ -33,26 +34,24 @@ namespace PgnNotifications.Client.Tests.UnitTests
         {
             // Arrange
             var handler = new FakeHandler();
-            var httpClient = new HttpClient(handler);
-
-            var client = new NotificationClient(
-                baseUrl: "https://fake-api.test",
-                apiKey: Constants.fakeApiKey,
-                httpClient: httpClient,
-                clientId: Constants.fakeClientId
-            );
+            var client = new NotificationClientBuilder()
+                .WithApiKey(Constants.fakeApiKey)
+                .WithClientId(Constants.fakeClientId)
+                .WithBaseUrl("https://fake-api.test")
+                .WithHandlerBuilder(hb => hb.WithTestHandler(handler))
+                .Build();
 
             // Act
             await client.SendSmsAsync(
                 Constants.fakePhoneNumber,
                 Constants.fakeTemplateId,
-                new Dictionary<string, dynamic>() 
+                new Dictionary<string, dynamic>()
             );
 
             // Assert
             Assert.IsNotNull(handler.LastRequest, "La requête n'a pas été interceptée.");
 
-            var userAgent = handler.LastRequest!.Headers.UserAgent.ToString();
+            var userAgent = handler.LastRequest!.Headers.UserAgent?.ToString() ?? string.Empty;
 
             Assert.That(userAgent, Does.Contain("NOTIFY-API-NET-CLIENT"), "Le User-Agent ne contient pas le nom du client.");
 
@@ -61,7 +60,7 @@ namespace PgnNotifications.Client.Tests.UnitTests
             Assert.IsNotNull(authHeader, "Authorization header is missing.");
 
             var expectedIat = JwtUtils.GetIatFromToken(authHeader!);
-            Assert.IsNotNull(expectedIat, "Impossible de récupérer l'iat depuis le token.");
+            Assert.IsTrue(expectedIat.HasValue, "Impossible de récupérer l'iat depuis le token.");
             Assert.That(userAgent, Does.Contain(expectedIat.Value.ToString("o")), "Le User-Agent ne contient pas l'iat attendu.");
         }
 

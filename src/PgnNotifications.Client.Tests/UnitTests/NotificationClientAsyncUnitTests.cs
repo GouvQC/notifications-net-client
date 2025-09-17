@@ -4,6 +4,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NUnit.Framework;
 using PgnNotifications.Client;
+using PgnNotifications.Client.Builders;
 using PgnNotifications.Exceptions;
 using PgnNotifications.Models;
 using PgnNotifications.Models.Responses;
@@ -20,16 +21,18 @@ namespace PgnNotifications.Client.Tests.UnitTests
     [TestFixture]
     public class NotificationClientAsyncUnitTests
     {
-        private Mock<HttpMessageHandler> handler;
-        private NotificationClient client;
+        private Mock<HttpMessageHandler>? handler;
+        private NotificationClient? client;
 
         [SetUp]
         public void SetUp()
         {
             handler = new Mock<HttpMessageHandler>();
-
-            var w = new HttpClientWrapper(new HttpClient(handler.Object));
-            client = new NotificationClient(w, Constants.fakeApiKey, Constants.fakeClientId);
+            client = new NotificationClientBuilder()
+                .WithApiKey(Constants.fakeApiKey)
+                .WithClientId(Constants.fakeClientId)
+                .WithHandlerBuilder(hb => hb.WithTestHandler(handler.Object))
+                .Build();
         }
 
         [TearDown]
@@ -60,6 +63,8 @@ namespace PgnNotifications.Client.Tests.UnitTests
         [Test, Category("Unit"), Category("Unit/NotificationClientAsync")]
         public void GetNonJsonResponseHandlesException()
         {
+            Assert.NotNull(client);
+            Assert.NotNull(handler);
             MockRequest("non json response",
                 client.GET_ALL_NOTIFICATIONS_URL,
                 AssertValidRequest, status: HttpStatusCode.NotFound);
@@ -72,6 +77,8 @@ namespace PgnNotifications.Client.Tests.UnitTests
         [Test, Category("Unit"), Category("Unit/NotificationClientAsync")]
         public async Task GetNotificationByIdCreatesExpectedRequest()
         {
+            Assert.NotNull(client);
+            Assert.NotNull(handler);
             MockRequest(Constants.fakeNotificationJson,
                 client.GET_NOTIFICATION_URL + Constants.fakeNotificationId,
                 AssertValidRequest);
@@ -82,6 +89,7 @@ namespace PgnNotifications.Client.Tests.UnitTests
         [Test, Category("Unit"), Category("Unit/NotificationClient")]
         public async Task CheckHealth_ReturnsErrorMessage_WhenExceptionThrown()
         {
+            Assert.NotNull(client);
             string result = await client.CheckHealthAsync();
             Assert.IsTrue(result.StartsWith("❌ Erreur lors de la vérification de l'état de santé"));
             Assert.IsTrue(result.Contains("Handler "));
@@ -90,6 +98,8 @@ namespace PgnNotifications.Client.Tests.UnitTests
         [Test, Category("Unit"), Category("Unit/NotificationClient")]
         public async Task CheckHealth_ReturnsSuccess_WhenNoException()
         {
+            Assert.NotNull(client);
+            Assert.NotNull(handler);
             MockRequest("ok", client.GET_CHECK_HEALTH_URL, AssertValidRequest);
             await client.CheckHealthAsync();
         }
@@ -97,6 +107,8 @@ namespace PgnNotifications.Client.Tests.UnitTests
         [Test, Category("Unit"), Category("Unit/NotificationClientAsync")]
         public async Task GetAllNotificationsCreatesExpectedResult()
         {
+            Assert.NotNull(client);
+            Assert.NotNull(handler);
             MockRequest(Constants.fakeNotificationsJson,
                 client.GET_ALL_NOTIFICATIONS_URL,
                 AssertValidRequest);
@@ -107,6 +119,8 @@ namespace PgnNotifications.Client.Tests.UnitTests
         [Test, Category("Unit"), Category("Unit/NotificationClientAsync")]
         public async Task GetAllNotificationsWithStatusCreatesExpectedResult()
         {
+            Assert.NotNull(client);
+            Assert.NotNull(handler);
             MockRequest(Constants.fakeNotificationsJson,
                 client.GET_ALL_NOTIFICATIONS_URL + "?status=sending",
                 AssertValidRequest);
@@ -117,6 +131,8 @@ namespace PgnNotifications.Client.Tests.UnitTests
         [Test, Category("Unit"), Category("Unit/NotificationClientAsync")]
         public async Task GetAllNotificationsWithReferenceCreatesExpectedResult()
         {
+            Assert.NotNull(client);
+            Assert.NotNull(handler);
             MockRequest(Constants.fakeNotificationsJson,
                 client.GET_ALL_NOTIFICATIONS_URL + "?reference=foo",
                 AssertValidRequest);
@@ -127,6 +143,8 @@ namespace PgnNotifications.Client.Tests.UnitTests
         [Test, Category("Unit"), Category("Unit/NotificationClientAsync")]
         public async Task GetAllSmsNotificationsWithStatusAndReferenceWithCreatesExpectedResult()
         {
+            Assert.NotNull(client);
+            Assert.NotNull(handler);
             MockRequest(Constants.fakeNotificationsJson,
                 client.GET_ALL_NOTIFICATIONS_URL + "?template_type=sms&status=sending&reference=foo",
                 AssertValidRequest);
@@ -137,6 +155,8 @@ namespace PgnNotifications.Client.Tests.UnitTests
         [Test, Category("Unit"), Category("Unit/NotificationClientAsync")]
         public async Task GetAllSmsNotificationsCreatesExpectedResult()
         {
+            Assert.NotNull(client);
+            Assert.NotNull(handler);
             MockRequest(Constants.fakeSmsNotificationResponseJson,
                 client.GET_ALL_NOTIFICATIONS_URL + "?template_type=sms",
                 AssertValidRequest);
@@ -147,6 +167,8 @@ namespace PgnNotifications.Client.Tests.UnitTests
         [Test, Category("Unit"), Category("Unit/NotificationClientAsync")]
         public async Task GetAllEmailNotificationsCreatesExpectedResult()
         {
+            Assert.NotNull(client);
+            Assert.NotNull(handler);
             MockRequest(Constants.fakeEmailNotificationResponseJson,
                 client.GET_ALL_NOTIFICATIONS_URL + "?template_type=email",
                 AssertValidRequest);
@@ -157,6 +179,8 @@ namespace PgnNotifications.Client.Tests.UnitTests
         [Test, Category("Unit"), Category("Unit/NotificationClientAsync")]
         public async Task GetTemplateWithIdCreatesExpectedRequest()
         {
+            Assert.NotNull(client);
+            Assert.NotNull(handler);
             MockRequest(Constants.fakeTemplateResponseJson,
                 client.GET_TEMPLATE_URL + Constants.fakeTemplateId,
                 AssertValidRequest);
@@ -167,6 +191,8 @@ namespace PgnNotifications.Client.Tests.UnitTests
         [Test, Category("Unit"), Category("Unit/NotificationClientAsync")]
         public async Task GetTemplateWithIdAndVersionCreatesExpectedRequest()
         {
+            Assert.NotNull(client);
+            Assert.NotNull(handler);
             MockRequest(Constants.fakeTemplateResponseJson,
                 client.GET_TEMPLATE_URL + Constants.fakeTemplateId + client.VERSION_PARAM + "2",
                 AssertValidRequest);
@@ -177,6 +203,8 @@ namespace PgnNotifications.Client.Tests.UnitTests
         [Test, Category("Unit"), Category("Unit/NotificationClientAsync")]
         public async Task GetNotificationByIdReceivesExpectedResponse()
         {
+            Assert.NotNull(client);
+            Assert.NotNull(handler);
             var expectedResponse = JsonConvert.DeserializeObject<Notification>(Constants.fakeNotificationJson);
 
             MockRequest(Constants.fakeNotificationJson);
@@ -188,6 +216,8 @@ namespace PgnNotifications.Client.Tests.UnitTests
         [Test, Category("Unit"), Category("Unit/NotificationClientAsync")]
         public async Task GetTemplateWithIdReceivesExpectedResponse()
         {
+            Assert.NotNull(client);
+            Assert.NotNull(handler);
             var expectedResponse = JsonConvert.DeserializeObject<TemplateResponse>(Constants.fakeTemplateResponseJson);
 
             MockRequest(Constants.fakeTemplateResponseJson);
@@ -199,6 +229,8 @@ namespace PgnNotifications.Client.Tests.UnitTests
         [Test, Category("Unit"), Category("Unit/NotificationClientAsync")]
         public async Task GetTemplateWithIdAndVersionReceivesExpectedResponse()
         {
+            Assert.NotNull(client);
+            Assert.NotNull(handler);
             var expectedResponse =
                 JsonConvert.DeserializeObject<TemplateResponse>(Constants.fakeTemplateResponseJson);
 
@@ -211,6 +243,8 @@ namespace PgnNotifications.Client.Tests.UnitTests
         [Test, Category("Unit"), Category("Unit/NotificationClientAsync")]
         public async Task GenerateTemplatePreviewGeneratesExpectedRequest()
         {
+            Assert.NotNull(client);
+            Assert.NotNull(handler);
             Dictionary<string, dynamic> personalisation = new Dictionary<string, dynamic> {
                     { "name", "someone" }
             };
@@ -229,6 +263,8 @@ namespace PgnNotifications.Client.Tests.UnitTests
         [Test, Category("Unit"), Category("Unit/NotificationClientAsync")]
         public async Task GenerateTemplatePreviewReceivesExpectedResponse()
         {
+            Assert.NotNull(client);
+            Assert.NotNull(handler);
             Dictionary<string, dynamic> personalisation = new Dictionary<string, dynamic> {
                     { "name", "someone" }
             };
@@ -250,6 +286,8 @@ namespace PgnNotifications.Client.Tests.UnitTests
         [Test, Category("Unit"), Category("Unit/NotificationClientAsync")]
         public async Task GetAllTemplatesCreatesExpectedRequest()
         {
+            Assert.NotNull(client);
+            Assert.NotNull(handler);
             MockRequest(Constants.fakeTemplateListResponseJson,
                  client.GET_ALL_TEMPLATES_URL, AssertValidRequest);
 
@@ -259,6 +297,8 @@ namespace PgnNotifications.Client.Tests.UnitTests
         [Test, Category("Unit"), Category("Unit/NotificationClientAsync")]
         public async Task GetAllTemplatesBySmsTypeCreatesExpectedRequest()
         {
+            Assert.NotNull(client);
+            Assert.NotNull(handler);
             const string type = "sms";
             MockRequest(Constants.fakeTemplateSmsListResponseJson,
                          client.GET_ALL_TEMPLATES_URL + client.TYPE_PARAM + type, AssertValidRequest);
@@ -269,6 +309,8 @@ namespace PgnNotifications.Client.Tests.UnitTests
         [Test, Category("Unit"), Category("Unit/NotificationClientAsync")]
         public async Task GetAllTemplatesByEmailTypeCreatesExpectedRequest()
         {
+            Assert.NotNull(client);
+            Assert.NotNull(handler);
             const string type = "email";
 
             MockRequest(Constants.fakeTemplateEmailListResponseJson,
@@ -280,6 +322,7 @@ namespace PgnNotifications.Client.Tests.UnitTests
         [Test, Category("Unit"), Category("Unit/NotificationClientAsync")]
         public async Task GetAllTemplatesForEmptyListReceivesExpectedResponse()
         {
+            Assert.NotNull(client);
             var expectedResponse = JsonConvert.DeserializeObject<TemplateList>(Constants.fakeTemplateEmptyListResponseJson);
 
             MockRequest(Constants.fakeTemplateEmptyListResponseJson);
@@ -294,6 +337,7 @@ namespace PgnNotifications.Client.Tests.UnitTests
         [Test, Category("Unit"), Category("Unit/NotificationClientAsync")]
         public async Task GetAllTemplatesReceivesExpectedResponse()
         {
+            Assert.NotNull(client);
             TemplateList expectedResponse = JsonConvert.DeserializeObject<TemplateList>(Constants.fakeTemplateListResponseJson);
 
             MockRequest(Constants.fakeTemplateListResponseJson);
@@ -312,6 +356,7 @@ namespace PgnNotifications.Client.Tests.UnitTests
         [Test, Category("Unit"), Category("Unit/NotificationClientAsync")]
         public async Task GetAllTemplatesBySmsTypeReceivesExpectedResponse()
         {
+            Assert.NotNull(client);
             const string type = "sms";
 
             TemplateList expectedResponse =
@@ -334,6 +379,7 @@ namespace PgnNotifications.Client.Tests.UnitTests
         [Test, Category("Unit"), Category("Unit/NotificationClientAsync")]
         public async Task GetAllTemplatesByEmailTypeReceivesExpectedResponse()
         {
+            Assert.NotNull(client);
             const string type = "email";
 
             TemplateList expectedResponse =
@@ -356,6 +402,8 @@ namespace PgnNotifications.Client.Tests.UnitTests
         [Test, Category("Unit"), Category("Unit/NotificationClientAsync")]
         public async Task GetAllReceivedTextsCreatesExpectedRequest()
         {
+            Assert.NotNull(client);
+            Assert.NotNull(handler);
             MockRequest(Constants.fakeReceivedTextListResponseJson,
                  client.GET_RECEIVED_TEXTS_URL, AssertValidRequest);
 
@@ -365,6 +413,7 @@ namespace PgnNotifications.Client.Tests.UnitTests
         [Test, Category("Unit"), Category("Unit/NotificationClientAsync")]
         public async Task GetAllReceivedTextsReceivesExpectedResponse()
         {
+            Assert.NotNull(client);
             MockRequest(Constants.fakeReceivedTextListResponseJson,
                  client.GET_RECEIVED_TEXTS_URL, AssertValidRequest);
 
@@ -388,6 +437,7 @@ namespace PgnNotifications.Client.Tests.UnitTests
         [Test, Category("Unit"), Category("Unit/NotificationClientAsync")]
         public async Task SendSmsNotificationGeneratesExpectedRequest()
         {
+            Assert.NotNull(client);
             Dictionary<string, dynamic> personalisation = new Dictionary<string, dynamic>
                 {
                     { "name", "someone" }
@@ -411,6 +461,7 @@ namespace PgnNotifications.Client.Tests.UnitTests
         [Test, Category("Unit"), Category("Unit/NotificationClientAsync")]
         public async Task SendSmsNotificationWithSmsSenderIdGeneratesExpectedRequest()
         {
+            Assert.NotNull(client);
             var personalisation = new Dictionary<string, dynamic>
                 {
                     { "name", "someone" }
@@ -436,6 +487,7 @@ namespace PgnNotifications.Client.Tests.UnitTests
         [Test, Category("Unit"), Category("Unit/NotificationClientAsync")]
         public async Task SendSmsNotificationGeneratesExpectedResponse()
         {
+            Assert.NotNull(client);
             Dictionary<string, dynamic> personalisation = new Dictionary<string, dynamic>
                 {
                     { "name", "someone" }
@@ -452,6 +504,7 @@ namespace PgnNotifications.Client.Tests.UnitTests
         [Test, Category("Unit"), Category("Unit/NotificationClientAsync")]
         public async Task SendEmailNotificationGeneratesExpectedRequest()
         {
+            Assert.NotNull(client);
             Dictionary<string, dynamic> personalisation = new Dictionary<string, dynamic>
                 {
                     { "name", "someone" }
@@ -476,6 +529,7 @@ namespace PgnNotifications.Client.Tests.UnitTests
         [Test, Category("Unit"), Category("Unit/NotificationClientAsync")]
         public async Task SendEmailNotificationGeneratesExpectedResponse()
         {
+            Assert.NotNull(client);
             Dictionary<string, dynamic> personalisation = new Dictionary<string, dynamic>
                 {
                     { "name", "someone" }
@@ -493,6 +547,7 @@ namespace PgnNotifications.Client.Tests.UnitTests
         [Test, Category("Unit"), Category("Unit/NotificationClientAsync")]
         public async Task SendEmailNotificationWithReplyToIdGeneratesExpectedRequest()
         {
+            Assert.NotNull(client);
             var personalisation = new Dictionary<string, dynamic>
             {
                 { "name", "someone" }
@@ -520,6 +575,7 @@ namespace PgnNotifications.Client.Tests.UnitTests
         [Test, Category("Unit"), Category("Unit/NotificationClientAsync")]
         public async Task SendEmailNotificationWithReplyToIdGeneratesExpectedResponse()
         {
+            Assert.NotNull(client);
             var personalisation = new Dictionary<string, dynamic>
             {
                 { "name", "someone" }
@@ -537,6 +593,7 @@ namespace PgnNotifications.Client.Tests.UnitTests
         [Test, Category("Unit"), Category("Unit/NotificationClientAsync")]
         public async Task SendEmailNotificationWithoneClickUnsubscribeURLGeneratesExpectedRequest()
         {
+            Assert.NotNull(client);
             var personalisation = new Dictionary<string, dynamic>
                 {
                     { "name", "someone" }
@@ -564,6 +621,7 @@ namespace PgnNotifications.Client.Tests.UnitTests
         [Test, Category("Unit"), Category("Unit/NotificationClientAsync")]
         public async Task SendEmailNotificationWithDocumentGeneratesExpectedRequest()
         {
+            Assert.NotNull(client);
             Dictionary<string, dynamic> personalisation = new Dictionary<string, dynamic>
                 {
                     { "document", NotificationClient.PrepareUpload(Encoding.UTF8.GetBytes("%PDF-1.5 testpdf")) }
@@ -599,6 +657,7 @@ namespace PgnNotifications.Client.Tests.UnitTests
         [Test, Category("Unit"), Category("Unit/NotificationClientAsync")]
         public async Task SendEmailNotificationWithCSVDocumentGeneratesExpectedRequest()
         {
+            Assert.NotNull(client);
             Dictionary<string, dynamic> personalisation = new Dictionary<string, dynamic>
                 {
                     { "document", NotificationClient.PrepareUpload(Encoding.UTF8.GetBytes("%PDF-1.5 testpdf"), "report.csv") }
@@ -634,6 +693,7 @@ namespace PgnNotifications.Client.Tests.UnitTests
         [Test, Category("Unit"), Category("Unit/NotificationClientAsync")]
         public async Task SendEmailNotificationCanSetConfirmEmailBeforeDownloadAndRetentionPeriod()
         {
+            Assert.NotNull(client);
             Dictionary<string, dynamic> personalisation = new Dictionary<string, dynamic>
                 {
                     { "document", NotificationClient.PrepareUpload(Encoding.UTF8.GetBytes("%PDF-1.5 testpdf"), "report.csv", false, "1 weeks") }
@@ -678,6 +738,7 @@ namespace PgnNotifications.Client.Tests.UnitTests
         [Test, Category("Unit"), Category("Unit/NotificationClient")]
         public void SendBulkNotificationWithRowsGeneratesExpectedRequest()
         {
+            Assert.NotNull(client);
             JObject expected = new JObject()
             {
                 { "template_id", Constants.fakeTemplateId },
@@ -708,6 +769,7 @@ namespace PgnNotifications.Client.Tests.UnitTests
         [Test, Category("Unit"), Category("Unit/NotificationClient")]
         public void SendBulkNotificationsWithPhoneNumberCsvGeneratesExpectedRequest()
         {
+            Assert.NotNull(client);
             JObject expected = new JObject()
             {
                 { "template_id", Constants.fakeTemplateId },
@@ -741,29 +803,31 @@ namespace PgnNotifications.Client.Tests.UnitTests
             Assert.AreEqual(expected, content);
         }
 
-        private void AssertValidRequest(string uri, HttpRequestMessage r, HttpMethod method = null)
+        private void AssertValidRequest(string uri, HttpRequestMessage r, HttpMethod? method = null)
         {
+            Assert.NotNull(client);
             if (method == null)
             {
                 method = HttpMethod.Get;
             }
 
             Assert.AreEqual(r.Method, method);
-            Assert.AreEqual(r.RequestUri.ToString(), client.BaseUrl + uri);
+            Assert.AreEqual(r.RequestUri?.ToString(), client?.BaseUrl + uri);
             Assert.IsNotNull(r.Headers.Authorization);
             Assert.IsNotNull(r.Headers.UserAgent);
-            Assert.That(r.Headers.UserAgent.ToString(), Does.StartWith(client.GetUserAgent()));
+            Assert.That(r.Headers.UserAgent?.ToString(), Does.StartWith(client?.GetUserAgent()));
             Assert.AreEqual(r.Headers.Accept.ToString(), "application/json");
         }
 
         private void MockRequest(string content, string uri,
-                          Action<string, HttpRequestMessage, HttpMethod> _assertValidRequest = null,
-                          HttpMethod method = null,
-                          Action<string, string> _assertGetExpectedContent = null,
-                          string expected = null,
+                          Action<string, HttpRequestMessage, HttpMethod>? _assertValidRequest = null,
+                          HttpMethod? method = null,
+                          Action<string, string>? _assertGetExpectedContent = null,
+                          string? expected = null,
                           HttpStatusCode status = HttpStatusCode.OK)
         {
-            handler.Protected()
+            Assert.NotNull(handler);
+            handler!.Protected()
                 .Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
                 .Returns(Task<HttpResponseMessage>.Factory.StartNew(() => new HttpResponseMessage
                 {
@@ -772,19 +836,19 @@ namespace PgnNotifications.Client.Tests.UnitTests
                 }))
                 .Callback<HttpRequestMessage, CancellationToken>((r, c) =>
                 {
-                    _assertValidRequest(uri, r, method);
+                    _assertValidRequest?.Invoke(uri, r, method);
 
                     if (r.Content == null || _assertGetExpectedContent == null) return;
 
                     var response = r.Content.ReadAsStringAsync().Result;
-                    _assertGetExpectedContent(expected, response);
+                    _assertGetExpectedContent(expected!, response);
                 });
         }
 
         private void MockRequest(string content)
         {
-
-            handler.Protected()
+            Assert.NotNull(handler);
+            handler!.Protected()
                 .Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
                 .Returns(Task<HttpResponseMessage>.Factory.StartNew(() => new HttpResponseMessage
                 {

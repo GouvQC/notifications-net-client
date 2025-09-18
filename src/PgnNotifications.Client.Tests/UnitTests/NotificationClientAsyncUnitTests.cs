@@ -45,19 +45,28 @@ namespace PgnNotifications.Client.Tests.UnitTests
         [Test, Category("Unit"), Category("Unit/NotificationClientAsync")]
         public void CreateNotificationClientWithInvalidApiKeyFails()
         {
-            Assert.Throws<NotifyAuthException>(() => new NotificationClient("someinvalidkey", "someinvalidclientid"));
+            Assert.Throws<NotifyAuthException>(() => new NotificationClientBuilder()
+                .WithApiKey("someinvalidkey")
+                .WithClientId("someinvalidclientid")
+                .Build());
         }
 
         [Test, Category("Unit"), Category("Unit/NotificationClientAsync")]
         public void CreateNotificationClientWithProxyAPIAndClientIdFails()
         {
-            Assert.Throws<NotifyAuthException>(() => new NotificationClient(Constants.fakeApiKey, ""));
+            Assert.Throws<NotifyAuthException>(() => new NotificationClientBuilder()
+                .WithApiKey(Constants.fakeApiKey)
+                .WithClientId("")
+                .Build());
         }
 
         [Test, Category("Unit"), Category("Unit/NotificationClientAsync")]
         public void CreateNotificationClientWithEmptyApiKeyFails()
         {
-            Assert.Throws<NotifyAuthException>(() => new NotificationClient("" , ""));
+            Assert.Throws<NotifyAuthException>(() => new NotificationClientBuilder()
+                .WithApiKey("")
+                .WithClientId("")
+                .Build());
         }
 
         [Test, Category("Unit"), Category("Unit/NotificationClientAsync")]

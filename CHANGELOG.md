@@ -1,3 +1,15 @@
+## 1.0.2 (2025-09-15)
+
+### Ajouts / Améliorations
+- Nouveau constructeur dans `BaseClient` permettant d’injecter un `HttpClient` personnalisé.
+- Gestion améliorée des en-têtes HTTP (`User-Agent`, `Accept`) dans `BaseClient` et `HttpClientWrapper`.
+- Ajout du champ `iat` (Issued At) dans le `User-Agent` pour le suivi des JWT.
+- Introduction de `NotificationClientBuilder` et des handlers HTTP internes (`RequestHandler`, `RetryHandler`) pour sécuriser la configuration et centraliser la logique de communication.
+- Réduction de la surface publique de l’API : certaines classes passent en `internal` pour éviter une utilisation hors contexte.
+- Amélioration de la compatibilité multi-cibles (`netstandard2.0`, `net462`, `net6.0`, `net8.0`) et renforcement des tests.
+
+---
+
 ## 1.0.1 (2025-06-20)
 
 ### Ajouts

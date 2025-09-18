@@ -17,14 +17,14 @@ namespace Notify.Tests.UnitTests
         public void CreateTokenWithInvalidSecretThrowsAuthException()
         {
             var ex = Assert.Throws<NotifyAuthException>(() => Authenticator.CreateToken("invalidsecret", NOTIFY_SERVICE_ID));
-            Assert.That(ex.Message, Does.Contain("Invalid secret or serviceId. Please check that your API Key is correct"));
+            Assert.That(ex!.Message, Does.Contain("Invalid secret or serviceId. Please check that your API Key is correct"));
         }
 
         [Test, Category("Unit"), Category("Unit/AuthenticationTests")]
         public void CreateTokenWithInvalidServiceIdThrowsAuthException()
         {
             var ex = Assert.Throws<NotifyAuthException>(() => Authenticator.CreateToken(NOTIFY_SECRET_ID, "invalid service id"));
-            Assert.That(ex.Message, Does.Contain("Invalid secret or serviceId. Please check that your API Key is correct"));
+            Assert.That(ex!.Message, Does.Contain("Invalid secret or serviceId. Please check that your API Key is correct"));
         }
 
         [Test, Category("Unit"), Category("Unit/AuthenticationTests")]
@@ -57,14 +57,14 @@ namespace Notify.Tests.UnitTests
         public void DecodeInvalidTokenWithNoDotsShouldThrowAuthException()
         {
             var ex = Assert.Throws<NotifyAuthException>(() => Authenticator.DecodeToken("tokenwithnodots", NOTIFY_SECRET_ID));
-            Assert.That(ex.Message, Does.Contain("Token must consist of 3 delimited by dot parts"));
+            Assert.That(ex!.Message, Does.Contain("Token must consist of 3 delimited by dot parts"));
         }
 
         [Test, Category("Unit"), Category("Unit/AuthenticationTests")]
         public void DecodeInvalidTokenShouldThrowAuthException()
         {
             var ex = Assert.Throws<NotifyAuthException>(() => Authenticator.DecodeToken(INVALID_TOKEN, NOTIFY_SECRET_ID));
-            Assert.That(ex.Message, Does.Contain("Invalid signature"));
+            Assert.That(ex!.Message, Does.Contain("Invalid signature"));
         }
     }
 }

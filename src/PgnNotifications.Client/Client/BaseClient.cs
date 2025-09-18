@@ -3,7 +3,9 @@ using PgnNotifications.Authentication;
 using PgnNotifications.Exceptions;
 using PgnNotifications.Interfaces;
 using PgnNotifications.Models.Responses;
+using PgnNotifications.Utils;
 using System;
+using System.Linq;
 using System.Net.Http;
 using System.Reflection;
 using System.Text;
@@ -16,7 +18,7 @@ namespace PgnNotifications.Client
         private const int SERVICE_ID_START_POSITION = 73;
         private const int SERVICE_API_KEY_START_POSITION = 36;
         private const int GUID_LENGTH = 36;
-        private const string NOTIFY_CLIENT_NAME = "NOTIFY-API-NET-CLIENT/";
+        private const string NOTIFY_CLIENT_NAME = "NOTIFY-API-NET-CLIENT";
         private const string BASE_URL = "https://gw-gouvqc.mcn.api.gouv.qc.ca/pgn/";
         private const string PROXY_PGGAPI = "mcn.api.gouv.qc.ca";
 
@@ -29,24 +31,28 @@ namespace PgnNotifications.Client
         private readonly string proxyPggapi;
 
         public BaseClient(IHttpClient client, string apiKey, string clientId, string baseUrl = BASE_URL)
-        {           
+        {
             var serviceCredentials = ExtractServiceIdAndApiKey(apiKey);
             serviceId = serviceCredentials.Item1;
             this.apiKey = serviceCredentials.Item2;
 
             BaseUrl = string.IsNullOrEmpty(baseUrl) ? BASE_URL : baseUrl;
 
-
             this.client = client;
-            this.client.BaseAddress = ValidateBaseUri(BaseUrl);
-            this.proxyPggapi = PROXY_PGGAPI;
+
+            if (this.client.BaseAddress == null)
+            {
+                this.client.BaseAddress = ValidateBaseUri(BaseUrl);
+            }
+
+            proxyPggapi = PROXY_PGGAPI;
             this.clientId = ValidateClientId(clientId, BaseUrl, proxyPggapi);
-            this.client.AddContentHeader("application/json");
 
-            var productVersion = typeof(BaseClient).GetTypeInfo().Assembly.GetName().Version.ToString();
-            this.client.AddUserAgent(NOTIFY_CLIENT_NAME + productVersion);
+            if (!this.client.DefaultRequestHeaders.Accept.Any())
+            {
+                this.client.AddAcceptHeader("application/json");
+            }
         }
-
 
         public async Task<string> GET(string url)
         {
@@ -72,12 +78,9 @@ namespace PgnNotifications.Client
 
             if (!response.IsSuccessStatusCode)
             {
-                // if there was an error, rather than a binary pdf, the http body will be a json error message, so
-                // encode the bytes as UTF8
                 HandleHTTPErrors(response, Encoding.UTF8.GetString(responseContent));
             }
             return responseContent;
-
         }
 
         public async Task<string> MakeRequest(string url, HttpMethod method, HttpContent content = null)
@@ -102,9 +105,22 @@ namespace PgnNotifications.Client
                 request.Content = content;
             }
 
+            // Création du token réel
             var notifyToken = Authenticator.CreateToken(this.apiKey, this.serviceId);
             request.Headers.TryAddWithoutValidation("Authorization", "Bearer " + notifyToken);
 
+            // Ajout du User-Agent avec iat dynamique
+            var productVersion = typeof(BaseClient).GetTypeInfo().Assembly.GetName().Version?.ToString() ?? "unknown";
+            var iatDate = JwtUtils.GetIatFromToken(notifyToken);
+
+            var userAgentValue = iatDate != null
+                ? $"{NOTIFY_CLIENT_NAME}/{productVersion} (iat:{iatDate:o})"
+                : $"{NOTIFY_CLIENT_NAME}/{productVersion}";
+
+            request.Headers.UserAgent.Clear();
+            request.Headers.Add("User-Agent", userAgentValue);
+
+            // Headers supplémentaires
             if (!string.IsNullOrWhiteSpace(this.clientId))
             {
                 request.Headers.TryAddWithoutValidation("X-QC-Client-Id", this.clientId);
@@ -149,7 +165,6 @@ namespace PgnNotifications.Client
             if (fromApiKey.Length < 73 || string.IsNullOrWhiteSpace(fromApiKey) || fromApiKey.Contains(" "))
             {
                 throw new NotifyAuthException("The API Key provided is invalid. Please ensure you are using a v2 API Key that is not empty or null");
-                                                 
             }
 
             var serviceId = fromApiKey.Substring(fromApiKey.Length - SERVICE_ID_START_POSITION, GUID_LENGTH);
@@ -169,7 +184,6 @@ namespace PgnNotifications.Client
             }
 
             return uriResult;
-
         }
 
         private string ValidateClientId(string clientId, string baseUrl, string proxyPggapi)
@@ -180,14 +194,14 @@ namespace PgnNotifications.Client
                 {
                     throw new NotifyAuthException("A valid client identifier (X-QC-Client-Id) is required when using the PGGAPI proxy.");
                 }
-            }          
+            }
 
             return clientId;
         }
 
         public string GetUserAgent()
         {
-            return NOTIFY_CLIENT_NAME + typeof(BaseClient).GetTypeInfo().Assembly.GetName().Version;
+            return NOTIFY_CLIENT_NAME + "/" + typeof(BaseClient).GetTypeInfo().Assembly.GetName().Version;
         }
     }
 }

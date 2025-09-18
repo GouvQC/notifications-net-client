@@ -73,7 +73,7 @@ namespace PgnNotifications.Client.Tests.IntegrationTests
             Assert.IsNotNull(template.name);
             Assert.IsNotNull(template.version);
             Assert.IsNotNull(template.type);
-            if (template.type.Equals("email") || (!string.IsNullOrEmpty(type) && type.Equals("email")))
+            if ((template.type != null && template.type.Equals("email")) || (!string.IsNullOrEmpty(type) && type.Equals("email")))
                 Assert.IsNotNull(template.subject);
             Assert.IsNotNull(template.created_at);
             Assert.IsNotNull(template.created_by);

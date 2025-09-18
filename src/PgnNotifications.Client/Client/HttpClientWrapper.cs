@@ -21,6 +21,8 @@ namespace PgnNotifications.Client
             }
         }
 
+        public HttpRequestHeaders DefaultRequestHeaders => _client.DefaultRequestHeaders;
+
         public HttpClientWrapper(HttpClient client)
         {
             _client = client;
@@ -41,11 +43,12 @@ namespace PgnNotifications.Client
             _client.BaseAddress = _baseAddress;
         }
 
-        public void AddContentHeader(string header)
+        public void AddAcceptHeader(string mediaType)
         {
             _client.DefaultRequestHeaders.Accept
-                .Add(new MediaTypeWithQualityHeaderValue(header));
+                .Add(new MediaTypeWithQualityHeaderValue(mediaType));
         }
+
 
         public void AddUserAgent(string userAgent)
         {

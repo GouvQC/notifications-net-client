@@ -33,7 +33,7 @@ namespace PgnNotifications.Client.Tests.IntegrationTests
         public void SetUp()
         {
             handler = new Mock<HttpMessageHandler>();
-            client = new NotificationClientBuilder()
+            client = NotificationClientBuilder.Create()
                 .WithApiKey(Constants.fakeApiKey)
                 .WithClientId(Constants.fakeClientId)
                 .WithHandlerBuilder(hb => hb.WithTestHandler(handler.Object))
@@ -747,7 +747,7 @@ namespace PgnNotifications.Client.Tests.IntegrationTests
                 .ReturnsAsync(httpResponse);
 
             // On instancie le client via le builder sécurisé
-            var client = new NotificationClientBuilder()
+            var client = NotificationClientBuilder.Create()
                 .WithApiKey(Constants.fakeApiKey)
                 .WithClientId(Constants.fakeClientId)
                 .WithBaseUrl("https://fake-api.test")
@@ -772,7 +772,7 @@ namespace PgnNotifications.Client.Tests.IntegrationTests
         public void SendSms_RespectsCustomHttpClientTimeout()
         {
             // Handler factice qui attend plus longtemps que le timeout du HttpClient
-            var client = new NotificationClientBuilder()
+            var client = NotificationClientBuilder.Create()
                 .WithApiKey(Constants.fakeApiKey)
                 .WithClientId(Constants.fakeClientId)
                 .WithBaseUrl("https://fake-api.test")

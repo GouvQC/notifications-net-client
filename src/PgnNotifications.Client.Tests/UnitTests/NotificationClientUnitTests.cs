@@ -28,7 +28,7 @@ namespace PgnNotifications.Client.Tests.UnitTests
         public void SetUp()
         {
             handler = new Mock<HttpMessageHandler>();
-            client = new NotificationClientBuilder()
+            client = NotificationClientBuilder.Create()
                 .WithApiKey(Constants.fakeApiKey)
                 .WithClientId(Constants.fakeClientId)
                 .WithHandlerBuilder(hb => hb.WithTestHandler(handler.Object))
@@ -45,7 +45,7 @@ namespace PgnNotifications.Client.Tests.UnitTests
         [Test, Category("Unit"), Category("Unit/NotificationClient")]
         public void CreateNotificationClientWithInvalidApiKeyFails()
         {
-            Assert.Throws<NotifyAuthException>(() => new NotificationClientBuilder()
+            Assert.Throws<NotifyAuthException>(() => NotificationClientBuilder.Create()
                 .WithApiKey("someinvalidkey")
                 .WithClientId("someinvalidclientid")
                 .Build());
@@ -54,7 +54,7 @@ namespace PgnNotifications.Client.Tests.UnitTests
         [Test, Category("Unit"), Category("Unit/NotificationClient")]
         public void CreateNotificationClientWithEmptyApiKeyFails()
         {
-            Assert.Throws<NotifyAuthException>(() => new NotificationClientBuilder()
+            Assert.Throws<NotifyAuthException>(() => NotificationClientBuilder.Create()
                 .WithApiKey("")
                 .WithClientId("")
                 .Build());

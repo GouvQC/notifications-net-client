@@ -11,6 +11,13 @@ namespace PgnNotifications.Client.Builders
         private string _baseUrl;
         private HandlerBuilder _handlerBuilder;
 
+        private NotificationClientBuilder() { }
+
+        public static NotificationClientBuilder Create()
+        {
+            return new NotificationClientBuilder();
+        }
+
         public NotificationClientBuilder WithApiKey(string apiKey)
         {
             _apiKey = apiKey;
@@ -37,7 +44,7 @@ namespace PgnNotifications.Client.Builders
 
         public NotificationClientBuilder WithHandlerBuilder(Action<HandlerBuilder> config)
         {
-            var builder = new HandlerBuilder();
+            var builder = HandlerBuilder.Create();
             config(builder);
             _handlerBuilder = builder;
             return this;

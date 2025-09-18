@@ -14,9 +14,25 @@ namespace PgnNotifications.Client.Builders
         private HttpMessageHandler _handler;
         private bool _hasTestHandler = false;
 
-        public HandlerBuilder()
+        private HandlerBuilder()
         {
             _handler = new HttpClientHandler();
+        }
+
+        private HandlerBuilder(HttpMessageHandler handler)
+        {
+            _handler = handler;
+            _hasTestHandler = true;
+        }
+
+        public static HandlerBuilder Create()
+        {
+            return new HandlerBuilder();
+        }
+
+        internal static HandlerBuilder Create(HttpMessageHandler handler)
+        {
+            return new HandlerBuilder(handler);
         }
 
         public HandlerBuilder WithRetry(int maxRetries = 3)

@@ -11,7 +11,7 @@ namespace PgnNotifications.Client.API.Services
         {
             _httpContextAccessor = httpContextAccessor;
             var context = new NotificationServiceContext(_httpContextAccessor);
-            _client = new PgnNotifications.Client.Builders.NotificationClientBuilder()
+            _client = PgnNotifications.Client.Builders.NotificationClientBuilder.Create()
                 .WithApiKey(context.ApiKey)
                 .WithClientId(context.ClientId)
                 .WithBaseUrl(context.BaseUrl)

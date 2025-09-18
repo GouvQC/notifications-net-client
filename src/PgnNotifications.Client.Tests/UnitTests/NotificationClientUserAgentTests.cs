@@ -34,7 +34,7 @@ namespace PgnNotifications.Client.Tests.UnitTests
         {
             // Arrange
             var handler = new FakeHandler();
-            var client = new NotificationClientBuilder()
+            var client = NotificationClientBuilder.Create()
                 .WithApiKey(Constants.fakeApiKey)
                 .WithClientId(Constants.fakeClientId)
                 .WithBaseUrl("https://fake-api.test")

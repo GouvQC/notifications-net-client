@@ -11,7 +11,11 @@ namespace PgnNotifications.Client.API.Services
         {
             _httpContextAccessor = httpContextAccessor;
             var context = new NotificationServiceContext(_httpContextAccessor);
-            _client = new NotificationClient(context.BaseUrl, context.ApiKey, context.ClientId);
+            _client = new PgnNotifications.Client.Builders.NotificationClientBuilder()
+                .WithApiKey(context.ApiKey)
+                .WithClientId(context.ClientId)
+                .WithBaseUrl(context.BaseUrl)
+                .Build();
         }
 
         public object GenerateTemplatePreview(string templateId, Dictionary<string, dynamic> parameters)

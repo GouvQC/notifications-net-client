@@ -8,7 +8,7 @@ namespace PgnNotifications.Client.Handlers
     /// <summary>
     /// Handler de retry simple pour la chaîne de handlers contrôlée par HandlerBuilder.
     /// </summary>
-    public class RetryHandler : DelegatingHandler
+    internal class RetryHandler : DelegatingHandler
     {
         private readonly int _maxRetries;
 

@@ -9,7 +9,7 @@ namespace PgnNotifications.Client.Builders
     /// Permet la composition contrôlée de handlers HTTP (retry, logging, proxy) pour NotificationClientBuilder.
     /// Empêche l'injection de handlers arbitraires pour garantir la sécurité de la chaîne (ex: pas d'accès direct à Authorization/body).
     /// </summary>
-    public class HandlerBuilder
+    internal class HandlerBuilder
     {
         private HttpMessageHandler _handler;
         private bool _hasTestHandler = false;

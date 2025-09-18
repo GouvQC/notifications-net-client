@@ -4,7 +4,7 @@ using System.Text.Json;
 
 namespace PgnNotifications.Utils
 {
-    public static class JwtUtils
+    internal static class JwtUtils
     {
         /// <summary>
         /// Extrait le champ 'iat' (issued-at) d’un JWT HMACSHA256.

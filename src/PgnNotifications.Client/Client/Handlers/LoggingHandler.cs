@@ -8,7 +8,7 @@ namespace PgnNotifications.Client.Handlers
     /// <summary>
     /// Handler de logging contrôlé pour la chaîne de handlers du HandlerBuilder.
     /// </summary>
-    public class LoggingHandler : DelegatingHandler
+    internal class LoggingHandler : DelegatingHandler
     {
         private readonly Action<string> _logAction;
 

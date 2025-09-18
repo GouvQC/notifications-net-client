@@ -44,6 +44,8 @@
 
   <ItemGroup>
     <None Include="README.md" Pack="true" PackagePath="" />
-  </ItemGroup>
+    <InternalsVisibleTo Include="PgnNotifications.Client.Tests" />
+    <InternalsVisibleTo Include="PgnNotifications.Client.API" />
+</ItemGroup>
 
 </Project>

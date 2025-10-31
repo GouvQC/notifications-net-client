@@ -5,7 +5,7 @@
     <TargetFrameworks>net8.0;net6.0;net462;netstandard2.0</TargetFrameworks>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageId>notifications-dotnet-client-pgn</PackageId>
-    <Version>1.0.2</Version>
+    <Version>1.0.3</Version>
     <Authors>PGN - Plateforme gouvernementale de notification</Authors>
     <Company>Ministère de la Cybersécurité et du numérique (MCN)</Company>
     <Description>Client .NET pour la Plateforme gouvernementale de notification</Description>

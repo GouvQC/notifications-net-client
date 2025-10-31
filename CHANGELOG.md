@@ -1,3 +1,14 @@
+## 1.0.3 (2025-10-30)
+
+### Ajouts / Améliorations
+- Ajout du support officiel du pattern Builder
+- NotificationClientBuilder est désormais public (au lieu d’internal).
+- HandlerBuilder est désormais public, permettant :
+    - la configuration des handlers HTTP (retry, logging, proxy);
+    - le chaînage contrôlé et sécurisé des middlewares internes.
+- Ajustement de la méthode WithHandlerBuilder(Action<HandlerBuilder>) pour corriger les erreurs de visibilité (CS0051).
+- Maintien du principe d’encapsulation : les constructeurs directs de NotificationClient restent internes pour forcer l’utilisation du Builder.
+
 ## 1.0.2 (2025-09-15)
 
 ### Ajouts / Améliorations

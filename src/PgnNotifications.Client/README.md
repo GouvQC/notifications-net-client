@@ -13,13 +13,24 @@ Ce client permet d’envoyer des **courriels** et des **messages texte (SMS)** e
 ## Exemple d’utilisation
 
 ```csharp
-var client = new NotificationClient(...);
-await client.SendEmailAsync(new EmailRequest
-{
-    EmailAddress = "utilisateur@exemple.com",
-    TemplateId = "modele-abc123",
-    Personalisation = new Dictionary<string, dynamic>
+// Exemple minimal
+var client = NotificationClientBuilder.Create()
+    .WithBaseUrl("https://gw-acc-tst.mcn.api.gouv.qc.ca/pgn/") // optionnel, sinon utilise la valeur par défaut (baseUrl de prod)
+    .WithApiKey("service_id + api_key")
+    .WithClientId("ton-client-id-pggapi")
+    .WithTimeout(TimeSpan.FromSeconds(10))
+    .WithHandlerBuilder(hb =>
+        hb.WithRetry(3)
+          .WithLogging(msg => Console.WriteLine($"[LOG] {msg}"))
+    )
+    .Build();
+
+// Envoi d’un courriel à partir d’un modèle PGN
+var response = await client.SendEmailAsync(
+    emailAddress: "utilisateur@exemple.com",
+    templateId: "modele-abc123",
+    personalisation: new Dictionary<string, dynamic> // optionnel, si le template exige des variables
     {
         ["nom"] = "Jean Dupont"
     }
-});
+);

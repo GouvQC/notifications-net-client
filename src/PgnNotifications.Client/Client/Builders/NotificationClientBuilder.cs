@@ -3,7 +3,7 @@ using System.Net.Http;
 
 namespace PgnNotifications.Client.Builders
 {
-    internal class NotificationClientBuilder
+    public class NotificationClientBuilder
     {
         private string _apiKey;
         private string _clientId;

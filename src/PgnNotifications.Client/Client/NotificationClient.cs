@@ -247,7 +247,7 @@ namespace PgnNotifications.Client
                 o.Add(new JProperty("reference", reference));
 
             if (!string.IsNullOrWhiteSpace(scheduledFor))
-                 o.Add(new JProperty("scheduledFor", scheduledFor));
+                 o.Add(new JProperty("scheduled_for", scheduledFor));
 
             if (!string.IsNullOrWhiteSpace(replyToId))
                  o.Add(new JProperty("replyToId", replyToId));

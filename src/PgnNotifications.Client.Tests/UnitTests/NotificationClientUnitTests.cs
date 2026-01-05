@@ -735,6 +735,7 @@ namespace PgnNotifications.Client.Tests.UnitTests
                 { "name",        Constants.fakeSmsBulkName },
                 { "rows",        JArray.FromObject(Constants.fakeRowsEmailBulk) },
                 { "reference",   Constants.fakeNotificationReference },
+                { "scheduled_for", Constants.fakeScheduledFor },
                 { "replyToId",   Constants.fakeReplyToId }
             };
 
@@ -752,7 +753,8 @@ namespace PgnNotifications.Client.Tests.UnitTests
                 name: Constants.fakeSmsBulkName,
                 rows: Constants.fakeRowsEmailBulk,
                 reference: Constants.fakeNotificationReference,
-                replyToId: Constants.fakeReplyToId
+                replyToId: Constants.fakeReplyToId,
+                scheduledFor: Constants.fakeScheduledFor
             );
         }
 
